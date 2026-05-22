@@ -76,7 +76,7 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
               }
               onFocus={(e) => e.target.select()}
               aria-label={`${r.fullName} level`}
-              className="h-7 w-full rounded bg-slate-800 px-1 text-center tabular-nums text-sm leading-none text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="h-7 w-full rounded bg-slate-800 px-1 text-center tabular-nums text-sm leading-none text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
             />
             <select
               value={r.instance.palmon || ''}
