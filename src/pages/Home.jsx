@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom';
+import { useProfiles } from '../hooks/useProfiles.js';
+import ProfileSummary from '../components/ProfileSummary.jsx';
+import { hasProfileDetails } from '../lib/profile.js';
 
 const tools = [
   {
@@ -11,6 +14,9 @@ const tools = [
 ];
 
 export default function Home() {
+  const { activeProfile } = useProfiles();
+  const showProfile = hasProfileDetails(activeProfile);
+
   return (
     <div className="flex flex-col gap-6">
       <section>
@@ -22,6 +28,25 @@ export default function Home() {
           Survival.
         </p>
       </section>
+
+      {showProfile && (
+        <section className="rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+              {activeProfile.ign ? activeProfile.ign : 'Your profile'}
+            </h2>
+            <Link
+              to="/speedups"
+              className="text-xs text-indigo-300 underline hover:text-indigo-200"
+            >
+              Edit
+            </Link>
+          </div>
+          <div className="mt-3">
+            <ProfileSummary profile={activeProfile} />
+          </div>
+        </section>
+      )}
 
       <section>
         <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-400">
