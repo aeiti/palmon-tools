@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ProfileDetailsDialog from '../components/ProfileDetailsDialog.jsx';
+import ProfileDeleteDialog from '../components/ProfileDeleteDialog.jsx';
 import {
   formatProfileValue,
   formatServer,
@@ -10,19 +11,14 @@ import {
 } from '../lib/profile.js';
 
 const FIELDS = [
-  {
-    key: 'ign',
-    label: 'In-game name',
-    format: formatProfileValue,
-    emptyText: 'username',
-  },
-  { key: 'server', label: 'Server', format: formatServer, emptyText: 'Not set' },
-  { key: 'guild', label: 'Guild', format: formatProfileValue, emptyText: 'Not set' },
-  { key: 'level', label: 'Player level', format: formatProfileValue, emptyText: 'Not set' },
-  { key: 'power', label: 'Power', format: formatProfileValue, emptyText: 'Not set' },
+  { key: 'ign', label: 'In-game name', format: formatProfileValue },
+  { key: 'server', label: 'Server', format: formatServer },
+  { key: 'guild', label: 'Guild', format: formatProfileValue },
+  { key: 'level', label: 'Player level', format: formatProfileValue },
+  { key: 'power', label: 'Power', format: formatProfileValue },
 ];
 
-function Row({ label, display, emptyText }) {
+function Row({ label, display }) {
   const empty = display === '';
   return (
     <div className="flex items-baseline justify-between gap-3 border-b border-slate-800 py-2 last:border-b-0">
@@ -34,7 +30,7 @@ function Row({ label, display, emptyText }) {
             : 'text-sm font-medium text-slate-100'
         }
       >
-        {empty ? emptyText : display}
+        {empty ? 'Not set' : display}
       </dd>
     </div>
   );
@@ -46,8 +42,11 @@ export default function Profile() {
     activeProfile,
     setActiveProfile,
     updateProfileDetails,
+    deleteProfile,
   } = useProfiles();
   const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const canDelete = profiles.length > 1;
 
   const hasDetails = hasProfileDetails(activeProfile);
 
@@ -62,13 +61,28 @@ export default function Profile() {
             Your in-game info, saved locally to this browser.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setEditOpen(true)}
-          className="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
-        >
-          Edit
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setEditOpen(true)}
+            className="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            onClick={() => setDeleteOpen(true)}
+            disabled={!canDelete}
+            title={
+              canDelete
+                ? undefined
+                : 'Create another profile first before deleting this one.'
+            }
+            className="rounded bg-slate-700 px-3 py-1.5 text-sm font-medium text-slate-100 hover:bg-red-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-slate-700 disabled:hover:text-slate-100"
+          >
+            Delete
+          </button>
+        </div>
       </header>
 
       {profiles.length > 1 && (
@@ -89,16 +103,15 @@ export default function Profile() {
       )}
 
       <section className="rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+        <h2 className="text-base font-semibold text-slate-100">
           {profileLabel(activeProfile)}
         </h2>
         <dl className="mt-3">
-          {FIELDS.map(({ key, label, format, emptyText }) => (
+          {FIELDS.map(({ key, label, format }) => (
             <Row
               key={key}
               label={label}
               display={format(activeProfile[key])}
-              emptyText={emptyText}
             />
           ))}
         </dl>
@@ -133,6 +146,16 @@ export default function Profile() {
         onSave={(values) => {
           updateProfileDetails(activeProfile.id, values);
           setEditOpen(false);
+        }}
+      />
+
+      <ProfileDeleteDialog
+        open={deleteOpen}
+        profile={activeProfile}
+        onCancel={() => setDeleteOpen(false)}
+        onConfirm={() => {
+          deleteProfile(activeProfile.id);
+          setDeleteOpen(false);
         }}
       />
     </div>

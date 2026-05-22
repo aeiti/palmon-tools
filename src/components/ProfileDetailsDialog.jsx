@@ -4,9 +4,9 @@ import { formatProfileValue, formatServer } from '../lib/profile.js';
 const FIELDS = [
   { key: 'ign', label: 'In-game name', placeholder: 'username', inputMode: 'text' },
   { key: 'server', label: 'Server', placeholder: '#111', inputMode: 'numeric' },
-  { key: 'guild', label: 'Guild', placeholder: 'Void', inputMode: 'text' },
-  { key: 'level', label: 'Player level', placeholder: '30', inputMode: 'numeric' },
-  { key: 'power', label: 'Power', placeholder: '12,500,000', inputMode: 'numeric' },
+  { key: 'guild', label: 'Guild', placeholder: 'guild', inputMode: 'text' },
+  { key: 'level', label: 'Player level', placeholder: '1', inputMode: 'numeric' },
+  { key: 'power', label: 'Power', placeholder: '100,000,000', inputMode: 'numeric' },
 ];
 
 function ProfileDetailsForm({ profile, onCancel, onSave }) {
