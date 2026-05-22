@@ -1,20 +1,16 @@
 import { useState } from 'react';
 import { useProfiles } from '../hooks/useProfiles.js';
-import ProfileBar from '../components/ProfileBar.jsx';
 import InventoryGrid from '../components/InventoryGrid.jsx';
 import Totals from '../components/Totals.jsx';
 import TargetChecker from '../components/TargetChecker.jsx';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import { profileLabel } from '../lib/profile.js';
 
 export default function Speedups() {
   const {
     profiles,
     activeProfile,
     setActiveProfile,
-    createProfile,
-    renameProfile,
-    updateProfileDetails,
-    deleteProfile,
     updateCount,
     resetActiveInventory,
   } = useProfiles();
@@ -42,15 +38,22 @@ export default function Speedups() {
         </p>
       </header>
 
-      <ProfileBar
-        profiles={profiles}
-        activeProfile={activeProfile}
-        onSelect={setActiveProfile}
-        onCreate={createProfile}
-        onRename={renameProfile}
-        onUpdateDetails={updateProfileDetails}
-        onDelete={deleteProfile}
-      />
+      {profiles.length > 1 && (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg bg-slate-800/60 p-3 ring-1 ring-slate-700">
+          <label className="text-sm text-slate-300">Profile</label>
+          <select
+            value={activeProfile.id}
+            onChange={(e) => setActiveProfile(e.target.value)}
+            className="min-w-0 flex-1 rounded bg-slate-700 px-2 py-1.5 text-sm text-slate-100 ring-1 ring-slate-600 focus:outline-none focus:ring-indigo-400 sm:flex-none"
+          >
+            {profiles.map((p) => (
+              <option key={p.id} value={p.id}>
+                {profileLabel(p)}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <section className="flex flex-col gap-2">
         <div className="flex items-center justify-between">

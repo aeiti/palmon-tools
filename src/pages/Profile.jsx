@@ -41,12 +41,24 @@ export default function Profile() {
     profiles,
     activeProfile,
     setActiveProfile,
+    createProfile,
+    renameProfile,
     updateProfileDetails,
     deleteProfile,
   } = useProfiles();
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const canDelete = profiles.length > 1;
+
+  const handleCreate = () => {
+    const name = window.prompt('Profile name:', '');
+    if (name && name.trim()) createProfile(name);
+  };
+
+  const handleRename = () => {
+    const name = window.prompt('Rename profile:', activeProfile.name);
+    if (name && name.trim()) renameProfile(activeProfile.id, name);
+  };
 
   const hasDetails = hasProfileDetails(activeProfile);
 
@@ -61,13 +73,27 @@ export default function Profile() {
             Your in-game info, saved locally to this browser.
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={handleCreate}
+            className="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
+          >
+            New
+          </button>
           <button
             type="button"
             onClick={() => setEditOpen(true)}
-            className="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
+            className="rounded bg-slate-700 px-3 py-1.5 text-sm font-medium text-slate-100 hover:bg-slate-600"
           >
             Edit
+          </button>
+          <button
+            type="button"
+            onClick={handleRename}
+            className="rounded bg-slate-700 px-3 py-1.5 text-sm font-medium text-slate-100 hover:bg-slate-600"
+          >
+            Rename
           </button>
           <button
             type="button"
