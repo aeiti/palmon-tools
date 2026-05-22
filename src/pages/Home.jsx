@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ProfileSummary from '../components/ProfileSummary.jsx';
+import ChestSummary from '../components/ChestSummary.jsx';
 import { hasProfileDetails, profileLabel } from '../lib/profile.js';
+import { hasAnyChests } from '../lib/chests.js';
 
 const tools = [
   {
@@ -16,6 +18,7 @@ const tools = [
 export default function Home() {
   const { activeProfile } = useProfiles();
   const showProfile = hasProfileDetails(activeProfile);
+  const showChests = hasAnyChests(activeProfile.chests);
 
   return (
     <div className="flex flex-col gap-6">
@@ -44,6 +47,25 @@ export default function Home() {
           </div>
           <div className="mt-3">
             <ProfileSummary profile={activeProfile} />
+          </div>
+        </section>
+      )}
+
+      {showChests && (
+        <section className="rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-base font-semibold text-slate-100">
+              Resource Inventory
+            </h2>
+            <Link
+              to="/resources"
+              className="text-xs text-indigo-300 underline hover:text-indigo-200"
+            >
+              Edit
+            </Link>
+          </div>
+          <div className="mt-3">
+            <ChestSummary chests={activeProfile.chests} />
           </div>
         </section>
       )}

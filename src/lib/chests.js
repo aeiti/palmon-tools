@@ -38,6 +38,19 @@ export function emptyChests() {
   }, {});
 }
 
+export function tierTypeTotal(chests, typeKey, tierKey) {
+  return CHEST_RESOURCES.reduce(
+    (sum, r) => sum + (chests?.[typeKey]?.[tierKey]?.[r.key] || 0),
+    0,
+  );
+}
+
+export function hasAnyChests(chests) {
+  return CHEST_TYPES.some((type) =>
+    CHEST_TIERS.some((tier) => tierTypeTotal(chests, type.key, tier.key) > 0),
+  );
+}
+
 export function normalizeChests(chests) {
   const base = emptyChests();
   if (!chests || typeof chests !== 'object') return base;
