@@ -155,6 +155,23 @@ export function duplicatePalmonKeys(buildings) {
   return dupes;
 }
 
+export function findPalmonBuildingAssignment(palmonId, buildings) {
+  if (!palmonId || !buildings) return null;
+  for (const b of BUILDINGS) {
+    const instances = buildings[b.key] || [];
+    for (let i = 0; i < instances.length; i++) {
+      if (instances[i]?.palmon === palmonId) {
+        return {
+          buildingKey: b.key,
+          index: i,
+          label: b.count > 1 ? `${b.label} ${i + 1}` : b.label,
+        };
+      }
+    }
+  }
+  return null;
+}
+
 export function groupBuildingsForDisplay(buildings) {
   const cards = [];
   let current = null;
