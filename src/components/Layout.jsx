@@ -165,7 +165,10 @@ export default function Layout() {
             className="grid grid-cols-3 gap-x-4 gap-y-4"
           >
             {footerColumns.map((col, i) => (
-              <div key={col.header.label + i} className="flex flex-col gap-1">
+              <div
+                key={col.header.label + i}
+                className="flex flex-col items-center gap-1 text-center"
+              >
                 {col.header.to ? (
                   <NavLink
                     to={col.header.to}
