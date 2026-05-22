@@ -6,6 +6,7 @@ import About from './pages/About.jsx';
 import Profile from './pages/Profile.jsx';
 import Speedups from './pages/Speedups.jsx';
 import Resources from './pages/Resources.jsx';
+import Buildings from './pages/Buildings.jsx';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="speedups" element={<Speedups />} />
           <Route path="resources" element={<Resources />} />
+          <Route path="buildings" element={<Buildings />} />
           <Route path="profile" element={<Profile />} />
           <Route path="about" element={<About />} />
           <Route path="*" element={<Navigate to="/" replace />} />
