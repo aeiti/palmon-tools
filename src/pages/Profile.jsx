@@ -10,19 +10,14 @@ import {
 } from '../lib/profile.js';
 
 const FIELDS = [
-  {
-    key: 'ign',
-    label: 'In-game name',
-    format: formatProfileValue,
-    emptyText: 'username',
-  },
-  { key: 'server', label: 'Server', format: formatServer, emptyText: 'Not set' },
-  { key: 'guild', label: 'Guild', format: formatProfileValue, emptyText: 'guild' },
-  { key: 'level', label: 'Player level', format: formatProfileValue, emptyText: '1' },
-  { key: 'power', label: 'Power', format: formatProfileValue, emptyText: '100,000,000' },
+  { key: 'ign', label: 'In-game name', format: formatProfileValue },
+  { key: 'server', label: 'Server', format: formatServer },
+  { key: 'guild', label: 'Guild', format: formatProfileValue },
+  { key: 'level', label: 'Player level', format: formatProfileValue },
+  { key: 'power', label: 'Power', format: formatProfileValue },
 ];
 
-function Row({ label, display, emptyText }) {
+function Row({ label, display }) {
   const empty = display === '';
   return (
     <div className="flex items-baseline justify-between gap-3 border-b border-slate-800 py-2 last:border-b-0">
@@ -34,7 +29,7 @@ function Row({ label, display, emptyText }) {
             : 'text-sm font-medium text-slate-100'
         }
       >
-        {empty ? emptyText : display}
+        {empty ? 'Not set' : display}
       </dd>
     </div>
   );
@@ -93,12 +88,11 @@ export default function Profile() {
           {profileLabel(activeProfile)}
         </h2>
         <dl className="mt-3">
-          {FIELDS.map(({ key, label, format, emptyText }) => (
+          {FIELDS.map(({ key, label, format }) => (
             <Row
               key={key}
               label={label}
               display={format(activeProfile[key])}
-              emptyText={emptyText}
             />
           ))}
         </dl>
