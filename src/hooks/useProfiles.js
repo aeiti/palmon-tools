@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { emptyInventory } from '../lib/speedups.js';
+import { emptyChests, normalizeChests } from '../lib/chests.js';
 import { loadState, saveState } from '../lib/storage.js';
 
 function makeId() {
@@ -25,6 +26,7 @@ function makeProfile(name) {
     name,
     ...emptyDetails(),
     inventory: emptyInventory(),
+    chests: emptyChests(),
   };
 }
 
@@ -46,6 +48,7 @@ function normalize(state) {
     level: parseNonNegativeInt(p.level),
     power: parseNonNegativeInt(p.power),
     inventory: { ...emptyInventory(), ...(p.inventory || {}) },
+    chests: normalizeChests(p.chests),
   }));
   const activeProfileId = profiles.find((p) => p.id === state.activeProfileId)
     ? state.activeProfileId
@@ -144,6 +147,36 @@ export function useProfiles() {
     }));
   }, []);
 
+  const updateChestCount = useCallback((typeKey, tierKey, value) => {
+    const v = Math.max(0, Math.floor(Number(value) || 0));
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId
+          ? p
+          : {
+              ...p,
+              chests: {
+                ...p.chests,
+                [typeKey]: {
+                  ...p.chests[typeKey],
+                  [tierKey]: v,
+                },
+              },
+            },
+      ),
+    }));
+  }, []);
+
+  const resetActiveChests = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId ? p : { ...p, chests: emptyChests() },
+      ),
+    }));
+  }, []);
+
   return {
     profiles: state.profiles,
     activeProfile,
@@ -154,5 +187,7 @@ export function useProfiles() {
     deleteProfile,
     updateCount,
     resetActiveInventory,
+    updateChestCount,
+    resetActiveChests,
   };
 }
