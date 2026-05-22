@@ -204,7 +204,8 @@ export default function Layout() {
             ))}
           </nav>
           <div className="mt-6 border-t border-slate-800 pt-4 text-center text-xs text-slate-500">
-            <p>
+            <p>&copy; 2026 aeiti</p>
+            <p className="mt-1">
               Fan-made tools for Palmon: Survival. Not affiliated with the
               game's publisher.
             </p>
