@@ -13,6 +13,7 @@ export default function Speedups() {
     setActiveProfile,
     createProfile,
     renameProfile,
+    updateProfileDetails,
     deleteProfile,
     updateCount,
     resetActiveInventory,
@@ -37,6 +38,7 @@ export default function Speedups() {
         onSelect={setActiveProfile}
         onCreate={createProfile}
         onRename={renameProfile}
+        onUpdateDetails={updateProfileDetails}
         onDelete={deleteProfile}
       />
 

@@ -6,8 +6,17 @@ function makeId() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+function emptyDetails() {
+  return { ign: '', server: '', guild: '', level: '', power: '' };
+}
+
 function makeProfile(name) {
-  return { id: makeId(), name, inventory: emptyInventory() };
+  return {
+    id: makeId(),
+    name,
+    ...emptyDetails(),
+    inventory: emptyInventory(),
+  };
 }
 
 function defaultState() {
@@ -22,6 +31,11 @@ function normalize(state) {
   const profiles = state.profiles.map((p) => ({
     id: p.id || makeId(),
     name: p.name || 'Untitled',
+    ign: typeof p.ign === 'string' ? p.ign : '',
+    server: typeof p.server === 'string' ? p.server : '',
+    guild: typeof p.guild === 'string' ? p.guild : '',
+    level: typeof p.level === 'string' ? p.level : '',
+    power: typeof p.power === 'string' ? p.power : '',
     inventory: { ...emptyInventory(), ...(p.inventory || {}) },
   }));
   const activeProfileId = profiles.find((p) => p.id === state.activeProfileId)
@@ -53,6 +67,17 @@ export function useProfiles() {
     setState((s) => ({
       activeProfileId: p.id,
       profiles: [...s.profiles, p],
+    }));
+  }, []);
+
+  const updateProfileDetails = useCallback((id, details) => {
+    const clean = {};
+    for (const key of ['ign', 'server', 'guild', 'level', 'power']) {
+      if (key in details) clean[key] = String(details[key] ?? '').trim();
+    }
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) => (p.id === id ? { ...p, ...clean } : p)),
     }));
   }, []);
 
@@ -113,6 +138,7 @@ export function useProfiles() {
     setActiveProfile,
     createProfile,
     renameProfile,
+    updateProfileDetails,
     deleteProfile,
     updateCount,
     resetActiveInventory,

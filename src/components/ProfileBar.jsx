@@ -1,5 +1,16 @@
 import { useState } from 'react';
 import ConfirmDialog from './ConfirmDialog.jsx';
+import ProfileDetailsDialog from './ProfileDetailsDialog.jsx';
+
+function DetailChip({ label, value }) {
+  if (!value) return null;
+  return (
+    <span className="inline-flex items-center gap-1 rounded bg-slate-700/70 px-2 py-0.5 text-xs text-slate-200 ring-1 ring-slate-600">
+      <span className="text-slate-400">{label}</span>
+      <span className="font-medium text-slate-100">{value}</span>
+    </span>
+  );
+}
 
 export default function ProfileBar({
   profiles,
@@ -7,9 +18,11 @@ export default function ProfileBar({
   onSelect,
   onCreate,
   onRename,
+  onUpdateDetails,
   onDelete,
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   const handleCreate = () => {
     const name = window.prompt('Profile name:', '');
@@ -21,42 +34,80 @@ export default function ProfileBar({
     if (name && name.trim()) onRename(activeProfile.id, name);
   };
 
+  const hasAnyDetails =
+    activeProfile.ign ||
+    activeProfile.server ||
+    activeProfile.guild ||
+    activeProfile.level ||
+    activeProfile.power;
+
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-lg bg-slate-800/60 p-3 ring-1 ring-slate-700">
-      <label className="text-sm text-slate-300">Profile</label>
-      <select
-        value={activeProfile.id}
-        onChange={(e) => onSelect(e.target.value)}
-        className="min-w-0 flex-1 rounded bg-slate-700 px-2 py-1.5 text-sm text-slate-100 ring-1 ring-slate-600 focus:outline-none focus:ring-indigo-400 sm:flex-none"
-      >
-        {profiles.map((p) => (
-          <option key={p.id} value={p.id}>
-            {p.name}
-          </option>
-        ))}
-      </select>
-      <button
-        type="button"
-        onClick={handleCreate}
-        className="rounded bg-indigo-600 px-2.5 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
-      >
-        New
-      </button>
-      <button
-        type="button"
-        onClick={handleRename}
-        className="rounded bg-slate-700 px-2.5 py-1.5 text-sm font-medium text-slate-100 hover:bg-slate-600"
-      >
-        Rename
-      </button>
-      <button
-        type="button"
-        onClick={() => setConfirmDelete(true)}
-        disabled={profiles.length <= 1}
-        className="rounded bg-slate-700 px-2.5 py-1.5 text-sm font-medium text-slate-100 hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-slate-700"
-      >
-        Delete
-      </button>
+    <div className="flex flex-col gap-3 rounded-lg bg-slate-800/60 p-3 ring-1 ring-slate-700">
+      <div className="flex flex-wrap items-center gap-2">
+        <label className="text-sm text-slate-300">Profile</label>
+        <select
+          value={activeProfile.id}
+          onChange={(e) => onSelect(e.target.value)}
+          className="min-w-0 flex-1 rounded bg-slate-700 px-2 py-1.5 text-sm text-slate-100 ring-1 ring-slate-600 focus:outline-none focus:ring-indigo-400 sm:flex-none"
+        >
+          {profiles.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.name}
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          onClick={handleCreate}
+          className="rounded bg-indigo-600 px-2.5 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
+        >
+          New
+        </button>
+        <button
+          type="button"
+          onClick={() => setEditOpen(true)}
+          className="rounded bg-slate-700 px-2.5 py-1.5 text-sm font-medium text-slate-100 hover:bg-slate-600"
+        >
+          Edit
+        </button>
+        <button
+          type="button"
+          onClick={handleRename}
+          className="rounded bg-slate-700 px-2.5 py-1.5 text-sm font-medium text-slate-100 hover:bg-slate-600"
+        >
+          Rename
+        </button>
+        <button
+          type="button"
+          onClick={() => setConfirmDelete(true)}
+          disabled={profiles.length <= 1}
+          className="rounded bg-slate-700 px-2.5 py-1.5 text-sm font-medium text-slate-100 hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-slate-700"
+        >
+          Delete
+        </button>
+      </div>
+
+      {hasAnyDetails ? (
+        <div className="flex flex-wrap items-center gap-1.5">
+          <DetailChip label="IGN" value={activeProfile.ign} />
+          <DetailChip label="Server" value={activeProfile.server} />
+          <DetailChip label="Guild" value={activeProfile.guild} />
+          <DetailChip label="Level" value={activeProfile.level} />
+          <DetailChip label="Power" value={activeProfile.power} />
+        </div>
+      ) : (
+        <p className="text-xs text-slate-400">
+          No profile details yet —{' '}
+          <button
+            type="button"
+            onClick={() => setEditOpen(true)}
+            className="text-indigo-300 underline hover:text-indigo-200"
+          >
+            add your in-game info
+          </button>
+          .
+        </p>
+      )}
 
       <ConfirmDialog
         open={confirmDelete}
@@ -68,6 +119,16 @@ export default function ProfileBar({
         onConfirm={() => {
           onDelete(activeProfile.id);
           setConfirmDelete(false);
+        }}
+      />
+
+      <ProfileDetailsDialog
+        open={editOpen}
+        profile={activeProfile}
+        onCancel={() => setEditOpen(false)}
+        onSave={(values) => {
+          onUpdateDetails(activeProfile.id, values);
+          setEditOpen(false);
         }}
       />
     </div>
