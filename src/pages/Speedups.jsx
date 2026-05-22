@@ -28,7 +28,17 @@ export default function Speedups() {
           Speedup Calculator
         </h1>
         <p className="mt-1 text-sm text-slate-400">
-          Saved locally to this browser.
+          {activeProfile.ign ? (
+            <>
+              Signed in as{' '}
+              <span className="font-medium text-slate-200">
+                {activeProfile.ign}
+              </span>
+              . Saved locally to this browser.
+            </>
+          ) : (
+            'Saved locally to this browser.'
+          )}
         </p>
       </header>
 

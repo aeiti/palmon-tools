@@ -7,7 +7,16 @@ function makeId() {
 }
 
 function emptyDetails() {
-  return { ign: '', server: '', guild: '', level: '', power: '' };
+  return { ign: '', server: '', guild: '', level: null, power: null };
+}
+
+function parseNonNegativeInt(value) {
+  if (value === null || value === undefined) return null;
+  const cleaned = String(value).replace(/[\s,_]/g, '');
+  if (cleaned === '') return null;
+  const n = Number(cleaned);
+  if (!Number.isFinite(n) || n < 0) return null;
+  return Math.floor(n);
 }
 
 function makeProfile(name) {
@@ -34,8 +43,8 @@ function normalize(state) {
     ign: typeof p.ign === 'string' ? p.ign : '',
     server: typeof p.server === 'string' ? p.server : '',
     guild: typeof p.guild === 'string' ? p.guild : '',
-    level: typeof p.level === 'string' ? p.level : '',
-    power: typeof p.power === 'string' ? p.power : '',
+    level: parseNonNegativeInt(p.level),
+    power: parseNonNegativeInt(p.power),
     inventory: { ...emptyInventory(), ...(p.inventory || {}) },
   }));
   const activeProfileId = profiles.find((p) => p.id === state.activeProfileId)
@@ -72,8 +81,11 @@ export function useProfiles() {
 
   const updateProfileDetails = useCallback((id, details) => {
     const clean = {};
-    for (const key of ['ign', 'server', 'guild', 'level', 'power']) {
+    for (const key of ['ign', 'server', 'guild']) {
       if (key in details) clean[key] = String(details[key] ?? '').trim();
+    }
+    for (const key of ['level', 'power']) {
+      if (key in details) clean[key] = parseNonNegativeInt(details[key]);
     }
     setState((s) => ({
       ...s,

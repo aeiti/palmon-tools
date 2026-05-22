@@ -1,16 +1,8 @@
 import { useState } from 'react';
 import ConfirmDialog from './ConfirmDialog.jsx';
 import ProfileDetailsDialog from './ProfileDetailsDialog.jsx';
-
-function DetailChip({ label, value }) {
-  if (!value) return null;
-  return (
-    <span className="inline-flex items-center gap-1 rounded bg-slate-700/70 px-2 py-0.5 text-xs text-slate-200 ring-1 ring-slate-600">
-      <span className="text-slate-400">{label}</span>
-      <span className="font-medium text-slate-100">{value}</span>
-    </span>
-  );
-}
+import ProfileSummary from './ProfileSummary.jsx';
+import { hasProfileDetails } from '../lib/profile.js';
 
 export default function ProfileBar({
   profiles,
@@ -34,12 +26,7 @@ export default function ProfileBar({
     if (name && name.trim()) onRename(activeProfile.id, name);
   };
 
-  const hasAnyDetails =
-    activeProfile.ign ||
-    activeProfile.server ||
-    activeProfile.guild ||
-    activeProfile.level ||
-    activeProfile.power;
+  const hasAnyDetails = hasProfileDetails(activeProfile);
 
   return (
     <div className="flex flex-col gap-3 rounded-lg bg-slate-800/60 p-3 ring-1 ring-slate-700">
@@ -88,13 +75,7 @@ export default function ProfileBar({
       </div>
 
       {hasAnyDetails ? (
-        <div className="flex flex-wrap items-center gap-1.5">
-          <DetailChip label="IGN" value={activeProfile.ign} />
-          <DetailChip label="Server" value={activeProfile.server} />
-          <DetailChip label="Guild" value={activeProfile.guild} />
-          <DetailChip label="Level" value={activeProfile.level} />
-          <DetailChip label="Power" value={activeProfile.power} />
-        </div>
+        <ProfileSummary profile={activeProfile} />
       ) : (
         <p className="text-xs text-slate-400">
           No profile details yet —{' '}
