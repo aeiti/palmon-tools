@@ -9,6 +9,7 @@ import Other from './pages/Other.jsx';
 import Speedups from './pages/Speedups.jsx';
 import Resources from './pages/Resources.jsx';
 import Buildings from './pages/Buildings.jsx';
+import Palmon from './pages/Palmon.jsx';
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
             element={<Navigate to="/inventory/speedups" replace />}
           />
           <Route path="buildings" element={<Buildings />} />
+          <Route path="palmon" element={<Palmon />} />
           <Route path="profile" element={<Profile />} />
           <Route path="about" element={<About />} />
           <Route path="*" element={<Navigate to="/" replace />} />

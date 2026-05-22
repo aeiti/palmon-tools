@@ -4,6 +4,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 const tools = [
   { to: '/buildings', label: 'Buildings' },
   { to: '/inventory', label: 'Inventory' },
+  { to: '/palmon', label: 'Palmon' },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 const navItems = [

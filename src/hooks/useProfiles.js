@@ -8,6 +8,12 @@ import {
   emptyBuildings,
   normalizeBuildings,
 } from '../lib/buildings.js';
+import {
+  PALMON_SPECIES_BY_KEY,
+  emptyPalmon,
+  normalizePalmon,
+  normalizePalmonList,
+} from '../lib/palmon.js';
 import { loadState, saveState } from '../lib/storage.js';
 
 function makeId() {
@@ -36,7 +42,20 @@ function makeProfile(name) {
     chests: emptyChests(),
     other: emptyOther(),
     buildings: emptyBuildings(),
+    palmons: [],
   };
+}
+
+function scrubBuildingPalmonRefs(buildings, validIds) {
+  const out = {};
+  for (const key of Object.keys(buildings)) {
+    out[key] = buildings[key].map((inst) =>
+      inst.palmon && !validIds.has(inst.palmon)
+        ? { ...inst, palmon: '' }
+        : inst,
+    );
+  }
+  return out;
 }
 
 function defaultState() {
@@ -73,8 +92,14 @@ function normalize(state) {
   if (!state || !Array.isArray(state.profiles) || state.profiles.length === 0) {
     return defaultState();
   }
-  const profiles = state.profiles.map((p) =>
-    syncProfileCampLevel({
+  const profiles = state.profiles.map((p) => {
+    const palmons = normalizePalmonList(p.palmons);
+    const palmonIds = new Set(palmons.map((pm) => pm.id));
+    const buildings = scrubBuildingPalmonRefs(
+      normalizeBuildings(p.buildings),
+      palmonIds,
+    );
+    return syncProfileCampLevel({
       id: p.id || makeId(),
       name: p.name || 'Untitled',
       ign: typeof p.ign === 'string' ? p.ign : '',
@@ -85,9 +110,10 @@ function normalize(state) {
       inventory: { ...emptyInventory(), ...(p.inventory || {}) },
       chests: normalizeChests(p.chests),
       other: normalizeOther(p.other),
-      buildings: normalizeBuildings(p.buildings),
-    }),
-  );
+      buildings,
+      palmons,
+    });
+  });
   const activeProfileId = profiles.find((p) => p.id === state.activeProfileId)
     ? state.activeProfileId
     : profiles[0].id;
@@ -296,6 +322,57 @@ export function useProfiles() {
     }));
   }, []);
 
+  const createPalmon = useCallback((speciesKey) => {
+    if (!PALMON_SPECIES_BY_KEY[speciesKey]) return;
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId
+          ? p
+          : { ...p, palmons: [...p.palmons, emptyPalmon(speciesKey)] },
+      ),
+    }));
+  }, []);
+
+  const updatePalmon = useCallback((palmonId, patch) => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) => {
+        if (p.id !== s.activeProfileId) return p;
+        const palmons = p.palmons.map((pm) => {
+          if (pm.id !== palmonId) return pm;
+          const merged = { ...pm, ...patch };
+          return normalizePalmon(merged) || pm;
+        });
+        return { ...p, palmons };
+      }),
+    }));
+  }, []);
+
+  const deletePalmon = useCallback((palmonId) => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) => {
+        if (p.id !== s.activeProfileId) return p;
+        const palmons = p.palmons.filter((pm) => pm.id !== palmonId);
+        const validIds = new Set(palmons.map((pm) => pm.id));
+        const buildings = scrubBuildingPalmonRefs(p.buildings, validIds);
+        return { ...p, palmons, buildings };
+      }),
+    }));
+  }, []);
+
+  const resetActivePalmons = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) => {
+        if (p.id !== s.activeProfileId) return p;
+        const buildings = scrubBuildingPalmonRefs(p.buildings, new Set());
+        return { ...p, palmons: [], buildings };
+      }),
+    }));
+  }, []);
+
   return {
     profiles: state.profiles,
     activeProfile,
@@ -312,5 +389,9 @@ export function useProfiles() {
     resetActiveOther,
     updateBuildingInstance,
     resetActiveBuildings,
+    createPalmon,
+    updatePalmon,
+    deletePalmon,
+    resetActivePalmons,
   };
 }
