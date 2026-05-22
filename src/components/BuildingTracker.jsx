@@ -100,10 +100,10 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
   );
 }
 
-function CardGrid({ defs, profileBuildings, palmons, onChange, dupes }) {
+function CardList({ defs, profileBuildings, palmons, onChange, dupes }) {
   const cards = groupBuildingsForDisplay(defs);
   return (
-    <div className="grid items-start gap-3 sm:grid-cols-2">
+    <div className="flex flex-col gap-3">
       {cards.map((card) => (
         <BuildingCard
           key={card.groupKey || card.buildings[0].key}
@@ -122,9 +122,12 @@ export default function BuildingTracker({ buildings, palmons = [], onChange }) {
   const dupes = duplicatePalmonKeys(buildings);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 sm:block sm:columns-2 sm:gap-x-6">
       {BUILDINGS_BY_CATEGORY.map((category) => (
-        <section key={category.key} className="flex flex-col gap-3">
+        <section
+          key={category.key}
+          className="flex flex-col gap-3 sm:mb-6 sm:break-inside-avoid"
+        >
           <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
             {category.label}
           </h2>
@@ -135,7 +138,7 @@ export default function BuildingTracker({ buildings, palmons = [], onChange }) {
                   <h3 className="text-xs font-medium uppercase tracking-wide text-slate-500">
                     {sub.label}
                   </h3>
-                  <CardGrid
+                  <CardList
                     defs={sub.buildings}
                     profileBuildings={buildings}
                     palmons={palmons}
@@ -146,7 +149,7 @@ export default function BuildingTracker({ buildings, palmons = [], onChange }) {
               ))}
             </div>
           ) : (
-            <CardGrid
+            <CardList
               defs={category.buildings}
               profileBuildings={buildings}
               palmons={palmons}
