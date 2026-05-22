@@ -13,6 +13,7 @@ import {
   emptyPalmon,
   normalizePalmon,
   normalizePalmonList,
+  squadIsFull,
 } from '../lib/palmon.js';
 import { loadState, saveState } from '../lib/storage.js';
 
@@ -342,6 +343,14 @@ export function useProfiles() {
         const palmons = p.palmons.map((pm) => {
           if (pm.id !== palmonId) return pm;
           const merged = { ...pm, ...patch };
+          if (
+            'squad' in patch &&
+            patch.squad &&
+            patch.squad !== pm.squad &&
+            squadIsFull(p.palmons, patch.squad, palmonId)
+          ) {
+            merged.squad = pm.squad;
+          }
           return normalizePalmon(merged) || pm;
         });
         return { ...p, palmons };

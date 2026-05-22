@@ -3,6 +3,7 @@ export const MAX_SKILL_LEVEL = 30;
 export const STAR_LEVELS = 5;
 export const SUB_STAR_LEVELS = 5;
 export const SQUAD_COUNT = 4;
+export const MAX_PALMON_PER_SQUAD = 7;
 export const SKILL_SLOTS = 4;
 export const TRAIT_SLOTS = 4;
 export const EQUIPMENT_SLOTS = 4;
@@ -213,4 +214,16 @@ export function palmonOptions(palmons) {
 
 export function hasAnyPalmons(palmons) {
   return Array.isArray(palmons) && palmons.length > 0;
+}
+
+export function palmonsInSquad(palmons, squad) {
+  if (!Array.isArray(palmons) || !squad) return [];
+  return palmons.filter((p) => p.squad === squad);
+}
+
+export function squadIsFull(palmons, squad, excludeId) {
+  const members = palmonsInSquad(palmons, squad).filter(
+    (p) => p.id !== excludeId,
+  );
+  return members.length >= MAX_PALMON_PER_SQUAD;
 }

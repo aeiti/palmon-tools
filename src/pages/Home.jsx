@@ -31,6 +31,12 @@ const tools = [
       'Track your Palmon roster: level, stars, squad, equipment, skills, and traits.',
     available: true,
   },
+  {
+    to: '/squads',
+    title: 'Squads',
+    description: 'See each squad and the Palmon assigned to it.',
+    available: true,
+  },
 ].sort((a, b) => a.title.localeCompare(b.title));
 
 export default function Home() {

@@ -10,6 +10,7 @@ import Speedups from './pages/Speedups.jsx';
 import Resources from './pages/Resources.jsx';
 import Buildings from './pages/Buildings.jsx';
 import Palmon from './pages/Palmon.jsx';
+import Squads from './pages/Squads.jsx';
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
           />
           <Route path="buildings" element={<Buildings />} />
           <Route path="palmon" element={<Palmon />} />
+          <Route path="squads" element={<Squads />} />
           <Route path="profile" element={<Profile />} />
           <Route path="about" element={<About />} />
           <Route path="*" element={<Navigate to="/" replace />} />
