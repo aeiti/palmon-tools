@@ -2,18 +2,27 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ProfileDetailsDialog from '../components/ProfileDetailsDialog.jsx';
-import { formatProfileValue, hasProfileDetails } from '../lib/profile.js';
+import {
+  formatProfileValue,
+  formatServer,
+  hasProfileDetails,
+  profileLabel,
+} from '../lib/profile.js';
 
 const FIELDS = [
-  { key: 'ign', label: 'In-game name' },
-  { key: 'server', label: 'Server' },
-  { key: 'guild', label: 'Guild' },
-  { key: 'level', label: 'Player level' },
-  { key: 'power', label: 'Power' },
+  {
+    key: 'ign',
+    label: 'In-game name',
+    format: formatProfileValue,
+    emptyText: 'username',
+  },
+  { key: 'server', label: 'Server', format: formatServer, emptyText: 'Not set' },
+  { key: 'guild', label: 'Guild', format: formatProfileValue, emptyText: 'Not set' },
+  { key: 'level', label: 'Player level', format: formatProfileValue, emptyText: 'Not set' },
+  { key: 'power', label: 'Power', format: formatProfileValue, emptyText: 'Not set' },
 ];
 
-function Row({ label, value }) {
-  const display = formatProfileValue(value);
+function Row({ label, display, emptyText }) {
   const empty = display === '';
   return (
     <div className="flex items-baseline justify-between gap-3 border-b border-slate-800 py-2 last:border-b-0">
@@ -25,7 +34,7 @@ function Row({ label, value }) {
             : 'text-sm font-medium text-slate-100'
         }
       >
-        {empty ? 'Not set' : display}
+        {empty ? emptyText : display}
       </dd>
     </div>
   );
@@ -72,7 +81,7 @@ export default function Profile() {
           >
             {profiles.map((p) => (
               <option key={p.id} value={p.id}>
-                {p.name}
+                {profileLabel(p)}
               </option>
             ))}
           </select>
@@ -81,11 +90,16 @@ export default function Profile() {
 
       <section className="rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-          {activeProfile.name}
+          {profileLabel(activeProfile)}
         </h2>
         <dl className="mt-3">
-          {FIELDS.map(({ key, label }) => (
-            <Row key={key} label={label} value={activeProfile[key]} />
+          {FIELDS.map(({ key, label, format, emptyText }) => (
+            <Row
+              key={key}
+              label={label}
+              display={format(activeProfile[key])}
+              emptyText={emptyText}
+            />
           ))}
         </dl>
         {!hasDetails && (

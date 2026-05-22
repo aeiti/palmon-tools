@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import { formatProfileValue } from '../lib/profile.js';
+import { formatProfileValue, formatServer } from '../lib/profile.js';
 
 const FIELDS = [
-  { key: 'ign', label: 'In-game name', placeholder: 'e.g. AdamTheBrave' },
-  { key: 'server', label: 'Server', placeholder: 'e.g. #111' },
-  { key: 'guild', label: 'Guild', placeholder: 'e.g. Void' },
-  { key: 'level', label: 'Player level', placeholder: 'e.g. 30' },
-  { key: 'power', label: 'Power', placeholder: 'e.g. 12,500,000' },
+  { key: 'ign', label: 'In-game name', placeholder: 'username', inputMode: 'text' },
+  { key: 'server', label: 'Server', placeholder: '#111', inputMode: 'numeric' },
+  { key: 'guild', label: 'Guild', placeholder: 'Void', inputMode: 'text' },
+  { key: 'level', label: 'Player level', placeholder: '30', inputMode: 'numeric' },
+  { key: 'power', label: 'Power', placeholder: '12,500,000', inputMode: 'numeric' },
 ];
 
 function ProfileDetailsForm({ profile, onCancel, onSave }) {
   const [values, setValues] = useState(() => ({
     ign: profile.ign || '',
-    server: profile.server || '',
+    server: formatServer(profile.server),
     guild: profile.guild || '',
     level: formatProfileValue(profile.level),
     power: formatProfileValue(profile.power),
@@ -40,11 +40,12 @@ function ProfileDetailsForm({ profile, onCancel, onSave }) {
       </p>
 
       <div className="mt-4 flex flex-col gap-3">
-        {FIELDS.map(({ key, label, placeholder }) => (
+        {FIELDS.map(({ key, label, placeholder, inputMode }) => (
           <label key={key} className="flex flex-col gap-1 text-sm">
             <span className="text-slate-300">{label}</span>
             <input
               type="text"
+              inputMode={inputMode}
               value={values[key] ?? ''}
               onChange={handleChange(key)}
               placeholder={placeholder}
