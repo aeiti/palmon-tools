@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Layout from './components/Layout.jsx';
+import PageTracker from './components/PageTracker.jsx';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
 import Profile from './pages/Profile.jsx';
@@ -9,6 +10,7 @@ import Resources from './pages/Resources.jsx';
 export default function App() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <PageTracker />
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home />} />
