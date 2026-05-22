@@ -16,7 +16,6 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
       const labelText = card.showBuildingLabel
         ? building.label
         : instanceLabel(building, i);
-      const hideLabel = !card.showBuildingLabel && building.count === 1;
       return {
         id: `${building.key}:${i}`,
         building,
@@ -24,15 +23,11 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
         instance: inst,
         isDupe,
         labelText,
-        hideLabel,
       };
     }),
   );
 
-  const showLabelColumn = rows.some((r) => !r.hideLabel);
-  const gridCols = showLabelColumn
-    ? 'grid-cols-[minmax(0,1fr)_3rem_max-content]'
-    : 'grid-cols-[3rem_max-content]';
+  const gridCols = 'grid-cols-[minmax(0,1fr)_3rem_max-content]';
 
   return (
     <div className="rounded-lg ring-1 ring-slate-700">
@@ -54,18 +49,16 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
       <div
         className={`grid items-center gap-x-2 gap-y-1 bg-slate-900/40 px-3 py-2 ${gridCols}`}
       >
-        {showLabelColumn && <span aria-hidden="true" />}
+        <span aria-hidden="true" />
         <span className="text-center text-[10px] font-medium uppercase tracking-wide text-slate-500">
           Lvl
         </span>
         <span aria-hidden="true" />
         {rows.map((r) => (
           <Fragment key={r.id}>
-            {showLabelColumn && (
-              <span className="truncate text-sm text-slate-300">
-                {r.hideLabel ? '' : r.labelText}
-              </span>
-            )}
+            <span className="truncate text-sm text-slate-300">
+              {r.labelText}
+            </span>
             <input
               type="number"
               inputMode="numeric"

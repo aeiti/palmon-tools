@@ -109,7 +109,7 @@ export function normalizeBuildings(buildings) {
 }
 
 export function instanceLabel(building, index) {
-  return building.count > 1 ? `${building.label} ${index + 1}` : building.label;
+  return `${building.label} ${index + 1}`;
 }
 
 export function hasAnyBuildings(buildings) {
