@@ -20,10 +20,9 @@ const ELEMENT_BADGE_CLASS = {
 };
 
 const RARITY_BADGE_CLASS = {
-  common: 'bg-slate-500/15 text-slate-300 ring-slate-500/30',
-  rare: 'bg-blue-500/15 text-blue-300 ring-blue-500/30',
-  epic: 'bg-purple-500/15 text-purple-300 ring-purple-500/30',
-  legendary: 'bg-orange-500/15 text-orange-300 ring-orange-500/30',
+  r: 'bg-blue-500/15 text-blue-300 ring-blue-500/30',
+  sr: 'bg-purple-500/15 text-purple-300 ring-purple-500/30',
+  ur: 'bg-orange-500/15 text-orange-300 ring-orange-500/30',
   mythical: 'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-500/30',
 };
 

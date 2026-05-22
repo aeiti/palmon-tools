@@ -16,10 +16,9 @@ export const ELEMENTS = [
 ];
 
 export const RARITIES = [
-  { key: 'common', label: 'Common' },
-  { key: 'rare', label: 'Rare' },
-  { key: 'epic', label: 'Epic' },
-  { key: 'legendary', label: 'Legendary' },
+  { key: 'r', label: 'R' },
+  { key: 'sr', label: 'SR' },
+  { key: 'ur', label: 'UR' },
   { key: 'mythical', label: 'Mythical' },
 ];
 
