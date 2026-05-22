@@ -1,5 +1,6 @@
 const REPO_URL = 'https://github.com/aeiti/palmon-tools';
 const ISSUES_URL = `${REPO_URL}/issues`;
+const BMC_URL = 'https://www.buymeacoffee.com/palmontools';
 
 export default function About() {
   return (
@@ -24,6 +25,23 @@ export default function About() {
           Everything you enter is saved locally in your browser. Nothing is
           sent to a server.
         </p>
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <h2 className="text-base font-semibold text-slate-100">Support</h2>
+        <p>
+          Palmon Tools is free and ad-free. If it's saved you some time, a
+          coffee goes a long way toward fueling more updates.
+        </p>
+        <a
+          href={BMC_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex w-fit items-center gap-2 rounded-md bg-[#5F7FFF] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#4a6aef]"
+        >
+          <span aria-hidden="true">☕</span>
+          Buy me a coffee
+        </a>
       </section>
 
       <section className="flex flex-col gap-2">
