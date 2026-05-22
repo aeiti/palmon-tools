@@ -7,13 +7,20 @@ import { hasAnyChests } from '../lib/chests.js';
 
 const tools = [
   {
+    to: '/resources',
+    title: 'Resources',
+    description:
+      'Track the resource chests in your inventory and see totals by resource type.',
+    available: true,
+  },
+  {
     to: '/speedups',
     title: 'Speedup Calculator',
     description:
       'Track your speedup inventory and check whether you have enough for an upcoming build, research, or training.',
     available: true,
   },
-];
+].sort((a, b) => a.title.localeCompare(b.title));
 
 export default function Home() {
   const { activeProfile } = useProfiles();
