@@ -51,17 +51,9 @@ export default function Home() {
 
       {showProfile && (
         <section className="rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700">
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="text-base font-semibold text-slate-100">
-              {profileLabel(activeProfile)}
-            </h2>
-            <Link
-              to="/speedups"
-              className="text-xs text-indigo-300 underline hover:text-indigo-200"
-            >
-              Edit
-            </Link>
-          </div>
+          <h2 className="text-base font-semibold text-slate-100">
+            {profileLabel(activeProfile)}
+          </h2>
           <div className="mt-3">
             <ProfileSummary profile={activeProfile} />
           </div>
