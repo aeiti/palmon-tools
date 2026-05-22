@@ -1,10 +1,16 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 
-const navLinks = [
-  { to: '/', label: 'Home', end: true },
-  { to: '/speedups', label: 'Speedups' },
-  { to: '/profile', label: 'Profile' },
-  { to: '/about', label: 'About' },
+const tools = [
+  { to: '/resources', label: 'Resources' },
+  { to: '/speedups', label: 'Speedup Calculator' },
+].sort((a, b) => a.label.localeCompare(b.label));
+
+const navItems = [
+  { type: 'link', to: '/', label: 'Home', end: true },
+  { type: 'link', to: '/profile', label: 'Profile' },
+  { type: 'tools' },
+  { type: 'link', to: '/about', label: 'About' },
 ];
 
 function linkClass({ isActive }) {
@@ -14,6 +20,91 @@ function linkClass({ isActive }) {
       ? 'bg-indigo-600 text-white'
       : 'text-slate-300 hover:bg-slate-800 hover:text-white',
   ].join(' ');
+}
+
+function ToolsMenu() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const location = useLocation();
+  const isToolsActive = tools.some((t) => location.pathname === t.to);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+    function onDocClick(e) {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') setOpen(false);
+    }
+    document.addEventListener('mousedown', onDocClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDocClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  const buttonClass = [
+    'inline-flex items-center gap-1 rounded px-3 py-1.5 text-sm font-medium transition-colors',
+    isToolsActive
+      ? 'bg-indigo-600 text-white'
+      : 'text-slate-300 hover:bg-slate-800 hover:text-white',
+  ].join(' ');
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        className={buttonClass}
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        Tools
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 20 20"
+          className="h-3 w-3"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M5.23 7.21a.75.75 0 011.06.02L10 11.06l3.71-3.83a.75.75 0 111.08 1.04l-4.24 4.38a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </button>
+      {open && (
+        <div
+          role="menu"
+          className="absolute right-0 z-10 mt-1 min-w-[12rem] overflow-hidden rounded-md border border-slate-700 bg-slate-800 shadow-lg ring-1 ring-black/20"
+        >
+          {tools.map((t) => {
+            const active = location.pathname === t.to;
+            return (
+              <Link
+                key={t.to}
+                to={t.to}
+                role="menuitem"
+                className={[
+                  'block px-3 py-2 text-sm transition-colors',
+                  active
+                    ? 'bg-indigo-600 text-white'
+                    : 'text-slate-200 hover:bg-slate-700 hover:text-white',
+                ].join(' ')}
+              >
+                {t.label}
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function Layout() {
@@ -28,11 +119,20 @@ export default function Layout() {
             Palmon Tools
           </NavLink>
           <nav className="flex items-center gap-1">
-            {navLinks.map((l) => (
-              <NavLink key={l.to} to={l.to} end={l.end} className={linkClass}>
-                {l.label}
-              </NavLink>
-            ))}
+            {navItems.map((item, i) =>
+              item.type === 'tools' ? (
+                <ToolsMenu key="tools" />
+              ) : (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.end}
+                  className={linkClass}
+                >
+                  {item.label}
+                </NavLink>
+              ),
+            )}
           </nav>
         </div>
       </header>
