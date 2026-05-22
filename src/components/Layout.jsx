@@ -42,8 +42,15 @@ export default function Layout() {
       </main>
 
       <footer className="mx-auto max-w-3xl px-4 py-6 text-center text-xs text-slate-500">
-        Fan-made tools for Palmon: Survival. Not affiliated with the game's
-        publisher.
+        <p>
+          Fan-made tools for Palmon: Survival. Not affiliated with the game's
+          publisher.
+        </p>
+        {import.meta.env.VITE_APP_VERSION && (
+          <p className="mt-1 text-slate-600">
+            v{import.meta.env.VITE_APP_VERSION}
+          </p>
+        )}
       </footer>
     </div>
   );
