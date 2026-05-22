@@ -7,6 +7,7 @@ export const BUILDING_CATEGORIES = [
   { key: 'medical', label: 'Medical' },
   { key: 'research', label: 'Research' },
   { key: 'production', label: 'Production' },
+  { key: 'seasonal', label: 'Seasonal' },
   { key: 'services', label: 'Services' },
   {
     key: 'resources',
@@ -18,7 +19,6 @@ export const BUILDING_CATEGORIES = [
     ],
   },
   { key: 'totems', label: 'Totems' },
-  { key: 'seasonal', label: 'Seasonal' },
 ];
 
 export const BUILDINGS = [
