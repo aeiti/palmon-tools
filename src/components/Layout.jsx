@@ -3,8 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 
 const tools = [
   { to: '/buildings', label: 'Buildings' },
-  { to: '/resources', label: 'Resources' },
-  { to: '/speedups', label: 'Speedups' },
+  { to: '/inventory', label: 'Inventory' },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 const navItems = [
@@ -27,7 +26,11 @@ function ToolsMenu() {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   const location = useLocation();
-  const isToolsActive = tools.some((t) => location.pathname === t.to);
+  const isToolsActive = tools.some(
+    (t) =>
+      location.pathname === t.to ||
+      location.pathname.startsWith(`${t.to}/`),
+  );
 
   useEffect(() => {
     setOpen(false);
@@ -85,7 +88,9 @@ function ToolsMenu() {
           className="absolute right-0 z-10 mt-1 min-w-[12rem] overflow-hidden rounded-md border border-slate-700 bg-slate-800 shadow-lg ring-1 ring-black/20"
         >
           {tools.map((t) => {
-            const active = location.pathname === t.to;
+            const active =
+              location.pathname === t.to ||
+              location.pathname.startsWith(`${t.to}/`);
             return (
               <Link
                 key={t.to}

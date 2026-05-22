@@ -4,6 +4,8 @@ import PageTracker from './components/PageTracker.jsx';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
 import Profile from './pages/Profile.jsx';
+import Inventory from './pages/Inventory.jsx';
+import Other from './pages/Other.jsx';
 import Speedups from './pages/Speedups.jsx';
 import Resources from './pages/Resources.jsx';
 import Buildings from './pages/Buildings.jsx';
@@ -15,8 +17,18 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="speedups" element={<Speedups />} />
-          <Route path="resources" element={<Resources />} />
+          <Route path="inventory" element={<Inventory />} />
+          <Route path="inventory/other" element={<Other />} />
+          <Route path="inventory/resources" element={<Resources />} />
+          <Route path="inventory/speedups" element={<Speedups />} />
+          <Route
+            path="resources"
+            element={<Navigate to="/inventory/resources" replace />}
+          />
+          <Route
+            path="speedups"
+            element={<Navigate to="/inventory/speedups" replace />}
+          />
           <Route path="buildings" element={<Buildings />} />
           <Route path="profile" element={<Profile />} />
           <Route path="about" element={<About />} />
