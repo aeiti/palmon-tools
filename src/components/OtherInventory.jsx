@@ -18,7 +18,7 @@ function ItemRow({ item, count, onChange }) {
         value={count ?? 0}
         onChange={(e) => onChange(item.key, e.target.value)}
         onFocus={(e) => e.target.select()}
-        className="h-7 w-20 rounded bg-slate-800 px-1.5 text-center tabular-nums text-sm leading-none text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+        className="h-7 w-20 rounded bg-slate-800 px-1.5 text-center tabular-nums text-sm leading-none text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
       />
     </div>
   );
