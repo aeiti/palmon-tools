@@ -1,0 +1,89 @@
+name: Release and Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Compute version
+        id: version
+        run: |
+          set -euo pipefail
+          git fetch --tags --force
+          DATE=$(date -u +%Y.%m.%d)
+          PREFIX="v${DATE}."
+          LAST=$(git tag --list "${PREFIX}*" \
+            | sed "s|^${PREFIX}||" \
+            | grep -E '^[0-9]+$' \
+            | sort -n \
+            | tail -n1 || true)
+          if [ -z "$LAST" ]; then
+            PATCH=0
+          else
+            PATCH=$((LAST + 1))
+          fi
+          TAG="v${DATE}.${PATCH}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+          echo "Computed tag: ${TAG}"
+
+      - run: npm ci
+
+      - name: Build
+        env:
+          VITE_APP_VERSION: ${{ steps.version.outputs.version }}
+          REACT_APP_VERSION: ${{ steps.version.outputs.version }}
+        run: npm run build
+
+      - name: Package build artifact
+        run: tar -czf "palmon-tools-${{ steps.version.outputs.tag }}.tar.gz" -C dist .
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release create "$TAG" \
+            --title "$TAG" \
+            --target "$GITHUB_SHA" \
+            --generate-notes \
+            "palmon-tools-${TAG}.tar.gz"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
