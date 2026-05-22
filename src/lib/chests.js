@@ -45,6 +45,13 @@ export function tierTypeTotal(chests, typeKey, tierKey) {
   );
 }
 
+export function resourceTierTotal(chests, tierKey, resourceKey) {
+  return CHEST_TYPES.reduce(
+    (sum, t) => sum + (chests?.[t.key]?.[tierKey]?.[resourceKey] || 0),
+    0,
+  );
+}
+
 export function hasAnyChests(chests) {
   return CHEST_TYPES.some((type) =>
     CHEST_TIERS.some((tier) => tierTypeTotal(chests, type.key, tier.key) > 0),
