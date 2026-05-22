@@ -15,7 +15,8 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
       const isDupe = Boolean(name) && dupes.has(name);
       const labelText = card.showBuildingLabel
         ? building.label
-        : instanceLabel(building, i);
+        : String(i + 1);
+      const fullName = instanceLabel(building, i);
       return {
         id: `${building.key}:${i}`,
         building,
@@ -23,11 +24,12 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
         instance: inst,
         isDupe,
         labelText,
+        fullName,
       };
     }),
   );
 
-  const gridCols = 'grid-cols-[minmax(0,1fr)_3rem_max-content]';
+  const gridCols = 'grid-cols-[max-content_3rem_max-content]';
 
   return (
     <div className="rounded-lg ring-1 ring-slate-700">
@@ -56,7 +58,10 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
         <span aria-hidden="true" />
         {rows.map((r) => (
           <Fragment key={r.id}>
-            <span className="truncate text-sm text-slate-300">
+            <span
+              className="text-sm tabular-nums text-slate-300"
+              title={card.showBuildingLabel ? undefined : r.fullName}
+            >
               {r.labelText}
             </span>
             <input
@@ -70,7 +75,7 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
                 onChange(r.building.key, r.index, 'level', e.target.value)
               }
               onFocus={(e) => e.target.select()}
-              aria-label={`${r.labelText} level`}
+              aria-label={`${r.fullName} level`}
               className="h-7 w-full rounded bg-slate-800 px-1 text-center tabular-nums text-sm leading-none text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <select
@@ -78,7 +83,7 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
               onChange={(e) =>
                 onChange(r.building.key, r.index, 'palmon', e.target.value)
               }
-              aria-label={`${r.labelText} palmon`}
+              aria-label={`${r.fullName} palmon`}
               title={
                 r.isDupe ? 'Already assigned to another building' : undefined
               }
@@ -100,10 +105,10 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
   );
 }
 
-function CardGrid({ defs, profileBuildings, palmons, onChange, dupes }) {
+function CardList({ defs, profileBuildings, palmons, onChange, dupes }) {
   const cards = groupBuildingsForDisplay(defs);
   return (
-    <div className="grid items-start gap-3 sm:grid-cols-2">
+    <div className="flex flex-col gap-3">
       {cards.map((card) => (
         <BuildingCard
           key={card.groupKey || card.buildings[0].key}
@@ -122,9 +127,12 @@ export default function BuildingTracker({ buildings, palmons = [], onChange }) {
   const dupes = duplicatePalmonKeys(buildings);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 sm:block sm:columns-2 sm:gap-x-6">
       {BUILDINGS_BY_CATEGORY.map((category) => (
-        <section key={category.key} className="flex flex-col gap-3">
+        <section
+          key={category.key}
+          className="flex flex-col gap-3 sm:mb-6 sm:break-inside-avoid"
+        >
           <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
             {category.label}
           </h2>
@@ -135,7 +143,7 @@ export default function BuildingTracker({ buildings, palmons = [], onChange }) {
                   <h3 className="text-xs font-medium uppercase tracking-wide text-slate-500">
                     {sub.label}
                   </h3>
-                  <CardGrid
+                  <CardList
                     defs={sub.buildings}
                     profileBuildings={buildings}
                     palmons={palmons}
@@ -146,7 +154,7 @@ export default function BuildingTracker({ buildings, palmons = [], onChange }) {
               ))}
             </div>
           ) : (
-            <CardGrid
+            <CardList
               defs={category.buildings}
               profileBuildings={buildings}
               palmons={palmons}
