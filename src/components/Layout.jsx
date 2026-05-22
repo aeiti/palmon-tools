@@ -5,6 +5,7 @@ const tools = [
   { to: '/buildings', label: 'Buildings' },
   { to: '/inventory', label: 'Inventory' },
   { to: '/palmon', label: 'Palmon' },
+  { to: '/squads', label: 'Squads' },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 const navItems = [

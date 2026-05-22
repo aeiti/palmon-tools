@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
 import { profileLabel } from '../lib/profile.js';
@@ -19,6 +20,7 @@ import {
   placeholderEquipmentName,
   placeholderSkillName,
   placeholderTraitName,
+  squadIsFull,
 } from '../lib/palmon.js';
 
 const ELEMENT_BADGE_CLASS = {
@@ -97,7 +99,7 @@ function SelectField({ label, value, onChange, options, ariaLabel }) {
         className="h-8 w-full rounded bg-slate-800 px-2 text-sm text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
       >
         {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>
+          <option key={opt.value} value={opt.value} disabled={opt.disabled}>
             {opt.label}
           </option>
         ))}
@@ -132,49 +134,75 @@ const SUB_STAR_OPTIONS = Array.from({ length: SUB_STAR_LEVELS }, (_, i) => ({
   value: String(i + 1),
   label: String(i + 1),
 }));
-const SQUAD_OPTIONS = [
-  { value: '', label: 'None' },
-  ...Array.from({ length: SQUAD_COUNT }, (_, i) => ({
-    value: String(i + 1),
-    label: `Squad ${i + 1}`,
-  })),
-];
+function buildSquadOptions(palmon, allPalmons) {
+  return [
+    { value: '', label: 'None' },
+    ...Array.from({ length: SQUAD_COUNT }, (_, i) => {
+      const n = i + 1;
+      const full = squadIsFull(allPalmons, n, palmon.id);
+      return {
+        value: String(n),
+        label: full ? `Squad ${n} (full)` : `Squad ${n}`,
+        disabled: full,
+      };
+    }),
+  ];
+}
 
 function PalmonCard({ palmon, allPalmons, onChange, onDelete }) {
   const species = PALMON_SPECIES_BY_KEY[palmon.speciesKey];
   const [expanded, setExpanded] = useState(false);
   const displayName = palmonDisplayName(palmon, allPalmons);
+  const cardRef = useRef(null);
+  const { hash } = useLocation();
+  const anchorId = `palmon-${palmon.id}`;
+  const squadOptions = buildSquadOptions(palmon, allPalmons);
+
+  useEffect(() => {
+    if (hash === `#${anchorId}`) {
+      setExpanded(true);
+      cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [hash, anchorId]);
 
   return (
-    <div className="rounded-lg ring-1 ring-slate-700">
-      <button
-        type="button"
-        onClick={() => setExpanded((v) => !v)}
-        className="flex w-full items-center justify-between gap-2 bg-slate-800/80 px-3 py-2 text-left hover:bg-slate-800"
-        aria-expanded={expanded}
-      >
-        <div className="flex min-w-0 items-center gap-2">
-          <span className="truncate text-sm font-semibold text-slate-100">
-            {displayName}
-          </span>
-          {species && <ElementBadge element={species.element} />}
-          {species?.rarity && <RarityBadge rarity={species.rarity} />}
-        </div>
-        <div className="flex shrink-0 items-center gap-3 text-xs text-slate-400 tabular-nums">
-          <span>
-            <span className="text-slate-500">Lv</span> {palmon.level || 0}
-          </span>
-          <span>
-            <span className="text-slate-500">★</span> {palmon.star}-
-            {palmon.subStar}
-          </span>
-          {palmon.squad && (
-            <span className="rounded bg-indigo-500/15 px-1.5 py-0.5 text-indigo-300 ring-1 ring-indigo-500/30">
+    <div ref={cardRef} id={anchorId} className="rounded-lg ring-1 ring-slate-700">
+      <div className="flex items-stretch bg-slate-800/80 hover:bg-slate-800">
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          className="flex flex-1 items-center justify-between gap-2 px-3 py-2 text-left"
+          aria-expanded={expanded}
+        >
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="truncate text-sm font-semibold text-slate-100">
+              {displayName}
+            </span>
+            {species && <ElementBadge element={species.element} />}
+            {species?.rarity && <RarityBadge rarity={species.rarity} />}
+          </div>
+          <div className="flex shrink-0 items-center gap-3 text-xs text-slate-400 tabular-nums">
+            <span>
+              <span className="text-slate-500">Lv</span> {palmon.level || 0}
+            </span>
+            <span>
+              <span className="text-slate-500">★</span> {palmon.star}-
+              {palmon.subStar}
+            </span>
+          </div>
+        </button>
+        {palmon.squad && (
+          <Link
+            to={`/squads#squad-${palmon.squad}`}
+            className="flex shrink-0 items-center px-3 text-xs tabular-nums"
+            aria-label={`Go to Squad ${palmon.squad}`}
+          >
+            <span className="rounded bg-indigo-500/15 px-1.5 py-0.5 text-indigo-300 ring-1 ring-indigo-500/30 hover:bg-indigo-500/25">
               Squad {palmon.squad}
             </span>
-          )}
-        </div>
-      </button>
+          </Link>
+        )}
+      </div>
 
       {expanded && (
         <div className="flex flex-col gap-4 bg-slate-900/40 px-3 py-3">
@@ -198,7 +226,7 @@ function PalmonCard({ palmon, allPalmons, onChange, onDelete }) {
               onChange={(v) =>
                 onChange(palmon.id, { squad: v === '' ? null : Number(v) })
               }
-              options={SQUAD_OPTIONS}
+              options={squadOptions}
               ariaLabel={`${displayName} squad`}
             />
             <SelectField
