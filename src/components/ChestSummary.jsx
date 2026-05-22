@@ -8,8 +8,8 @@ import {
 } from '../lib/chests.js';
 
 const VIEWS = [
-  { key: 'total', label: 'Total' },
   { key: 'by-resource', label: 'By resource' },
+  { key: 'total', label: 'Total' },
 ];
 
 function toggleClass(active) {
@@ -96,7 +96,7 @@ function ByResourceView({ chests }) {
 }
 
 export default function ChestSummary({ chests }) {
-  const [view, setView] = useState('total');
+  const [view, setView] = useState('by-resource');
 
   return (
     <div className="flex flex-col gap-2">
