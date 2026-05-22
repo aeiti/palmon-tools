@@ -17,9 +17,9 @@ const FIELDS = [
     emptyText: 'username',
   },
   { key: 'server', label: 'Server', format: formatServer, emptyText: 'Not set' },
-  { key: 'guild', label: 'Guild', format: formatProfileValue, emptyText: 'Not set' },
-  { key: 'level', label: 'Player level', format: formatProfileValue, emptyText: 'Not set' },
-  { key: 'power', label: 'Power', format: formatProfileValue, emptyText: 'Not set' },
+  { key: 'guild', label: 'Guild', format: formatProfileValue, emptyText: 'guild' },
+  { key: 'level', label: 'Player level', format: formatProfileValue, emptyText: '1' },
+  { key: 'power', label: 'Power', format: formatProfileValue, emptyText: '100,000,000' },
 ];
 
 function Row({ label, display, emptyText }) {
@@ -89,7 +89,7 @@ export default function Profile() {
       )}
 
       <section className="rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+        <h2 className="text-base font-semibold text-slate-100">
           {profileLabel(activeProfile)}
         </h2>
         <dl className="mt-3">
