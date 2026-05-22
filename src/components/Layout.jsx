@@ -15,6 +15,13 @@ const navItems = [
   { type: 'link', to: '/about', label: 'About' },
 ];
 
+const footerLinks = [
+  { to: '/', label: 'Home', end: true },
+  { to: '/profile', label: 'Profile' },
+  { to: '/about', label: 'About' },
+  ...tools,
+].sort((a, b) => a.label.localeCompare(b.label));
+
 function linkClass({ isActive }) {
   return [
     'rounded px-3 py-1.5 text-sm font-medium transition-colors',
@@ -149,16 +156,42 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      <footer className="mx-auto max-w-3xl px-4 py-6 text-center text-xs text-slate-500">
-        <p>
-          Fan-made tools for Palmon: Survival. Not affiliated with the game's
-          publisher.
-        </p>
-        {import.meta.env.VITE_APP_VERSION && (
-          <p className="mt-1 text-slate-600">
-            v{import.meta.env.VITE_APP_VERSION}
-          </p>
-        )}
+      <footer className="mt-6 border-t border-slate-800 bg-slate-900/60">
+        <div className="mx-auto max-w-3xl px-4 py-6">
+          <nav
+            aria-label="Footer"
+            className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1"
+          >
+            {footerLinks.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) =>
+                  [
+                    'rounded px-2 py-1 text-xs font-medium transition-colors',
+                    isActive
+                      ? 'text-indigo-300'
+                      : 'text-slate-400 hover:text-slate-100',
+                  ].join(' ')
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+          <div className="mt-3 text-center text-xs text-slate-500">
+            <p>
+              Fan-made tools for Palmon: Survival. Not affiliated with the
+              game's publisher.
+            </p>
+            {import.meta.env.VITE_APP_VERSION && (
+              <p className="mt-1 text-slate-600">
+                v{import.meta.env.VITE_APP_VERSION}
+              </p>
+            )}
+          </div>
+        </div>
       </footer>
     </div>
   );
