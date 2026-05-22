@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ProfileSummary from '../components/ProfileSummary.jsx';
 import ChestSummary from '../components/ChestSummary.jsx';
+import SpeedupSummary from '../components/SpeedupSummary.jsx';
 import { hasProfileDetails, profileLabel } from '../lib/profile.js';
 import { hasAnyChests } from '../lib/chests.js';
+import { hasAnySpeedups } from '../lib/speedups.js';
 
 const tools = [
   {
@@ -26,6 +28,7 @@ export default function Home() {
   const { activeProfile } = useProfiles();
   const showProfile = hasProfileDetails(activeProfile);
   const showChests = hasAnyChests(activeProfile.chests);
+  const showSpeedups = hasAnySpeedups(activeProfile.inventory);
 
   return (
     <div className="flex flex-col gap-6">
@@ -73,6 +76,25 @@ export default function Home() {
           </div>
           <div className="mt-3">
             <ChestSummary chests={activeProfile.chests} />
+          </div>
+        </section>
+      )}
+
+      {showSpeedups && (
+        <section className="rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-base font-semibold text-slate-100">
+              Speedup Inventory
+            </h2>
+            <Link
+              to="/speedups"
+              className="text-xs text-indigo-300 underline hover:text-indigo-200"
+            >
+              Edit
+            </Link>
+          </div>
+          <div className="mt-3">
+            <SpeedupSummary inventory={activeProfile.inventory} />
           </div>
         </section>
       )}
