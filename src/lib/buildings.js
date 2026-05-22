@@ -1,35 +1,49 @@
 export const MAX_BUILDING_LEVEL = 30;
 
-export const BUILDINGS = [
-  { key: 'alchemy_lab', label: 'Alchemy Lab', count: 4 },
-  { key: 'armigo_hut', label: 'Armigo Hut', count: 4 },
-  { key: 'aurora_altar', label: 'Aurora Altar', count: 1 },
-  { key: 'bed', label: 'Bed', count: 7 },
-  { key: 'camp', label: 'Camp', count: 1 },
-  { key: 'dreamium_siever', label: 'Dreamium Siever', count: 4 },
-  { key: 'earth_totem', label: 'Earth Totem', count: 1 },
-  { key: 'electric_totem', label: 'Electric Totem', count: 1 },
-  { key: 'field_lab', label: 'Field Lab', count: 2 },
-  { key: 'fire_totem', label: 'Fire Totem', count: 1 },
-  { key: 'furnace', label: 'Furnace', count: 4 },
-  { key: 'hatchery', label: 'Hatchery', count: 1 },
-  { key: 'holy_tower', label: 'Holy Tower', count: 1, seasonal: true },
-  { key: 'hospital', label: 'Hospital', count: 2 },
-  { key: 'mithril_workshop', label: 'Mithril Workshop', count: 4, seasonal: true },
-  { key: 'ore_stockpile', label: 'Ore Stockpile', count: 1 },
-  { key: 'palcatcher_workshop', label: 'Palcatcher Workshop', count: 1 },
-  { key: 'power_plant', label: 'Power Plant', count: 4 },
-  { key: 'pumpkin_farm', label: 'Pumpkin Farm', count: 1 },
-  { key: 'shop', label: 'Shop', count: 1 },
-  { key: 'squad', label: 'Squad', count: 4 },
-  { key: 'stable', label: 'Stable', count: 1 },
-  { key: 'super_mithril_workshop', label: 'Super Mithril Workshop', count: 1, seasonal: true },
-  { key: 'table_saw', label: 'Table Saw', count: 4 },
-  { key: 'titan_totem', label: 'Titan Totem', count: 4 },
-  { key: 'tomato_farm', label: 'Tomato Farm', count: 1 },
-  { key: 'water_totem', label: 'Water Totem', count: 1 },
-  { key: 'wood_stockpile', label: 'Wood Stockpile', count: 1 },
+export const BUILDING_CATEGORIES = [
+  { key: 'general', label: 'General' },
+  { key: 'farms', label: 'Farms' },
+  { key: 'lumber', label: 'Lumber' },
+  { key: 'smelting', label: 'Smelting' },
+  { key: 'totems', label: 'Totems' },
+  { key: 'seasonal', label: 'Seasonal' },
 ];
+
+export const BUILDINGS = [
+  { key: 'alchemy_lab', label: 'Alchemy Lab', count: 4, category: 'general' },
+  { key: 'armigo_hut', label: 'Armigo Hut', count: 4, category: 'general' },
+  { key: 'aurora_altar', label: 'Aurora Altar', count: 1, category: 'general' },
+  { key: 'bed', label: 'Bed', count: 7, category: 'general' },
+  { key: 'camp', label: 'Camp', count: 1, category: 'general' },
+  { key: 'dreamium_siever', label: 'Dreamium Siever', count: 4, category: 'general' },
+  { key: 'field_lab', label: 'Field Lab', count: 2, category: 'general' },
+  { key: 'hatchery', label: 'Hatchery', count: 1, category: 'general' },
+  { key: 'hospital', label: 'Hospital', count: 2, category: 'general' },
+  { key: 'palcatcher_workshop', label: 'Palcatcher Workshop', count: 1, category: 'general' },
+  { key: 'power_plant', label: 'Power Plant', count: 4, category: 'general' },
+  { key: 'shop', label: 'Shop', count: 1, category: 'general' },
+  { key: 'squad', label: 'Squad', count: 4, category: 'general' },
+  { key: 'stable', label: 'Stable', count: 1, category: 'general' },
+  { key: 'pumpkin_farm', label: 'Pumpkin Farm', count: 1, category: 'farms' },
+  { key: 'tomato_farm', label: 'Tomato Farm', count: 1, category: 'farms' },
+  { key: 'table_saw', label: 'Table Saw', count: 4, category: 'lumber' },
+  { key: 'wood_stockpile', label: 'Wood Stockpile', count: 1, category: 'lumber' },
+  { key: 'furnace', label: 'Furnace', count: 4, category: 'smelting' },
+  { key: 'ore_stockpile', label: 'Ore Stockpile', count: 1, category: 'smelting' },
+  { key: 'earth_totem', label: 'Earth Totem', count: 1, category: 'totems' },
+  { key: 'electric_totem', label: 'Electric Totem', count: 1, category: 'totems' },
+  { key: 'fire_totem', label: 'Fire Totem', count: 1, category: 'totems' },
+  { key: 'titan_totem', label: 'Titan Totem', count: 4, category: 'totems' },
+  { key: 'water_totem', label: 'Water Totem', count: 1, category: 'totems' },
+  { key: 'holy_tower', label: 'Holy Tower', count: 1, category: 'seasonal', seasonal: true },
+  { key: 'mithril_workshop', label: 'Mithril Workshop', count: 4, category: 'seasonal', seasonal: true },
+  { key: 'super_mithril_workshop', label: 'Super Mithril Workshop', count: 1, category: 'seasonal', seasonal: true },
+];
+
+export const BUILDINGS_BY_CATEGORY = BUILDING_CATEGORIES.map((cat) => ({
+  ...cat,
+  buildings: BUILDINGS.filter((b) => b.category === cat.key),
+}));
 
 function emptyInstance() {
   return { level: 0, palmon: '' };
