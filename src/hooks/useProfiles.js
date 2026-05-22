@@ -147,26 +147,32 @@ export function useProfiles() {
     }));
   }, []);
 
-  const updateChestCount = useCallback((typeKey, tierKey, value) => {
-    const v = Math.max(0, Math.floor(Number(value) || 0));
-    setState((s) => ({
-      ...s,
-      profiles: s.profiles.map((p) =>
-        p.id !== s.activeProfileId
-          ? p
-          : {
-              ...p,
-              chests: {
-                ...p.chests,
-                [typeKey]: {
-                  ...p.chests[typeKey],
-                  [tierKey]: v,
+  const updateChestCount = useCallback(
+    (typeKey, tierKey, resourceKey, value) => {
+      const v = Math.max(0, Math.floor(Number(value) || 0));
+      setState((s) => ({
+        ...s,
+        profiles: s.profiles.map((p) =>
+          p.id !== s.activeProfileId
+            ? p
+            : {
+                ...p,
+                chests: {
+                  ...p.chests,
+                  [typeKey]: {
+                    ...p.chests[typeKey],
+                    [tierKey]: {
+                      ...p.chests[typeKey][tierKey],
+                      [resourceKey]: v,
+                    },
+                  },
                 },
               },
-            },
-      ),
-    }));
-  }, []);
+        ),
+      }));
+    },
+    [],
+  );
 
   const resetActiveChests = useCallback(() => {
     setState((s) => ({
