@@ -32,9 +32,9 @@ const ELEMENT_BADGE_CLASS = {
 };
 
 const RARITY_BADGE_CLASS = {
-  sr: 'bg-purple-500/15 text-purple-300 ring-purple-500/30',
-  ssr: 'bg-blue-500/15 text-blue-300 ring-blue-500/30',
-  ur: 'bg-orange-500/15 text-orange-300 ring-orange-500/30',
+  sr: 'bg-blue-500/15 text-blue-300 ring-blue-500/30',
+  ssr: 'bg-purple-500/15 text-purple-300 ring-purple-500/30',
+  ur: 'bg-yellow-500/15 text-yellow-300 ring-yellow-500/30',
 };
 
 const MYTHICAL_BADGE_CLASS =
