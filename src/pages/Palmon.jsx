@@ -9,6 +9,7 @@ import {
   MAX_SKILL_LEVEL,
   PALMON_SPECIES,
   PALMON_SPECIES_BY_KEY,
+  RARITY_BY_KEY,
   SKILL_SLOTS,
   SQUAD_COUNT,
   STAR_LEVELS,
@@ -27,10 +28,31 @@ const ELEMENT_BADGE_CLASS = {
   electric: 'bg-amber-500/15 text-amber-300 ring-amber-500/30',
 };
 
+const RARITY_BADGE_CLASS = {
+  common: 'bg-slate-500/15 text-slate-300 ring-slate-500/30',
+  rare: 'bg-blue-500/15 text-blue-300 ring-blue-500/30',
+  epic: 'bg-purple-500/15 text-purple-300 ring-purple-500/30',
+  legendary: 'bg-orange-500/15 text-orange-300 ring-orange-500/30',
+  mythical: 'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-500/30',
+};
+
 function ElementBadge({ element }) {
   const meta = ELEMENT_BY_KEY[element];
   if (!meta) return null;
   const cls = ELEMENT_BADGE_CLASS[element] || 'bg-slate-700 text-slate-300';
+  return (
+    <span
+      className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ring-1 ${cls}`}
+    >
+      {meta.label}
+    </span>
+  );
+}
+
+function RarityBadge({ rarity }) {
+  const meta = RARITY_BY_KEY[rarity];
+  if (!meta) return null;
+  const cls = RARITY_BADGE_CLASS[rarity] || 'bg-slate-700 text-slate-300';
   return (
     <span
       className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ring-1 ${cls}`}
@@ -136,6 +158,7 @@ function PalmonCard({ palmon, allPalmons, onChange, onDelete }) {
             {displayName}
           </span>
           {species && <ElementBadge element={species.element} />}
+          {species?.rarity && <RarityBadge rarity={species.rarity} />}
         </div>
         <div className="flex shrink-0 items-center gap-3 text-xs text-slate-400 tabular-nums">
           <span>

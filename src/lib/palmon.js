@@ -14,6 +14,14 @@ export const ELEMENTS = [
   { key: 'electric', label: 'Electric' },
 ];
 
+export const RARITIES = [
+  { key: 'common', label: 'Common' },
+  { key: 'rare', label: 'Rare' },
+  { key: 'epic', label: 'Epic' },
+  { key: 'legendary', label: 'Legendary' },
+  { key: 'mythical', label: 'Mythical' },
+];
+
 export const PALMON_SPECIES = [
   { key: 'abuzzinian', name: 'Abuzzinian', element: 'electric' },
   { key: 'auktyke', name: 'Auktyke', element: 'water' },
@@ -28,6 +36,7 @@ export const PALMON_SPECIES = [
   { key: 'fingenue', name: 'Fingenue', element: 'water' },
   { key: 'flouffant', name: 'Flouffant', element: 'earth' },
   { key: 'ghillant', name: 'Ghillant', element: 'earth' },
+  { key: 'glacewing', name: 'Glacewing', element: 'water', rarity: 'mythical' },
   { key: 'gnashley', name: 'Gnashley', element: 'water' },
   { key: 'graffitty', name: 'Graffitty', element: 'earth' },
   { key: 'herculeaf', name: 'Herculeaf', element: 'earth' },
@@ -42,6 +51,7 @@ export const PALMON_SPECIES = [
   { key: 'meowdame', name: 'Meowdame', element: 'water' },
   { key: 'ninjump', name: 'Ninjump', element: 'water' },
   { key: 'platyputz', name: 'Platyputz', element: 'water' },
+  { key: 'plunderjaw', name: 'Plunderjaw', element: 'water', rarity: 'mythical' },
   { key: 'regalion', name: 'Regalion', element: 'water' },
   { key: 'rootwarden', name: 'Rootwarden', element: 'earth' },
   { key: 'snowkami', name: 'Snowkami', element: 'water' },
@@ -62,6 +72,11 @@ export const PALMON_SPECIES_BY_KEY = PALMON_SPECIES.reduce((acc, s) => {
 
 export const ELEMENT_BY_KEY = ELEMENTS.reduce((acc, e) => {
   acc[e.key] = e;
+  return acc;
+}, {});
+
+export const RARITY_BY_KEY = RARITIES.reduce((acc, r) => {
+  acc[r.key] = r;
   return acc;
 }, {});
 
