@@ -44,23 +44,50 @@ function defaultState() {
   return { activeProfileId: p.id, profiles: [p] };
 }
 
+function clampCampLevel(n) {
+  if (!Number.isFinite(n) || n <= 0) return 0;
+  return Math.min(MAX_BUILDING_LEVEL, Math.floor(n));
+}
+
+function applyCampLevel(profile, level) {
+  const lvl = clampCampLevel(level);
+  return {
+    ...profile,
+    level: lvl === 0 ? null : lvl,
+    buildings: {
+      ...profile.buildings,
+      camp: profile.buildings.camp.map((inst, i) =>
+        i === 0 ? { ...inst, level: lvl } : inst,
+      ),
+    },
+  };
+}
+
+function syncProfileCampLevel(profile) {
+  const profLvl = profile.level ?? 0;
+  const campLvl = profile.buildings?.camp?.[0]?.level ?? 0;
+  return applyCampLevel(profile, Math.max(profLvl, campLvl));
+}
+
 function normalize(state) {
   if (!state || !Array.isArray(state.profiles) || state.profiles.length === 0) {
     return defaultState();
   }
-  const profiles = state.profiles.map((p) => ({
-    id: p.id || makeId(),
-    name: p.name || 'Untitled',
-    ign: typeof p.ign === 'string' ? p.ign : '',
-    server: parseNonNegativeInt(p.server),
-    guild: typeof p.guild === 'string' ? p.guild : '',
-    level: parseNonNegativeInt(p.level),
-    power: parseNonNegativeInt(p.power),
-    inventory: { ...emptyInventory(), ...(p.inventory || {}) },
-    chests: normalizeChests(p.chests),
-    other: normalizeOther(p.other),
-    buildings: normalizeBuildings(p.buildings),
-  }));
+  const profiles = state.profiles.map((p) =>
+    syncProfileCampLevel({
+      id: p.id || makeId(),
+      name: p.name || 'Untitled',
+      ign: typeof p.ign === 'string' ? p.ign : '',
+      server: parseNonNegativeInt(p.server),
+      guild: typeof p.guild === 'string' ? p.guild : '',
+      level: parseNonNegativeInt(p.level),
+      power: parseNonNegativeInt(p.power),
+      inventory: { ...emptyInventory(), ...(p.inventory || {}) },
+      chests: normalizeChests(p.chests),
+      other: normalizeOther(p.other),
+      buildings: normalizeBuildings(p.buildings),
+    }),
+  );
   const activeProfileId = profiles.find((p) => p.id === state.activeProfileId)
     ? state.activeProfileId
     : profiles[0].id;
@@ -98,12 +125,18 @@ export function useProfiles() {
     for (const key of ['ign', 'guild']) {
       if (key in details) clean[key] = String(details[key] ?? '').trim();
     }
-    for (const key of ['server', 'level', 'power']) {
+    for (const key of ['server', 'power']) {
       if (key in details) clean[key] = parseNonNegativeInt(details[key]);
     }
+    const hasLevel = 'level' in details;
+    const newLevel = hasLevel ? parseNonNegativeInt(details.level) : null;
     setState((s) => ({
       ...s,
-      profiles: s.profiles.map((p) => (p.id === id ? { ...p, ...clean } : p)),
+      profiles: s.profiles.map((p) => {
+        if (p.id !== id) return p;
+        const merged = { ...p, ...clean };
+        return hasLevel ? applyCampLevel(merged, newLevel) : merged;
+      }),
     }));
   }, []);
 
@@ -229,10 +262,13 @@ export function useProfiles() {
       } else {
         return;
       }
+      const isCampLevel =
+        buildingKey === 'camp' && index === 0 && field === 'level';
       setState((s) => ({
         ...s,
         profiles: s.profiles.map((p) => {
           if (p.id !== s.activeProfileId) return p;
+          if (isCampLevel) return applyCampLevel(p, clean);
           const instances = p.buildings[buildingKey].map((inst, i) =>
             i === index ? { ...inst, [field]: clean } : inst,
           );
@@ -250,7 +286,12 @@ export function useProfiles() {
     setState((s) => ({
       ...s,
       profiles: s.profiles.map((p) =>
-        p.id !== s.activeProfileId ? p : { ...p, buildings: emptyBuildings() },
+        p.id !== s.activeProfileId
+          ? p
+          : applyCampLevel(
+              { ...p, buildings: emptyBuildings() },
+              p.level ?? 0,
+            ),
       ),
     }));
   }, []);
