@@ -7,7 +7,6 @@ export const BUILDING_CATEGORIES = [
   { key: 'medical', label: 'Medical' },
   { key: 'research', label: 'Research' },
   { key: 'production', label: 'Production' },
-  { key: 'capture', label: 'Capture' },
   { key: 'services', label: 'Services' },
   {
     key: 'resources',
@@ -32,9 +31,9 @@ export const BUILDINGS = [
   { key: 'alchemy_lab', label: 'Alchemy Lab', count: 4, category: 'production' },
   { key: 'dreamium_siever', label: 'Dreamium Siever', count: 4, category: 'production' },
   { key: 'power_plant', label: 'Power Plant', count: 4, category: 'production' },
-  { key: 'palcatcher_workshop', label: 'Palcatcher Workshop', count: 1, category: 'capture' },
   { key: 'aurora_altar', label: 'Aurora Altar', count: 1, category: 'services' },
   { key: 'hatchery', label: 'Hatchery', count: 1, category: 'services' },
+  { key: 'palcatcher_workshop', label: 'Palcatcher Workshop', count: 1, category: 'services' },
   { key: 'shop', label: 'Shop', count: 1, category: 'services' },
   { key: 'stable', label: 'Stable', count: 1, category: 'services' },
   { key: 'pumpkin_farm', label: 'Pumpkin Farm', count: 1, category: 'resources', subcategory: 'farms' },
