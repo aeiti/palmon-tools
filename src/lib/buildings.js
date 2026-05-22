@@ -48,8 +48,8 @@ export const BUILDINGS = [
   { key: 'electric_totem', label: 'Electric Totem', count: 1, category: 'totems', groupKey: 'elemental_totems', groupLabel: 'Elemental Totems' },
   { key: 'titan_totem', label: 'Titan Totem', count: 4, category: 'totems' },
   { key: 'holy_tower', label: 'Holy Tower', count: 1, category: 'seasonal', seasonal: true },
-  { key: 'mithril_workshop', label: 'Mithril Workshop', count: 4, category: 'seasonal', seasonal: true },
   { key: 'super_mithril_workshop', label: 'Super Mithril Workshop', count: 1, category: 'seasonal', seasonal: true },
+  { key: 'mithril_workshop', label: 'Mithril Workshop', count: 4, category: 'seasonal', seasonal: true },
 ];
 
 function buildingsIn(categoryKey, subcategoryKey) {
