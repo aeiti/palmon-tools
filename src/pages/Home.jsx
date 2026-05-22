@@ -128,7 +128,7 @@ export default function Home() {
 
       <section>
         <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-400">
-          Tools
+          Profile
         </h2>
         <div className="grid gap-3 sm:grid-cols-2">
           {tools.map((t) =>
