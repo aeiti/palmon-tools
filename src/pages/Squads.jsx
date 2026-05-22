@@ -20,11 +20,13 @@ const ELEMENT_BADGE_CLASS = {
 };
 
 const RARITY_BADGE_CLASS = {
-  r: 'bg-blue-500/15 text-blue-300 ring-blue-500/30',
   sr: 'bg-purple-500/15 text-purple-300 ring-purple-500/30',
+  ssr: 'bg-blue-500/15 text-blue-300 ring-blue-500/30',
   ur: 'bg-orange-500/15 text-orange-300 ring-orange-500/30',
-  mythical: 'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-500/30',
 };
+
+const MYTHICAL_BADGE_CLASS =
+  'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-500/30';
 
 function Badge({ cls, label }) {
   return (
@@ -62,6 +64,9 @@ function PalmonRow({ palmon, allPalmons }) {
             cls={RARITY_BADGE_CLASS[species.rarity]}
             label={rarityMeta.label}
           />
+        )}
+        {species?.mythical && (
+          <Badge cls={MYTHICAL_BADGE_CLASS} label="Mythical" />
         )}
       </div>
       <div className="flex shrink-0 items-center gap-3 text-xs text-slate-400 tabular-nums">

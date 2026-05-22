@@ -32,11 +32,13 @@ const ELEMENT_BADGE_CLASS = {
 };
 
 const RARITY_BADGE_CLASS = {
-  r: 'bg-blue-500/15 text-blue-300 ring-blue-500/30',
   sr: 'bg-purple-500/15 text-purple-300 ring-purple-500/30',
+  ssr: 'bg-blue-500/15 text-blue-300 ring-blue-500/30',
   ur: 'bg-orange-500/15 text-orange-300 ring-orange-500/30',
-  mythical: 'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-500/30',
 };
+
+const MYTHICAL_BADGE_CLASS =
+  'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-500/30';
 
 function ElementBadge({ element }) {
   const meta = ELEMENT_BY_KEY[element];
@@ -60,6 +62,16 @@ function RarityBadge({ rarity }) {
       className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ring-1 ${cls}`}
     >
       {meta.label}
+    </span>
+  );
+}
+
+function MythicalBadge() {
+  return (
+    <span
+      className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ring-1 ${MYTHICAL_BADGE_CLASS}`}
+    >
+      Mythical
     </span>
   );
 }
@@ -181,6 +193,7 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
             </span>
             {species && <ElementBadge element={species.element} />}
             {species?.rarity && <RarityBadge rarity={species.rarity} />}
+            {species?.mythical && <MythicalBadge />}
           </div>
           <div className="flex shrink-0 items-center gap-3 text-xs text-slate-400 tabular-nums">
             <span>
