@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 
-const tools = [
+const profileTools = [
   { to: '/buildings', label: 'Buildings' },
   { to: '/inventory', label: 'Inventory' },
   { to: '/palmon', label: 'Palmon' },
@@ -10,15 +10,13 @@ const tools = [
 
 const navItems = [
   { type: 'link', to: '/', label: 'Home', end: true },
-  { type: 'link', to: '/profile', label: 'Profile' },
-  { type: 'tools' },
+  { type: 'profile' },
   { type: 'link', to: '/about', label: 'About' },
 ];
 
 const footerColumns = [
   { header: { to: '/', label: 'Home', end: true }, items: [] },
-  { header: { to: '/profile', label: 'Profile' }, items: [] },
-  { header: { label: 'Tools' }, items: tools },
+  { header: { to: '/profile', label: 'Profile' }, items: profileTools },
   { header: { to: '/about', label: 'About' }, items: [] },
 ];
 
@@ -31,11 +29,15 @@ function linkClass({ isActive }) {
   ].join(' ');
 }
 
-function ToolsMenu() {
+function ProfileMenu() {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   const location = useLocation();
-  const isToolsActive = tools.some(
+  const menuItems = [
+    { to: '/profile', label: 'Profile' },
+    ...profileTools,
+  ];
+  const isProfileSectionActive = menuItems.some(
     (t) =>
       location.pathname === t.to ||
       location.pathname.startsWith(`${t.to}/`),
@@ -63,7 +65,7 @@ function ToolsMenu() {
 
   const buttonClass = [
     'inline-flex items-center gap-1 rounded px-3 py-1.5 text-sm font-medium transition-colors',
-    isToolsActive
+    isProfileSectionActive
       ? 'bg-indigo-600 text-white'
       : 'text-slate-300 hover:bg-slate-800 hover:text-white',
   ].join(' ');
@@ -77,7 +79,7 @@ function ToolsMenu() {
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        Tools
+        Profile
         <svg
           aria-hidden="true"
           viewBox="0 0 20 20"
@@ -96,7 +98,7 @@ function ToolsMenu() {
           role="menu"
           className="absolute right-0 z-10 mt-1 min-w-[12rem] overflow-hidden rounded-md border border-slate-700 bg-slate-800 shadow-lg ring-1 ring-black/20"
         >
-          {tools.map((t) => {
+          {menuItems.map((t) => {
             const active =
               location.pathname === t.to ||
               location.pathname.startsWith(`${t.to}/`);
@@ -134,9 +136,9 @@ export default function Layout() {
             Palmon Tools
           </NavLink>
           <nav className="flex items-center gap-1">
-            {navItems.map((item, i) =>
-              item.type === 'tools' ? (
-                <ToolsMenu key="tools" />
+            {navItems.map((item) =>
+              item.type === 'profile' ? (
+                <ProfileMenu key="profile" />
               ) : (
                 <NavLink
                   key={item.to}
@@ -160,7 +162,7 @@ export default function Layout() {
         <div className="mx-auto max-w-3xl px-4 py-6">
           <nav
             aria-label="Footer"
-            className="grid grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-4"
+            className="grid grid-cols-3 gap-x-4 gap-y-4"
           >
             {footerColumns.map((col, i) => (
               <div key={col.header.label + i} className="flex flex-col gap-1">
