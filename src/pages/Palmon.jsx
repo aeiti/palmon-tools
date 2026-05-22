@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import { findPalmonBuildingAssignment } from '../lib/buildings.js';
 import { profileLabel } from '../lib/profile.js';
 import {
   ELEMENT_BY_KEY,
@@ -149,7 +150,7 @@ function buildSquadOptions(palmon, allPalmons) {
   ];
 }
 
-function PalmonCard({ palmon, allPalmons, onChange, onDelete }) {
+function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
   const species = PALMON_SPECIES_BY_KEY[palmon.speciesKey];
   const [expanded, setExpanded] = useState(false);
   const displayName = palmonDisplayName(palmon, allPalmons);
@@ -157,6 +158,7 @@ function PalmonCard({ palmon, allPalmons, onChange, onDelete }) {
   const { hash } = useLocation();
   const anchorId = `palmon-${palmon.id}`;
   const squadOptions = buildSquadOptions(palmon, allPalmons);
+  const buildingAssignment = findPalmonBuildingAssignment(palmon.id, buildings);
 
   useEffect(() => {
     if (hash === `#${anchorId}`) {
@@ -191,17 +193,26 @@ function PalmonCard({ palmon, allPalmons, onChange, onDelete }) {
             </span>
           </div>
         </button>
-        {palmon.squad && (
-          <Link
-            to={`/squads#squad-${palmon.squad}`}
-            className="flex shrink-0 items-center px-3 text-xs tabular-nums"
-            aria-label={`Go to Squad ${palmon.squad}`}
-          >
-            <span className="rounded bg-indigo-500/15 px-1.5 py-0.5 text-indigo-300 ring-1 ring-indigo-500/30 hover:bg-indigo-500/25">
+        <div className="flex shrink-0 items-center gap-2 pr-3 text-xs tabular-nums">
+          {buildingAssignment && (
+            <Link
+              to="/buildings"
+              className="rounded bg-emerald-500/15 px-1.5 py-0.5 text-emerald-300 ring-1 ring-emerald-500/30 hover:bg-emerald-500/25"
+              aria-label={`Assigned to ${buildingAssignment.label}`}
+            >
+              {buildingAssignment.label}
+            </Link>
+          )}
+          {palmon.squad && (
+            <Link
+              to={`/squads#squad-${palmon.squad}`}
+              className="rounded bg-indigo-500/15 px-1.5 py-0.5 text-indigo-300 ring-1 ring-indigo-500/30 hover:bg-indigo-500/25"
+              aria-label={`Go to Squad ${palmon.squad}`}
+            >
               Squad {palmon.squad}
-            </span>
-          </Link>
-        )}
+            </Link>
+          )}
+        </div>
       </div>
 
       {expanded && (
@@ -430,6 +441,7 @@ export default function Palmon() {
               key={pm.id}
               palmon={pm}
               allPalmons={palmons}
+              buildings={activeProfile.buildings}
               onChange={updatePalmon}
               onDelete={setPendingDelete}
             />
