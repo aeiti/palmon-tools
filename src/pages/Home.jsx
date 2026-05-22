@@ -15,7 +15,7 @@ const tools = [
   },
   {
     to: '/speedups',
-    title: 'Speedup Calculator',
+    title: 'Speedups',
     description:
       'Track your speedup inventory and check whether you have enough for an upcoming build, research, or training.',
     available: true,

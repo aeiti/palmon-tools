@@ -21,7 +21,7 @@ export default function Speedups() {
     <div className="flex flex-col gap-4">
       <header>
         <h1 className="text-xl font-semibold text-slate-100 sm:text-2xl">
-          Speedup Calculator
+          Speedups
         </h1>
         <p className="mt-1 text-sm text-slate-400">
           {activeProfile.ign ? (

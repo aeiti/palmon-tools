@@ -3,7 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 
 const tools = [
   { to: '/resources', label: 'Resources' },
-  { to: '/speedups', label: 'Speedup Calculator' },
+  { to: '/speedups', label: 'Speedups' },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 const navItems = [
