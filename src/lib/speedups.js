@@ -45,3 +45,8 @@ export function categoryTotalWithUniversal(inventory, categoryKey) {
   if (categoryKey === 'universal') return base;
   return base + categoryTotalMinutes(inventory.universal);
 }
+
+export function hasAnySpeedups(inventory) {
+  if (!inventory) return false;
+  return CATEGORIES.some((c) => categoryTotalMinutes(inventory[c.key]) > 0);
+}
