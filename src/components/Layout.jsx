@@ -15,12 +15,12 @@ const navItems = [
   { type: 'link', to: '/about', label: 'About' },
 ];
 
-const footerLinks = [
-  { to: '/', label: 'Home', end: true },
-  { to: '/profile', label: 'Profile' },
-  { to: '/about', label: 'About' },
-  ...tools,
-].sort((a, b) => a.label.localeCompare(b.label));
+const footerColumns = [
+  { header: { to: '/', label: 'Home', end: true }, items: [] },
+  { header: { to: '/profile', label: 'Profile' }, items: [] },
+  { header: { label: 'Tools' }, items: tools },
+  { header: { to: '/about', label: 'About' }, items: [] },
+];
 
 function linkClass({ isActive }) {
   return [
@@ -160,27 +160,50 @@ export default function Layout() {
         <div className="mx-auto max-w-3xl px-4 py-6">
           <nav
             aria-label="Footer"
-            className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1"
+            className="grid grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-4"
           >
-            {footerLinks.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                className={({ isActive }) =>
-                  [
-                    'rounded px-2 py-1 text-xs font-medium transition-colors',
-                    isActive
-                      ? 'text-indigo-300'
-                      : 'text-slate-400 hover:text-slate-100',
-                  ].join(' ')
-                }
-              >
-                {item.label}
-              </NavLink>
+            {footerColumns.map((col, i) => (
+              <div key={col.header.label + i} className="flex flex-col gap-1">
+                {col.header.to ? (
+                  <NavLink
+                    to={col.header.to}
+                    end={col.header.end}
+                    className={({ isActive }) =>
+                      [
+                        'text-xs font-semibold uppercase tracking-wide transition-colors',
+                        isActive
+                          ? 'text-indigo-300'
+                          : 'text-slate-300 hover:text-white',
+                      ].join(' ')
+                    }
+                  >
+                    {col.header.label}
+                  </NavLink>
+                ) : (
+                  <span className="text-xs font-semibold uppercase tracking-wide text-slate-300">
+                    {col.header.label}
+                  </span>
+                )}
+                {col.items.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    className={({ isActive }) =>
+                      [
+                        'text-xs transition-colors',
+                        isActive
+                          ? 'text-indigo-300'
+                          : 'text-slate-400 hover:text-slate-100',
+                      ].join(' ')
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                ))}
+              </div>
             ))}
           </nav>
-          <div className="mt-3 text-center text-xs text-slate-500">
+          <div className="mt-6 border-t border-slate-800 pt-4 text-center text-xs text-slate-500">
             <p>
               Fan-made tools for Palmon: Survival. Not affiliated with the
               game's publisher.
