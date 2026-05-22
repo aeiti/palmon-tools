@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import {
   BUILDINGS_BY_CATEGORY,
   MAX_BUILDING_LEVEL,
@@ -6,54 +7,37 @@ import {
   instanceLabel,
 } from '../lib/buildings.js';
 
-function BuildingRow({ building, index, instance, isDupe, palmons, onChange, label }) {
-  return (
-    <div className="flex flex-wrap items-center gap-2 px-3 py-2">
-      <span className="min-w-[6.5rem] text-sm text-slate-300">{label}</span>
-      <label className="flex items-center gap-1.5 text-xs text-slate-400">
-        Level
-        <input
-          type="number"
-          inputMode="numeric"
-          min="0"
-          max={MAX_BUILDING_LEVEL}
-          value={instance.level || ''}
-          placeholder="0"
-          onChange={(e) => onChange(building.key, index, 'level', e.target.value)}
-          onFocus={(e) => e.target.select()}
-          className="w-16 rounded bg-slate-800 px-2 py-1 text-center tabular-nums text-sm text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
-        />
-      </label>
-      <label className="flex flex-1 items-center gap-1.5 text-xs text-slate-400">
-        Palmon
-        <select
-          value={instance.palmon || ''}
-          onChange={(e) => onChange(building.key, index, 'palmon', e.target.value)}
-          className={`min-w-0 flex-1 rounded bg-slate-800 px-2 py-1 text-sm text-slate-100 ring-1 focus:outline-none focus:ring-indigo-400 ${
-            isDupe ? 'ring-red-500/70' : 'ring-slate-700'
-          }`}
-        >
-          <option value="">Unassigned</option>
-          {palmons.map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
-          ))}
-        </select>
-      </label>
-      {isDupe && (
-        <span className="text-[11px] text-red-300">Assigned elsewhere</span>
-      )}
-    </div>
-  );
-}
-
-function BuildingCard({ card, buildings, palmons, onChange, dupes }) {
+function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
   const totalCount = card.buildings.reduce((sum, b) => sum + b.count, 0);
+  const rows = card.buildings.flatMap((building) =>
+    profileBuildings[building.key].map((inst, i) => {
+      const name = (inst.palmon || '').trim().toLowerCase();
+      const isDupe = Boolean(name) && dupes.has(name);
+      const labelText = card.showBuildingLabel
+        ? building.label
+        : instanceLabel(building, i);
+      const hideLabel = !card.showBuildingLabel && building.count === 1;
+      return {
+        id: `${building.key}:${i}`,
+        building,
+        index: i,
+        instance: inst,
+        isDupe,
+        labelText,
+        hideLabel,
+      };
+    }),
+  );
+
+  const showLabelColumn = rows.some((r) => !r.hideLabel);
+  const gridCols = showLabelColumn
+    ? 'grid-cols-[minmax(0,1fr)_56px_minmax(0,1.6fr)]'
+    : 'grid-cols-[56px_minmax(0,1fr)]';
+
   return (
     <div className="rounded-lg ring-1 ring-slate-700">
-      <div className="flex items-center justify-between gap-2 bg-slate-800/80 px-3 py-2">
-        <h3 className="text-sm font-semibold text-slate-100">
+      <div className="flex items-center justify-between gap-2 bg-slate-800/80 px-3 py-1.5">
+        <h3 className="truncate text-sm font-semibold text-slate-100">
           {card.label}
           {card.showInstanceCount && totalCount > 1 && (
             <span className="ml-1 text-xs font-normal text-slate-400">
@@ -67,42 +51,71 @@ function BuildingCard({ card, buildings, palmons, onChange, dupes }) {
           </span>
         )}
       </div>
-      <div className="divide-y divide-slate-800 bg-slate-900/40">
-        {card.buildings.flatMap((building) =>
-          buildings[building.key].map((inst, i) => {
-            const name = (inst.palmon || '').trim().toLowerCase();
-            const isDupe = name && dupes.has(name);
-            const label = card.showBuildingLabel
-              ? building.label
-              : instanceLabel(building, i);
-            return (
-              <BuildingRow
-                key={`${building.key}:${i}`}
-                building={building}
-                index={i}
-                instance={inst}
-                isDupe={isDupe}
-                palmons={palmons}
-                onChange={onChange}
-                label={label}
-              />
-            );
-          }),
-        )}
+      <div
+        className={`grid items-center gap-x-2 gap-y-1 bg-slate-900/40 px-3 py-2 ${gridCols}`}
+      >
+        {showLabelColumn && <span aria-hidden="true" />}
+        <span className="text-center text-[10px] font-medium uppercase tracking-wide text-slate-500">
+          Lvl
+        </span>
+        <span aria-hidden="true" />
+        {rows.map((r) => (
+          <Fragment key={r.id}>
+            {showLabelColumn && (
+              <span className="truncate text-xs text-slate-300">
+                {r.hideLabel ? '' : r.labelText}
+              </span>
+            )}
+            <input
+              type="number"
+              inputMode="numeric"
+              min="0"
+              max={MAX_BUILDING_LEVEL}
+              value={r.instance.level || ''}
+              placeholder="0"
+              onChange={(e) =>
+                onChange(r.building.key, r.index, 'level', e.target.value)
+              }
+              onFocus={(e) => e.target.select()}
+              aria-label={`${r.labelText} level`}
+              className="w-full rounded bg-slate-800 px-1 py-1 text-center tabular-nums text-sm text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
+            />
+            <select
+              value={r.instance.palmon || ''}
+              onChange={(e) =>
+                onChange(r.building.key, r.index, 'palmon', e.target.value)
+              }
+              aria-label={`${r.labelText} palmon`}
+              title={
+                r.isDupe ? 'Already assigned to another building' : undefined
+              }
+              className={`min-w-0 rounded bg-slate-800 px-1.5 py-1 text-sm text-slate-100 ring-1 focus:outline-none focus:ring-indigo-400 ${
+                r.isDupe ? 'ring-red-500/70' : 'ring-slate-700'
+              }`}
+            >
+              <option value="">Unassigned</option>
+              {palmons.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </Fragment>
+        ))}
       </div>
     </div>
   );
 }
 
-function BuildingList({ buildings: defs, profileBuildings, palmons, onChange, dupes }) {
+function CardGrid({ defs, profileBuildings, palmons, onChange, dupes }) {
   const cards = groupBuildingsForDisplay(defs);
   return (
-    <div className="flex flex-col gap-3">
+    <div className="grid items-start gap-3 sm:grid-cols-2">
       {cards.map((card) => (
         <BuildingCard
           key={card.groupKey || card.buildings[0].key}
           card={card}
-          buildings={profileBuildings}
+          profileBuildings={profileBuildings}
           palmons={palmons}
           onChange={onChange}
           dupes={dupes}
@@ -129,8 +142,8 @@ export default function BuildingTracker({ buildings, palmons = [], onChange }) {
                   <h3 className="text-xs font-medium uppercase tracking-wide text-slate-500">
                     {sub.label}
                   </h3>
-                  <BuildingList
-                    buildings={sub.buildings}
+                  <CardGrid
+                    defs={sub.buildings}
                     profileBuildings={buildings}
                     palmons={palmons}
                     onChange={onChange}
@@ -140,8 +153,8 @@ export default function BuildingTracker({ buildings, palmons = [], onChange }) {
               ))}
             </div>
           ) : (
-            <BuildingList
-              buildings={category.buildings}
+            <CardGrid
+              defs={category.buildings}
               profileBuildings={buildings}
               palmons={palmons}
               onChange={onChange}
