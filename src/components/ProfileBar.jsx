@@ -2,7 +2,7 @@ import { useState } from 'react';
 import ConfirmDialog from './ConfirmDialog.jsx';
 import ProfileDetailsDialog from './ProfileDetailsDialog.jsx';
 import ProfileSummary from './ProfileSummary.jsx';
-import { hasProfileDetails } from '../lib/profile.js';
+import { hasProfileDetails, profileLabel } from '../lib/profile.js';
 
 export default function ProfileBar({
   profiles,
@@ -39,7 +39,7 @@ export default function ProfileBar({
         >
           {profiles.map((p) => (
             <option key={p.id} value={p.id}>
-              {p.name}
+              {profileLabel(p)}
             </option>
           ))}
         </select>
