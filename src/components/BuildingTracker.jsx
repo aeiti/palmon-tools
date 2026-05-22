@@ -31,8 +31,8 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
 
   const showLabelColumn = rows.some((r) => !r.hideLabel);
   const gridCols = showLabelColumn
-    ? 'grid-cols-[minmax(0,1fr)_56px_minmax(0,1.6fr)]'
-    : 'grid-cols-[56px_minmax(0,1fr)]';
+    ? 'grid-cols-[minmax(0,1fr)_3rem_max-content]'
+    : 'grid-cols-[3rem_max-content]';
 
   return (
     <div className="rounded-lg ring-1 ring-slate-700">
@@ -62,7 +62,7 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
         {rows.map((r) => (
           <Fragment key={r.id}>
             {showLabelColumn && (
-              <span className="truncate text-xs text-slate-300">
+              <span className="truncate text-sm text-slate-300">
                 {r.hideLabel ? '' : r.labelText}
               </span>
             )}
@@ -78,7 +78,7 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
               }
               onFocus={(e) => e.target.select()}
               aria-label={`${r.labelText} level`}
-              className="w-full rounded bg-slate-800 px-1 py-1 text-center tabular-nums text-sm text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
+              className="h-7 w-full rounded bg-slate-800 px-1 text-center tabular-nums text-sm leading-none text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <select
               value={r.instance.palmon || ''}
@@ -89,7 +89,7 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
               title={
                 r.isDupe ? 'Already assigned to another building' : undefined
               }
-              className={`min-w-0 rounded bg-slate-800 px-1.5 py-1 text-sm text-slate-100 ring-1 focus:outline-none focus:ring-indigo-400 ${
+              className={`h-7 rounded bg-slate-800 px-1.5 text-sm leading-none text-slate-100 ring-1 focus:outline-none focus:ring-indigo-400 ${
                 r.isDupe ? 'ring-red-500/70' : 'ring-slate-700'
               }`}
             >
