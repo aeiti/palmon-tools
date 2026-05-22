@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 const navLinks = [
   { to: '/', label: 'Home', end: true },
   { to: '/speedups', label: 'Speedups' },
+  { to: '/profile', label: 'Profile' },
   { to: '/about', label: 'About' },
 ];
 
