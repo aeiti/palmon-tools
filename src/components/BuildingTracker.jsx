@@ -93,8 +93,8 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
             >
               <option value="">Unassigned</option>
               {palmons.map((p) => (
-                <option key={p} value={p}>
-                  {p}
+                <option key={p.id} value={p.id}>
+                  {p.label}
                 </option>
               ))}
             </select>

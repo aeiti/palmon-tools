@@ -24,6 +24,13 @@ const tools = [
       'Track everything in your bag: miscellaneous items, resource chests, and speedups.',
     available: true,
   },
+  {
+    to: '/palmon',
+    title: 'Palmon',
+    description:
+      'Track your Palmon roster: level, stars, squad, equipment, skills, and traits.',
+    available: true,
+  },
 ].sort((a, b) => a.title.localeCompare(b.title));
 
 export default function Home() {

@@ -8,6 +8,7 @@ import {
   buildingsSummary,
   duplicatePalmonKeys,
 } from '../lib/buildings.js';
+import { palmonOptions } from '../lib/palmon.js';
 
 export default function Buildings() {
   const {
@@ -76,6 +77,7 @@ export default function Buildings() {
 
       <BuildingTracker
         buildings={activeProfile.buildings}
+        palmons={palmonOptions(activeProfile.palmons)}
         onChange={updateBuildingInstance}
       />
 
