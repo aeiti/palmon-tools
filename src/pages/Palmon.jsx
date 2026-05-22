@@ -98,7 +98,14 @@ function NumberField({ label, value, max, onChange, ariaLabel }) {
   );
 }
 
-function SelectField({ label, value, onChange, options, ariaLabel }) {
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+  groups,
+  ariaLabel,
+}) {
   return (
     <label className="flex flex-col gap-1">
       <span className="text-[10px] font-medium uppercase tracking-wide text-slate-500">
@@ -110,10 +117,19 @@ function SelectField({ label, value, onChange, options, ariaLabel }) {
         aria-label={ariaLabel || label}
         className="h-8 w-full rounded bg-slate-800 px-2 text-sm text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
       >
-        {options.map((opt) => (
+        {options?.map((opt) => (
           <option key={opt.value} value={opt.value} disabled={opt.disabled}>
             {opt.label}
           </option>
+        ))}
+        {groups?.map((group) => (
+          <optgroup key={group.label} label={group.label}>
+            {group.options.map((opt) => (
+              <option key={opt.value} value={opt.value} disabled={opt.disabled}>
+                {opt.label}
+              </option>
+            ))}
+          </optgroup>
         ))}
       </select>
     </label>
@@ -352,10 +368,20 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
   );
 }
 
-const SPECIES_OPTIONS = [
-  { value: '', label: 'Select species…' },
-  ...PALMON_SPECIES.map((s) => ({ value: s.key, label: s.name })),
-];
+const TIER_ORDER = ['ur', 'ssr', 'sr'];
+
+const SPECIES_PLACEHOLDER = [{ value: '', label: 'Select species…' }];
+
+const SPECIES_GROUPS = TIER_ORDER.map((tier) => {
+  const meta = RARITY_BY_KEY[tier];
+  return {
+    label: meta?.label || tier.toUpperCase(),
+    options: PALMON_SPECIES.filter((s) => s.rarity === tier)
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((s) => ({ value: s.key, label: s.name })),
+  };
+}).filter((g) => g.options.length > 0);
 
 export default function Palmon() {
   const {
@@ -429,7 +455,8 @@ export default function Palmon() {
           label="Add Palmon"
           value={pendingSpecies}
           onChange={setPendingSpecies}
-          options={SPECIES_OPTIONS}
+          options={SPECIES_PLACEHOLDER}
+          groups={SPECIES_GROUPS}
           ariaLabel="Species to add"
         />
         <button
