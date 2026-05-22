@@ -1,6 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import { emptyInventory } from '../lib/speedups.js';
 import { emptyChests, normalizeChests } from '../lib/chests.js';
+import {
+  BUILDINGS,
+  MAX_BUILDING_LEVEL,
+  emptyBuildings,
+  normalizeBuildings,
+} from '../lib/buildings.js';
 import { loadState, saveState } from '../lib/storage.js';
 
 function makeId() {
@@ -27,6 +33,7 @@ function makeProfile(name) {
     ...emptyDetails(),
     inventory: emptyInventory(),
     chests: emptyChests(),
+    buildings: emptyBuildings(),
   };
 }
 
@@ -49,6 +56,7 @@ function normalize(state) {
     power: parseNonNegativeInt(p.power),
     inventory: { ...emptyInventory(), ...(p.inventory || {}) },
     chests: normalizeChests(p.chests),
+    buildings: normalizeBuildings(p.buildings),
   }));
   const activeProfileId = profiles.find((p) => p.id === state.activeProfileId)
     ? state.activeProfileId
@@ -183,6 +191,46 @@ export function useProfiles() {
     }));
   }, []);
 
+  const updateBuildingInstance = useCallback(
+    (buildingKey, index, field, value) => {
+      const building = BUILDINGS.find((b) => b.key === buildingKey);
+      if (!building || index < 0 || index >= building.count) return;
+      let clean;
+      if (field === 'level') {
+        const n = Number(value);
+        if (!Number.isFinite(n) || n <= 0) clean = 0;
+        else clean = Math.min(MAX_BUILDING_LEVEL, Math.floor(n));
+      } else if (field === 'palmon') {
+        clean = typeof value === 'string' ? value : '';
+      } else {
+        return;
+      }
+      setState((s) => ({
+        ...s,
+        profiles: s.profiles.map((p) => {
+          if (p.id !== s.activeProfileId) return p;
+          const instances = p.buildings[buildingKey].map((inst, i) =>
+            i === index ? { ...inst, [field]: clean } : inst,
+          );
+          return {
+            ...p,
+            buildings: { ...p.buildings, [buildingKey]: instances },
+          };
+        }),
+      }));
+    },
+    [],
+  );
+
+  const resetActiveBuildings = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId ? p : { ...p, buildings: emptyBuildings() },
+      ),
+    }));
+  }, []);
+
   return {
     profiles: state.profiles,
     activeProfile,
@@ -195,5 +243,7 @@ export function useProfiles() {
     resetActiveInventory,
     updateChestCount,
     resetActiveChests,
+    updateBuildingInstance,
+    resetActiveBuildings,
   };
 }

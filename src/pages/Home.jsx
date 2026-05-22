@@ -9,6 +9,13 @@ import { hasAnySpeedups } from '../lib/speedups.js';
 
 const tools = [
   {
+    to: '/buildings',
+    title: 'Buildings',
+    description:
+      'Track the level and assigned palmon for each building in your camp.',
+    available: true,
+  },
+  {
     to: '/resources',
     title: 'Resources',
     description:

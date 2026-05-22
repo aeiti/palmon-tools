@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 
 const tools = [
+  { to: '/buildings', label: 'Buildings' },
   { to: '/resources', label: 'Resources' },
   { to: '/speedups', label: 'Speedups' },
 ].sort((a, b) => a.label.localeCompare(b.label));
