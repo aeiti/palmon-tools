@@ -1,8 +1,8 @@
 export const CHEST_TIERS = [
-  { key: 'gold', label: 'Gold', accent: 'text-amber-300' },
-  { key: 'purple', label: 'Purple', accent: 'text-purple-300' },
-  { key: 'blue', label: 'Blue', accent: 'text-sky-300' },
-  { key: 'green', label: 'Green', accent: 'text-emerald-300' },
+  { key: 'gold', label: 'UR', accent: 'text-amber-300' },
+  { key: 'purple', label: 'SSR', accent: 'text-purple-300' },
+  { key: 'blue', label: 'SR', accent: 'text-sky-300' },
+  { key: 'green', label: 'R', accent: 'text-emerald-300' },
 ];
 
 const TIER_ORDER = CHEST_TIERS.map((t) => t.key);
