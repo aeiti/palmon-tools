@@ -1,9 +1,9 @@
 export const DENOMINATIONS = [
-  { key: '1m', label: '1m', minutes: 1 },
-  { key: '5m', label: '5m', minutes: 5 },
-  { key: '1h', label: '1h', minutes: 60 },
-  { key: '3h', label: '3h', minutes: 180 },
   { key: '8h', label: '8h', minutes: 480 },
+  { key: '3h', label: '3h', minutes: 180 },
+  { key: '1h', label: '1h', minutes: 60 },
+  { key: '5m', label: '5m', minutes: 5 },
+  { key: '1m', label: '1m', minutes: 1 },
 ];
 
 export const CATEGORIES = [
