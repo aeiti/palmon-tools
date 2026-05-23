@@ -12,6 +12,7 @@ export const CATEGORIES = [
   { key: 'research', label: 'Research' },
   { key: 'training', label: 'Training' },
   { key: 'healing', label: 'Healing' },
+  { key: 'breeding', label: 'Breeding' },
 ];
 
 export const NON_UNIVERSAL_CATEGORIES = CATEGORIES.filter(
