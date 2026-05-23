@@ -217,6 +217,8 @@ export default function Layout() {
             {import.meta.env.VITE_APP_VERSION && (
               <p className="mt-1 text-slate-600">
                 v{import.meta.env.VITE_APP_VERSION}
+                {import.meta.env.VITE_APP_BUILD &&
+                  ` build ${import.meta.env.VITE_APP_BUILD}`}
               </p>
             )}
           </div>

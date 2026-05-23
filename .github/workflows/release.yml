@@ -56,7 +56,9 @@ jobs:
       - name: Build
         env:
           VITE_APP_VERSION: ${{ steps.version.outputs.version }}
+          VITE_APP_BUILD: ${{ github.run_number }}
           REACT_APP_VERSION: ${{ steps.version.outputs.version }}
+          REACT_APP_BUILD: ${{ github.run_number }}
         run: npm run build
 
       - name: Package build artifact
