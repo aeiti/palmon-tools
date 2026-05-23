@@ -69,7 +69,7 @@ export default function Home() {
         <section className="card">
           <div className="flex items-center justify-between gap-2">
             <h2 className="h-section">Other Inventory</h2>
-            <Link to="/inventory/other" className="link-inline text-xs">
+            <Link to="/inventory/other" className="btn-secondary text-xs">
               Edit
             </Link>
           </div>
@@ -83,7 +83,7 @@ export default function Home() {
         <section className="card">
           <div className="flex items-center justify-between gap-2">
             <h2 className="h-section">Resource Inventory</h2>
-            <Link to="/inventory/resources" className="link-inline text-xs">
+            <Link to="/inventory/resources" className="btn-secondary text-xs">
               Edit
             </Link>
           </div>
@@ -97,7 +97,7 @@ export default function Home() {
         <section className="card">
           <div className="flex items-center justify-between gap-2">
             <h2 className="h-section">Speedup Inventory</h2>
-            <Link to="/inventory/speedups" className="link-inline text-xs">
+            <Link to="/inventory/speedups" className="btn-secondary text-xs">
               Edit
             </Link>
           </div>

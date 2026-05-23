@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import InventoryGrid from '../components/InventoryGrid.jsx';
 import Totals from '../components/Totals.jsx';
@@ -19,21 +20,26 @@ export default function Speedups() {
 
   return (
     <div className="flex flex-col gap-6">
-      <header>
-        <h1 className="h-page">Speedup Inventory</h1>
-        <p className="mt-1 text-subtle">
-          {activeProfile.ign ? (
-            <>
-              Signed in as{' '}
-              <span className="font-medium text-slate-200">
-                {activeProfile.ign}
-              </span>
-              . Saved locally to this browser.
-            </>
-          ) : (
-            'Saved locally to this browser.'
-          )}
-        </p>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="h-page">Speedup Inventory</h1>
+          <p className="mt-1 text-subtle">
+            {activeProfile.ign ? (
+              <>
+                Signed in as{' '}
+                <span className="font-medium text-slate-200">
+                  {activeProfile.ign}
+                </span>
+                . Saved locally to this browser.
+              </>
+            ) : (
+              'Saved locally to this browser.'
+            )}
+          </p>
+        </div>
+        <Link to="/inventory" className="btn-secondary">
+          <span aria-hidden="true">←</span> Back
+        </Link>
       </header>
 
       {profiles.length > 1 && (

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import OtherInventory from '../components/OtherInventory.jsx';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
@@ -17,12 +18,17 @@ export default function Other() {
 
   return (
     <div className="flex flex-col gap-6">
-      <header>
-        <h1 className="h-page">Other Inventory</h1>
-        <p className="mt-1 text-subtle">
-          Track miscellaneous items like Skillfruit, Evolution Stones, Opus
-          Pearls, and more.
-        </p>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="h-page">Other Inventory</h1>
+          <p className="mt-1 text-subtle">
+            Track miscellaneous items like Skillfruit, Evolution Stones, Opus
+            Pearls, and more.
+          </p>
+        </div>
+        <Link to="/inventory" className="btn-secondary">
+          <span aria-hidden="true">←</span> Back
+        </Link>
       </header>
 
       {profiles.length > 1 && (

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ChestInventory from '../components/ChestInventory.jsx';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
@@ -17,11 +18,16 @@ export default function Resources() {
 
   return (
     <div className="flex flex-col gap-6">
-      <header>
-        <h1 className="h-page">Resource Inventory</h1>
-        <p className="mt-1 text-subtle">
-          Track unopened chests. Leveled chests scale with your player level.
-        </p>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="h-page">Resource Inventory</h1>
+          <p className="mt-1 text-subtle">
+            Track unopened chests. Leveled chests scale with your player level.
+          </p>
+        </div>
+        <Link to="/inventory" className="btn-secondary">
+          <span aria-hidden="true">←</span> Back
+        </Link>
       </header>
 
       {profiles.length > 1 && (
