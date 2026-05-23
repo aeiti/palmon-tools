@@ -13,11 +13,11 @@ export const CHEST_TYPES = [
 ];
 
 export const CHEST_RESOURCES = [
+  { key: 'xp', label: 'XP', accent: 'text-fuchsia-300' },
+  { key: 'electricity', label: 'Electricity', accent: 'text-cyan-300' },
   { key: 'gold', label: 'Gold', accent: 'text-amber-300' },
   { key: 'lumber', label: 'Lumber', accent: 'text-orange-300' },
   { key: 'steel', label: 'Steel', accent: 'text-slate-300' },
-  { key: 'electricity', label: 'Electricity', accent: 'text-cyan-300' },
-  { key: 'xp', label: 'XP', accent: 'text-fuchsia-300' },
 ];
 
 const CHEST_TIER_BY_KEY = Object.fromEntries(
