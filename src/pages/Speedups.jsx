@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import InventoryGrid from '../components/InventoryGrid.jsx';
 import Totals from '../components/Totals.jsx';
@@ -18,33 +19,36 @@ export default function Speedups() {
   const [confirmReset, setConfirmReset] = useState(false);
 
   return (
-    <div className="flex flex-col gap-4">
-      <header>
-        <h1 className="text-xl font-semibold text-slate-100 sm:text-2xl">
-          Speedups
-        </h1>
-        <p className="mt-1 text-sm text-slate-400">
-          {activeProfile.ign ? (
-            <>
-              Signed in as{' '}
-              <span className="font-medium text-slate-200">
-                {activeProfile.ign}
-              </span>
-              . Saved locally to this browser.
-            </>
-          ) : (
-            'Saved locally to this browser.'
-          )}
-        </p>
+    <div className="flex flex-col gap-6">
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="h-page">Speedup Inventory</h1>
+          <p className="mt-1 text-subtle">
+            {activeProfile.ign ? (
+              <>
+                Signed in as{' '}
+                <span className="font-medium text-slate-200">
+                  {activeProfile.ign}
+                </span>
+                . Saved locally to this browser.
+              </>
+            ) : (
+              'Saved locally to this browser.'
+            )}
+          </p>
+        </div>
+        <Link to="/inventory" className="btn-secondary">
+          <span aria-hidden="true">←</span> Back
+        </Link>
       </header>
 
       {profiles.length > 1 && (
-        <div className="flex flex-wrap items-center gap-2 rounded-lg bg-slate-800/60 p-3 ring-1 ring-slate-700">
+        <div className="toolbar">
           <label className="text-sm text-slate-300">Profile</label>
           <select
             value={activeProfile.id}
             onChange={(e) => setActiveProfile(e.target.value)}
-            className="min-w-0 flex-1 rounded bg-slate-700 px-2 py-1.5 text-sm text-slate-100 ring-1 ring-slate-600 focus:outline-none focus:ring-indigo-400 sm:flex-none"
+            className="select min-w-0 flex-1 sm:flex-none"
           >
             {profiles.map((p) => (
               <option key={p.id} value={p.id}>
@@ -57,11 +61,11 @@ export default function Speedups() {
 
       <section className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-slate-100">Inventory</h2>
+          <h2 className="h-section">Inventory</h2>
           <button
             type="button"
             onClick={() => setConfirmReset(true)}
-            className="rounded bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-200 ring-1 ring-slate-700 hover:bg-red-700 hover:text-white"
+            className="btn-ghost"
           >
             Reset
           </button>
@@ -73,7 +77,7 @@ export default function Speedups() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold text-slate-100">Totals</h2>
+        <h2 className="h-section">Totals</h2>
         <Totals inventory={activeProfile.inventory} />
       </section>
 

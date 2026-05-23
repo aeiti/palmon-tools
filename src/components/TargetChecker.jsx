@@ -18,11 +18,11 @@ export default function TargetChecker({ inventory }) {
   const hasTarget = targetMin > 0;
 
   const inputClass =
-    'w-full rounded bg-slate-800 px-2 py-1.5 text-center tabular-nums text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400';
+    'w-full rounded-md bg-slate-800 px-2 py-1.5 text-center tabular-nums text-slate-100 ring-1 ring-slate-700 transition-shadow focus:outline-none focus:ring-2 focus:ring-indigo-400';
 
   return (
-    <div className="rounded-lg bg-slate-800/40 p-4 ring-1 ring-slate-700">
-      <h2 className="text-base font-semibold text-slate-100">Target check</h2>
+    <div className="card">
+      <h2 className="h-section">Target check</h2>
       <p className="mt-1 text-xs text-slate-400">
         Enter the time you need and pick the category. Universal speedups are
         included.
@@ -34,7 +34,7 @@ export default function TargetChecker({ inventory }) {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="rounded bg-slate-800 px-2 py-1.5 text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
+            className="select-inline"
           >
             {NON_UNIVERSAL_CATEGORIES.map((c) => (
               <option key={c.key} value={c.key}>
@@ -85,7 +85,7 @@ export default function TargetChecker({ inventory }) {
       </div>
 
       <div className="mt-4 grid gap-2 text-sm sm:grid-cols-3">
-        <div className="rounded bg-slate-900/60 p-3">
+        <div className="rounded-md bg-slate-900/60 p-3 ring-1 ring-slate-700/50">
           <div className="text-xs uppercase tracking-wide text-slate-400">
             Target
           </div>
@@ -93,7 +93,7 @@ export default function TargetChecker({ inventory }) {
             {formatDHM(targetMin)}
           </div>
         </div>
-        <div className="rounded bg-slate-900/60 p-3">
+        <div className="rounded-md bg-slate-900/60 p-3 ring-1 ring-slate-700/50">
           <div className="text-xs uppercase tracking-wide text-slate-400">
             Available
           </div>
@@ -102,12 +102,12 @@ export default function TargetChecker({ inventory }) {
           </div>
         </div>
         <div
-          className={`rounded p-3 ${
+          className={`rounded-md p-3 ring-1 ${
             !hasTarget
-              ? 'bg-slate-900/60'
+              ? 'bg-slate-900/60 ring-slate-700/50'
               : enough
-                ? 'bg-emerald-900/40 ring-1 ring-emerald-700'
-                : 'bg-red-900/40 ring-1 ring-red-700'
+                ? 'bg-emerald-900/40 ring-emerald-700/70'
+                : 'bg-red-900/40 ring-red-700/70'
           }`}
         >
           <div className="text-xs uppercase tracking-wide text-slate-400">

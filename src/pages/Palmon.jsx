@@ -44,36 +44,18 @@ function ElementBadge({ element }) {
   const meta = ELEMENT_BY_KEY[element];
   if (!meta) return null;
   const cls = ELEMENT_BADGE_CLASS[element] || 'bg-slate-700 text-slate-300';
-  return (
-    <span
-      className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ring-1 ${cls}`}
-    >
-      {meta.label}
-    </span>
-  );
+  return <span className={`badge ${cls}`}>{meta.label}</span>;
 }
 
 function RarityBadge({ rarity }) {
   const meta = RARITY_BY_KEY[rarity];
   if (!meta) return null;
   const cls = RARITY_BADGE_CLASS[rarity] || 'bg-slate-700 text-slate-300';
-  return (
-    <span
-      className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ring-1 ${cls}`}
-    >
-      {meta.label}
-    </span>
-  );
+  return <span className={`badge ${cls}`}>{meta.label}</span>;
 }
 
 function MythicalBadge() {
-  return (
-    <span
-      className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ring-1 ${MYTHICAL_BADGE_CLASS}`}
-    >
-      Mythical
-    </span>
-  );
+  return <span className={`badge ${MYTHICAL_BADGE_CLASS}`}>Mythical</span>;
 }
 
 function NumberField({ label, value, max, onChange, ariaLabel }) {
@@ -92,7 +74,7 @@ function NumberField({ label, value, max, onChange, ariaLabel }) {
         onChange={(e) => onChange(e.target.value)}
         onFocus={(e) => e.target.select()}
         aria-label={ariaLabel || label}
-        className="h-8 w-full rounded bg-slate-800 px-2 text-center tabular-nums text-sm text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
+        className="input-compact"
       />
     </label>
   );
@@ -115,7 +97,7 @@ function SelectField({
         value={value === null || value === undefined ? '' : value}
         onChange={(e) => onChange(e.target.value)}
         aria-label={ariaLabel || label}
-        className="h-8 w-full rounded bg-slate-800 px-2 text-sm text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
+        className="select-compact"
       >
         {options?.map((opt) => (
           <option key={opt.value} value={opt.value} disabled={opt.disabled}>
@@ -148,7 +130,7 @@ function TextField({ label, value, onChange, placeholder, ariaLabel }) {
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
         aria-label={ariaLabel || label}
-        className="h-8 w-full rounded bg-slate-800 px-2 text-sm text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
+        className="select-compact"
       />
     </label>
   );
@@ -195,8 +177,8 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
   }, [hash, anchorId]);
 
   return (
-    <div ref={cardRef} id={anchorId} className="rounded-lg ring-1 ring-slate-700">
-      <div className="flex items-stretch bg-slate-800/80 hover:bg-slate-800">
+    <div ref={cardRef} id={anchorId} className="panel">
+      <div className="flex items-stretch bg-slate-800/80 transition-colors hover:bg-slate-800">
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
@@ -225,7 +207,7 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
           {buildingAssignment && (
             <Link
               to="/buildings"
-              className="rounded bg-emerald-500/15 px-1.5 py-0.5 text-emerald-300 ring-1 ring-emerald-500/30 hover:bg-emerald-500/25"
+              className="rounded-md bg-emerald-500/15 px-1.5 py-0.5 text-emerald-300 ring-1 ring-emerald-500/30 transition-colors hover:bg-emerald-500/25"
               aria-label={`Assigned to ${buildingAssignment.label}`}
             >
               {buildingAssignment.label}
@@ -234,7 +216,7 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
           {palmon.squad && (
             <Link
               to={`/squads#squad-${palmon.squad}`}
-              className="rounded bg-indigo-500/15 px-1.5 py-0.5 text-indigo-300 ring-1 ring-indigo-500/30 hover:bg-indigo-500/25"
+              className="rounded-md bg-indigo-500/15 px-1.5 py-0.5 text-indigo-300 ring-1 ring-indigo-500/30 transition-colors hover:bg-indigo-500/25"
               aria-label={`Go to Squad ${palmon.squad}`}
             >
               Squad {palmon.squad}
@@ -244,7 +226,7 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
       </div>
 
       {expanded && (
-        <div className="flex flex-col gap-4 bg-slate-900/40 px-3 py-3">
+        <div className="panel-body flex flex-col gap-4 px-3 py-3">
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             <TextField
               label="Nickname"
@@ -357,7 +339,7 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
             <button
               type="button"
               onClick={() => onDelete(palmon)}
-              className="rounded bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-200 ring-1 ring-slate-700 hover:bg-red-700 hover:text-white"
+              className="btn-ghost"
             >
               Delete
             </button>
@@ -407,24 +389,22 @@ export default function Palmon() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <header>
-        <h1 className="text-xl font-semibold text-slate-100 sm:text-2xl">
-          Palmon
-        </h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="h-page">Palmon</h1>
+        <p className="mt-1 text-subtle">
           Track your Palmon roster: level (max {MAX_PALMON_LEVEL}), star tier,
           squad, equipment, skills, and traits.
         </p>
       </header>
 
       {profiles.length > 1 && (
-        <div className="flex flex-wrap items-center gap-2 rounded-lg bg-slate-800/60 p-3 ring-1 ring-slate-700">
+        <div className="toolbar">
           <label className="text-sm text-slate-300">Profile</label>
           <select
             value={activeProfile.id}
             onChange={(e) => setActiveProfile(e.target.value)}
-            className="min-w-0 flex-1 rounded bg-slate-700 px-2 py-1.5 text-sm text-slate-100 ring-1 ring-slate-600 focus:outline-none focus:ring-indigo-400 sm:flex-none"
+            className="select min-w-0 flex-1 sm:flex-none"
           >
             {profiles.map((p) => (
               <option key={p.id} value={p.id}>
@@ -435,7 +415,7 @@ export default function Palmon() {
         </div>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-slate-800/60 p-3 text-sm text-slate-300 ring-1 ring-slate-700">
+      <div className="toolbar justify-between text-sm text-slate-300">
         <span>
           <span className="text-slate-400">Roster:</span>{' '}
           <span className="tabular-nums text-slate-100">{palmons.length}</span>
@@ -444,13 +424,13 @@ export default function Palmon() {
           type="button"
           onClick={() => setConfirmReset(true)}
           disabled={palmons.length === 0}
-          className="rounded bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-200 ring-1 ring-slate-700 hover:bg-red-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-slate-800 disabled:hover:text-slate-200"
+          className="btn-ghost"
         >
           Reset
         </button>
       </div>
 
-      <div className="flex flex-wrap items-end gap-2 rounded-lg bg-slate-800/60 p-3 ring-1 ring-slate-700">
+      <div className="flex flex-wrap items-end gap-2 rounded-lg bg-slate-800/60 p-3 ring-1 ring-slate-700/80">
         <SelectField
           label="Add Palmon"
           value={pendingSpecies}
@@ -463,14 +443,14 @@ export default function Palmon() {
           type="button"
           onClick={handleAdd}
           disabled={!pendingSpecies}
-          className="h-8 rounded bg-indigo-600 px-3 text-sm font-medium text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-indigo-600"
+          className="btn-primary h-8 py-0"
         >
           Add
         </button>
       </div>
 
       {palmons.length === 0 ? (
-        <p className="rounded-lg bg-slate-800/40 p-6 text-center text-sm text-slate-400 ring-1 ring-slate-700">
+        <p className="rounded-lg bg-slate-800/40 p-6 text-center text-sm text-slate-400 ring-1 ring-slate-700/80">
           No Palmon yet. Pick a species above to add your first one.
         </p>
       ) : (

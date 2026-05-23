@@ -11,11 +11,11 @@ export default function ConfirmDialog({
   if (!open) return null;
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
       onClick={onCancel}
     >
       <div
-        className="w-full max-w-sm rounded-lg bg-slate-800 p-5 shadow-xl ring-1 ring-slate-700"
+        className="w-full max-w-sm rounded-lg bg-slate-800 p-5 shadow-2xl ring-1 ring-slate-700"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-semibold text-slate-100">{title}</h2>
@@ -26,18 +26,14 @@ export default function ConfirmDialog({
           <button
             type="button"
             onClick={onCancel}
-            className="rounded bg-slate-700 px-3 py-1.5 text-sm font-medium text-slate-100 hover:bg-slate-600"
+            className="btn-secondary"
           >
             {cancelLabel}
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className={`rounded px-3 py-1.5 text-sm font-medium text-white ${
-              danger
-                ? 'bg-red-600 hover:bg-red-500'
-                : 'bg-indigo-600 hover:bg-indigo-500'
-            }`}
+            className={danger ? 'btn-danger' : 'btn-primary'}
           >
             {confirmLabel}
           </button>

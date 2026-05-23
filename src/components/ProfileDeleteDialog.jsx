@@ -13,7 +13,7 @@ function ProfileDeleteForm({ profile, onCancel, onConfirm }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-sm rounded-lg bg-slate-800 p-5 shadow-xl ring-1 ring-slate-700"
+      className="w-full max-w-sm rounded-lg bg-slate-800 p-5 shadow-2xl ring-1 ring-slate-700"
       onClick={(e) => e.stopPropagation()}
     >
       <h2 className="text-lg font-semibold text-slate-100">Delete profile?</h2>
@@ -33,22 +33,14 @@ function ProfileDeleteForm({ profile, onCancel, onConfirm }) {
           value={typed}
           onChange={(e) => setTyped(e.target.value)}
           placeholder={expected}
-          className="rounded bg-slate-700 px-2 py-1.5 text-sm text-slate-100 ring-1 ring-slate-600 focus:outline-none focus:ring-red-400"
+          className="input focus:ring-red-400"
         />
       </label>
       <div className="mt-5 flex justify-end gap-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded bg-slate-700 px-3 py-1.5 text-sm font-medium text-slate-100 hover:bg-slate-600"
-        >
+        <button type="button" onClick={onCancel} className="btn-secondary">
           Cancel
         </button>
-        <button
-          type="submit"
-          disabled={!matches}
-          className="rounded bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-red-600"
-        >
+        <button type="submit" disabled={!matches} className="btn-danger">
           Delete profile
         </button>
       </div>
@@ -60,7 +52,7 @@ export default function ProfileDeleteDialog({ open, profile, onCancel, onConfirm
   if (!open || !profile) return null;
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
       onClick={onCancel}
     >
       <ProfileDeleteForm

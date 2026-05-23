@@ -29,13 +29,7 @@ const MYTHICAL_BADGE_CLASS =
   'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-500/30';
 
 function Badge({ cls, label }) {
-  return (
-    <span
-      className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ring-1 ${cls}`}
-    >
-      {label}
-    </span>
-  );
+  return <span className={`badge ${cls}`}>{label}</span>;
 }
 
 function PalmonRow({ palmon, allPalmons }) {
@@ -47,7 +41,7 @@ function PalmonRow({ palmon, allPalmons }) {
   return (
     <Link
       to={`/palmon#palmon-${palmon.id}`}
-      className="flex items-center justify-between gap-2 rounded bg-slate-800/60 px-3 py-2 ring-1 ring-slate-700 hover:bg-slate-800 hover:ring-indigo-400"
+      className="flex items-center justify-between gap-2 rounded-md bg-slate-800/60 px-3 py-2 ring-1 ring-slate-700 transition-all hover:bg-slate-800 hover:ring-indigo-400"
     >
       <div className="flex min-w-0 items-center gap-2">
         <span className="truncate text-sm font-medium text-slate-100">
@@ -95,17 +89,11 @@ function SquadCard({ squadNumber, palmons, hashTarget }) {
   }, [hashTarget, anchorId]);
 
   return (
-    <section
-      ref={cardRef}
-      id={anchorId}
-      className="rounded-lg ring-1 ring-slate-700"
-    >
-      <header className="flex items-center justify-between gap-2 bg-slate-800/80 px-3 py-2">
-        <h2 className="text-sm font-semibold text-slate-100">
-          Squad {squadNumber}
-        </h2>
+    <section ref={cardRef} id={anchorId} className="panel">
+      <header className="panel-header flex items-center justify-between gap-2">
+        <h2>Squad {squadNumber}</h2>
         <span
-          className={`tabular-nums text-xs ${
+          className={`tabular-nums text-xs font-normal ${
             members.length >= MAX_PALMON_PER_SQUAD
               ? 'text-amber-300'
               : 'text-slate-400'
@@ -114,11 +102,11 @@ function SquadCard({ squadNumber, palmons, hashTarget }) {
           {members.length} / {MAX_PALMON_PER_SQUAD}
         </span>
       </header>
-      <div className="flex flex-col gap-1.5 bg-slate-900/40 px-3 py-3">
+      <div className="panel-body flex flex-col gap-1.5 px-3 py-3">
         {members.length === 0 ? (
           <p className="text-center text-sm text-slate-500">
             No Palmon assigned. Open{' '}
-            <Link to="/palmon" className="text-indigo-300 underline hover:text-indigo-200">
+            <Link to="/palmon" className="link-inline">
               Palmon
             </Link>{' '}
             and set a squad on one of your Palmon.
@@ -131,7 +119,7 @@ function SquadCard({ squadNumber, palmons, hashTarget }) {
             {Array.from({ length: emptySlots }, (_, i) => (
               <div
                 key={`empty-${i}`}
-                className="flex items-center justify-center rounded bg-slate-800/30 px-3 py-2 text-xs text-slate-600 ring-1 ring-dashed ring-slate-800"
+                className="flex items-center justify-center rounded-md bg-slate-800/30 px-3 py-2 text-xs text-slate-600 ring-1 ring-dashed ring-slate-800"
               >
                 Empty slot
               </div>
@@ -149,15 +137,13 @@ export default function Squads() {
   const hashTarget = hash.startsWith('#') ? hash.slice(1) : '';
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <header>
-        <h1 className="text-xl font-semibold text-slate-100 sm:text-2xl">
-          Squads
-        </h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="h-page">Squads</h1>
+        <p className="mt-1 text-subtle">
           Each squad holds up to {MAX_PALMON_PER_SQUAD} Palmon. Assign squad on
           the{' '}
-          <Link to="/palmon" className="text-indigo-300 underline hover:text-indigo-200">
+          <Link to="/palmon" className="link-inline">
             Palmon page
           </Link>
           .
@@ -165,12 +151,12 @@ export default function Squads() {
       </header>
 
       {profiles.length > 1 && (
-        <div className="flex flex-wrap items-center gap-2 rounded-lg bg-slate-800/60 p-3 ring-1 ring-slate-700">
+        <div className="toolbar">
           <label className="text-sm text-slate-300">Profile</label>
           <select
             value={activeProfile.id}
             onChange={(e) => setActiveProfile(e.target.value)}
-            className="min-w-0 flex-1 rounded bg-slate-700 px-2 py-1.5 text-sm text-slate-100 ring-1 ring-slate-600 focus:outline-none focus:ring-indigo-400 sm:flex-none"
+            className="select min-w-0 flex-1 sm:flex-none"
           >
             {profiles.map((p) => (
               <option key={p.id} value={p.id}>

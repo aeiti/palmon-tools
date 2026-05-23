@@ -3,7 +3,7 @@ import { formatProfileValue, formatServer } from '../lib/profile.js';
 function DetailChip({ label, display }) {
   if (display === '') return null;
   return (
-    <span className="inline-flex items-center gap-1 rounded bg-slate-700/70 px-2 py-0.5 text-xs text-slate-200 ring-1 ring-slate-600">
+    <span className="inline-flex items-center gap-1 rounded-md bg-slate-700/70 px-2 py-0.5 text-xs text-slate-200 ring-1 ring-slate-600">
       <span className="text-slate-400">{label}</span>
       <span className="font-medium text-slate-100">{display}</span>
     </span>
