@@ -1,45 +1,36 @@
-import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
-import ChestInventory from '../components/ChestInventory.jsx';
-import InventoryGrid from '../components/InventoryGrid.jsx';
-import OtherInventory from '../components/OtherInventory.jsx';
-import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import ChestSummary from '../components/ChestSummary.jsx';
+import OtherSummary from '../components/OtherSummary.jsx';
+import SpeedupSummary from '../components/SpeedupSummary.jsx';
 import { profileLabel } from '../lib/profile.js';
 
+const sections = [
+  {
+    key: 'other',
+    title: 'Other Inventory',
+    to: '/inventory/other',
+    Summary: OtherSummary,
+    propsFor: (p) => ({ other: p.other }),
+  },
+  {
+    key: 'resources',
+    title: 'Resource Inventory',
+    to: '/inventory/resources',
+    Summary: ChestSummary,
+    propsFor: (p) => ({ chests: p.chests }),
+  },
+  {
+    key: 'speedups',
+    title: 'Speedup Inventory',
+    to: '/inventory/speedups',
+    Summary: SpeedupSummary,
+    propsFor: (p) => ({ inventory: p.inventory }),
+  },
+];
+
 export default function Inventory() {
-  const {
-    profiles,
-    activeProfile,
-    setActiveProfile,
-    updateCount,
-    resetActiveInventory,
-    updateChestCount,
-    resetActiveChests,
-    updateOtherCount,
-    resetActiveOther,
-  } = useProfiles();
-
-  const [confirmReset, setConfirmReset] = useState(null);
-
-  const resets = {
-    other: {
-      title: 'Reset other inventory?',
-      message: `Set all other item counts for "${activeProfile.name}" back to 0.`,
-      run: resetActiveOther,
-    },
-    resources: {
-      title: 'Reset chests?',
-      message: `Set all chest counts for "${activeProfile.name}" back to 0.`,
-      run: resetActiveChests,
-    },
-    speedups: {
-      title: 'Reset speedups?',
-      message: `Set all speedup counts for "${activeProfile.name}" back to 0.`,
-      run: resetActiveInventory,
-    },
-  };
-
-  const current = confirmReset ? resets[confirmReset] : null;
+  const { profiles, activeProfile, setActiveProfile } = useProfiles();
 
   return (
     <div className="flex flex-col gap-6">
@@ -68,69 +59,19 @@ export default function Inventory() {
         </div>
       )}
 
-      <section className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <h2 className="h-section">Other</h2>
-          <button
-            type="button"
-            onClick={() => setConfirmReset('other')}
-            className="btn-ghost"
-          >
-            Reset
-          </button>
-        </div>
-        <OtherInventory
-          other={activeProfile.other}
-          onChange={updateOtherCount}
-        />
-      </section>
-
-      <section className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <h2 className="h-section">Resources</h2>
-          <button
-            type="button"
-            onClick={() => setConfirmReset('resources')}
-            className="btn-ghost"
-          >
-            Reset
-          </button>
-        </div>
-        <ChestInventory
-          chests={activeProfile.chests}
-          onChange={updateChestCount}
-        />
-      </section>
-
-      <section className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <h2 className="h-section">Speedups</h2>
-          <button
-            type="button"
-            onClick={() => setConfirmReset('speedups')}
-            className="btn-ghost"
-          >
-            Reset
-          </button>
-        </div>
-        <InventoryGrid
-          inventory={activeProfile.inventory}
-          onChange={updateCount}
-        />
-      </section>
-
-      <ConfirmDialog
-        open={Boolean(current)}
-        title={current?.title || ''}
-        message={current?.message || ''}
-        confirmLabel="Reset"
-        danger
-        onCancel={() => setConfirmReset(null)}
-        onConfirm={() => {
-          current?.run();
-          setConfirmReset(null);
-        }}
-      />
+      {sections.map(({ key, title, to, Summary, propsFor }) => (
+        <section key={key} className="card">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="h-section">{title}</h2>
+            <Link to={to} className="btn-secondary text-xs">
+              Edit
+            </Link>
+          </div>
+          <div className="mt-3">
+            <Summary {...propsFor(activeProfile)} />
+          </div>
+        </section>
+      ))}
     </div>
   );
 }

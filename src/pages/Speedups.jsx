@@ -20,7 +20,7 @@ export default function Speedups() {
   return (
     <div className="flex flex-col gap-6">
       <header>
-        <h1 className="h-page">Speedups</h1>
+        <h1 className="h-page">Speedup Inventory</h1>
         <p className="mt-1 text-subtle">
           {activeProfile.ign ? (
             <>
