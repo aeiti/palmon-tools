@@ -1,4 +1,8 @@
-import { CATEGORIES, DENOMINATIONS } from '../lib/speedups.js';
+import {
+  CATEGORIES,
+  DENOMINATIONS,
+  categorySupportsDenomination,
+} from '../lib/speedups.js';
 
 export default function InventoryGrid({ inventory, onChange }) {
   return (
@@ -23,19 +27,26 @@ export default function InventoryGrid({ inventory, onChange }) {
               <td className="px-3 py-2 font-medium text-slate-200">
                 {c.label}
               </td>
-              {DENOMINATIONS.map((d) => (
-                <td key={d.key} className="px-1 py-1.5">
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    min="0"
-                    value={inventory[c.key][d.key]}
-                    onChange={(e) => onChange(c.key, d.key, e.target.value)}
-                    onFocus={(e) => e.target.select()}
-                    className="input-cell"
-                  />
-                </td>
-              ))}
+              {DENOMINATIONS.map((d) => {
+                const supported = categorySupportsDenomination(c.key, d.key);
+                return (
+                  <td key={d.key} className="px-1 py-1.5">
+                    {supported ? (
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        min="0"
+                        value={inventory[c.key][d.key]}
+                        onChange={(e) => onChange(c.key, d.key, e.target.value)}
+                        onFocus={(e) => e.target.select()}
+                        className="input-cell"
+                      />
+                    ) : (
+                      <div className="text-center text-slate-600">—</div>
+                    )}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

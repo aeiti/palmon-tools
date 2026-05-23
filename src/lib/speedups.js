@@ -12,8 +12,21 @@ export const CATEGORIES = [
   { key: 'research', label: 'Research' },
   { key: 'training', label: 'Training' },
   { key: 'healing', label: 'Healing' },
-  { key: 'breeding', label: 'Breeding' },
+  { key: 'breeding', label: 'Breeding', denominations: ['1h'] },
 ];
+
+export function denominationsForCategory(categoryKey) {
+  const c = CATEGORIES.find((x) => x.key === categoryKey);
+  if (!c || !c.denominations) return DENOMINATIONS;
+  const allowed = new Set(c.denominations);
+  return DENOMINATIONS.filter((d) => allowed.has(d.key));
+}
+
+export function categorySupportsDenomination(categoryKey, denomKey) {
+  const c = CATEGORIES.find((x) => x.key === categoryKey);
+  if (!c || !c.denominations) return true;
+  return c.denominations.includes(denomKey);
+}
 
 export const NON_UNIVERSAL_CATEGORIES = CATEGORIES.filter(
   (c) => c.key !== 'universal',
