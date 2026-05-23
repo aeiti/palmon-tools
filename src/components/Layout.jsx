@@ -22,9 +22,9 @@ const footerColumns = [
 
 function linkClass({ isActive }) {
   return [
-    'rounded px-3 py-1.5 text-sm font-medium transition-colors',
+    'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
     isActive
-      ? 'bg-indigo-600 text-white'
+      ? 'bg-indigo-600 text-white shadow-sm'
       : 'text-slate-300 hover:bg-slate-800 hover:text-white',
   ].join(' ');
 }
@@ -64,9 +64,9 @@ function ProfileMenu() {
   }, [open]);
 
   const buttonClass = [
-    'inline-flex items-center gap-1 rounded px-3 py-1.5 text-sm font-medium transition-colors',
+    'inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
     isProfileSectionActive
-      ? 'bg-indigo-600 text-white'
+      ? 'bg-indigo-600 text-white shadow-sm'
       : 'text-slate-300 hover:bg-slate-800 hover:text-white',
   ].join(' ');
 
@@ -96,7 +96,7 @@ function ProfileMenu() {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 z-10 mt-1 min-w-[12rem] overflow-hidden rounded-md border border-slate-700 bg-slate-800 shadow-lg ring-1 ring-black/20"
+          className="absolute right-0 z-10 mt-1 min-w-[12rem] overflow-hidden rounded-md border border-slate-700 bg-slate-800 shadow-xl ring-1 ring-black/20"
         >
           {menuItems.map((t) => {
             const active =
@@ -126,12 +126,12 @@ function ProfileMenu() {
 
 export default function Layout() {
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100">
-      <header className="border-b border-slate-800 bg-slate-900/80 backdrop-blur">
+    <div className="min-h-screen text-slate-100">
+      <header className="sticky top-0 z-20 border-b border-slate-800/80 bg-slate-900/70 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-2 px-4 py-3">
           <NavLink
             to="/"
-            className="text-base font-semibold text-slate-100 hover:text-indigo-300"
+            className="text-base font-semibold tracking-tight text-slate-100 transition-colors hover:text-indigo-300"
           >
             Palmon Tools
           </NavLink>
@@ -158,7 +158,7 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      <footer className="mt-6 border-t border-slate-800 bg-slate-900/60">
+      <footer className="mt-6 border-t border-slate-800/80 bg-slate-900/40">
         <div className="mx-auto max-w-3xl px-4 py-6">
           <nav
             aria-label="Footer"

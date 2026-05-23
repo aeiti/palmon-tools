@@ -49,9 +49,7 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-6">
       <section>
-        <h1 className="text-2xl font-semibold text-slate-100 sm:text-3xl">
-          Palmon Tools
-        </h1>
+        <h1 className="h-page">Palmon Tools</h1>
         <p className="mt-2 text-slate-300">
           Calculators and trackers to help you plan your run in Palmon:
           Survival.
@@ -59,10 +57,8 @@ export default function Home() {
       </section>
 
       {showProfile && (
-        <section className="rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700">
-          <h2 className="text-base font-semibold text-slate-100">
-            {profileLabel(activeProfile)}
-          </h2>
+        <section className="card">
+          <h2 className="h-section">{profileLabel(activeProfile)}</h2>
           <div className="mt-3">
             <ProfileSummary profile={activeProfile} />
           </div>
@@ -70,15 +66,10 @@ export default function Home() {
       )}
 
       {showOther && (
-        <section className="rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700">
+        <section className="card">
           <div className="flex items-center justify-between gap-2">
-            <h2 className="text-base font-semibold text-slate-100">
-              Other Inventory
-            </h2>
-            <Link
-              to="/inventory/other"
-              className="text-xs text-indigo-300 underline hover:text-indigo-200"
-            >
+            <h2 className="h-section">Other Inventory</h2>
+            <Link to="/inventory/other" className="link-inline text-xs">
               Edit
             </Link>
           </div>
@@ -89,15 +80,10 @@ export default function Home() {
       )}
 
       {showChests && (
-        <section className="rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700">
+        <section className="card">
           <div className="flex items-center justify-between gap-2">
-            <h2 className="text-base font-semibold text-slate-100">
-              Resource Inventory
-            </h2>
-            <Link
-              to="/inventory/resources"
-              className="text-xs text-indigo-300 underline hover:text-indigo-200"
-            >
+            <h2 className="h-section">Resource Inventory</h2>
+            <Link to="/inventory/resources" className="link-inline text-xs">
               Edit
             </Link>
           </div>
@@ -108,15 +94,10 @@ export default function Home() {
       )}
 
       {showSpeedups && (
-        <section className="rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700">
+        <section className="card">
           <div className="flex items-center justify-between gap-2">
-            <h2 className="text-base font-semibold text-slate-100">
-              Speedup Inventory
-            </h2>
-            <Link
-              to="/inventory/speedups"
-              className="text-xs text-indigo-300 underline hover:text-indigo-200"
-            >
+            <h2 className="h-section">Speedup Inventory</h2>
+            <Link to="/inventory/speedups" className="link-inline text-xs">
               Edit
             </Link>
           </div>
@@ -127,16 +108,14 @@ export default function Home() {
       )}
 
       <section>
-        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-400">
-          Profile
-        </h2>
+        <h2 className="h-eyebrow mb-2">Profile</h2>
         <div className="grid gap-3 sm:grid-cols-2">
           {tools.map((t) =>
             t.available ? (
               <Link
                 key={t.to}
                 to={t.to}
-                className="block rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700 transition-colors hover:bg-slate-800 hover:ring-indigo-400"
+                className="card transition-all hover:-translate-y-0.5 hover:bg-slate-800/80 hover:shadow-md hover:ring-indigo-400/70"
               >
                 <div className="text-base font-semibold text-slate-100">
                   {t.title}

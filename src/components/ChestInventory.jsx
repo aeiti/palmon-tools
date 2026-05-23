@@ -10,7 +10,7 @@ export default function ChestInventory({ chests, onChange }) {
       {CHEST_TYPES.map((type) => (
         <div
           key={type.key}
-          className="overflow-x-auto rounded-lg ring-1 ring-slate-700"
+          className="panel overflow-x-auto"
         >
           <table className="w-full text-sm">
             <caption className="bg-slate-800/80 px-3 py-2 text-left text-sm font-semibold text-slate-100">
@@ -29,7 +29,7 @@ export default function ChestInventory({ chests, onChange }) {
                 ))}
               </tr>
             </thead>
-            <tbody className="bg-slate-900/40">
+            <tbody className="panel-body">
               {CHEST_TIERS.map((tier) => (
                 <tr key={tier.key} className="border-t border-slate-800">
                   <td
@@ -53,7 +53,7 @@ export default function ChestInventory({ chests, onChange }) {
                           )
                         }
                         onFocus={(e) => e.target.select()}
-                        className="w-full min-w-[3.5rem] rounded bg-slate-800 px-2 py-1 text-center tabular-nums text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
+                        className="input-cell"
                       />
                     </td>
                   ))}

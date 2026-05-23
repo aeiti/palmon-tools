@@ -7,7 +7,7 @@ import { formatDHM, formatDecimalHours } from '../lib/time.js';
 
 export default function Totals({ inventory }) {
   return (
-    <div className="overflow-x-auto rounded-lg ring-1 ring-slate-700">
+    <div className="panel overflow-x-auto">
       <table className="w-full text-sm">
         <thead className="bg-slate-800/80 text-slate-300">
           <tr>
@@ -16,7 +16,7 @@ export default function Totals({ inventory }) {
             <th className="px-3 py-2 text-right font-medium">+ Universal</th>
           </tr>
         </thead>
-        <tbody className="bg-slate-900/40">
+        <tbody className="panel-body">
           {CATEGORIES.map((c) => {
             const own = categoryTotalMinutes(inventory[c.key]);
             const withU = categoryTotalWithUniversal(inventory, c.key);

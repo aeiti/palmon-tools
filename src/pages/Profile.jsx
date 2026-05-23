@@ -66,32 +66,26 @@ export default function Profile() {
     <div className="flex flex-col gap-6">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-slate-100 sm:text-2xl">
-            Profile
-          </h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <h1 className="h-page">Profile</h1>
+          <p className="mt-1 text-subtle">
             Your in-game info, saved locally to this browser.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={handleCreate}
-            className="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
-          >
+          <button type="button" onClick={handleCreate} className="btn-primary">
             New
           </button>
           <button
             type="button"
             onClick={() => setEditOpen(true)}
-            className="rounded bg-slate-700 px-3 py-1.5 text-sm font-medium text-slate-100 hover:bg-slate-600"
+            className="btn-secondary"
           >
             Edit
           </button>
           <button
             type="button"
             onClick={handleRename}
-            className="rounded bg-slate-700 px-3 py-1.5 text-sm font-medium text-slate-100 hover:bg-slate-600"
+            className="btn-secondary"
           >
             Rename
           </button>
@@ -104,7 +98,7 @@ export default function Profile() {
                 ? undefined
                 : 'Create another profile first before deleting this one.'
             }
-            className="rounded bg-slate-700 px-3 py-1.5 text-sm font-medium text-slate-100 hover:bg-red-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-slate-700 disabled:hover:text-slate-100"
+            className="btn-secondary hover:bg-red-600 hover:text-white disabled:hover:bg-slate-700 disabled:hover:text-slate-100"
           >
             Delete
           </button>
@@ -112,12 +106,12 @@ export default function Profile() {
       </header>
 
       {profiles.length > 1 && (
-        <div className="flex flex-wrap items-center gap-2 rounded-lg bg-slate-800/60 p-3 ring-1 ring-slate-700">
+        <div className="toolbar">
           <label className="text-sm text-slate-300">Viewing</label>
           <select
             value={activeProfile.id}
             onChange={(e) => setActiveProfile(e.target.value)}
-            className="min-w-0 flex-1 rounded bg-slate-700 px-2 py-1.5 text-sm text-slate-100 ring-1 ring-slate-600 focus:outline-none focus:ring-indigo-400 sm:flex-none"
+            className="select min-w-0 flex-1 sm:flex-none"
           >
             {profiles.map((p) => (
               <option key={p.id} value={p.id}>
@@ -128,10 +122,8 @@ export default function Profile() {
         </div>
       )}
 
-      <section className="rounded-lg bg-slate-800/60 p-4 ring-1 ring-slate-700">
-        <h2 className="text-base font-semibold text-slate-100">
-          {profileLabel(activeProfile)}
-        </h2>
+      <section className="card">
+        <h2 className="h-section">{profileLabel(activeProfile)}</h2>
         <dl className="mt-3">
           {FIELDS.map(({ key, label, format }) => (
             <Row
@@ -147,7 +139,7 @@ export default function Profile() {
             <button
               type="button"
               onClick={() => setEditOpen(true)}
-              className="text-indigo-300 underline hover:text-indigo-200"
+              className="link-inline"
             >
               Edit
             </button>{' '}
@@ -159,7 +151,7 @@ export default function Profile() {
       <p className="text-xs text-slate-500">
         Profiles also let you keep separate speedup inventories — manage them on
         the{' '}
-        <Link to="/speedups" className="text-indigo-300 underline hover:text-indigo-200">
+        <Link to="/speedups" className="link-inline">
           Speedups
         </Link>{' '}
         page.

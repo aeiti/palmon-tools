@@ -29,11 +29,9 @@ function distribute(items, columnCount) {
 
 function Card({ title, children }) {
   return (
-    <section className="rounded-lg ring-1 ring-slate-700">
-      <h3 className="bg-slate-800/80 px-3 py-2 text-sm font-semibold text-slate-100">
-        {title}
-      </h3>
-      <div className="bg-slate-900/40">{children}</div>
+    <section className="panel">
+      <h3 className="panel-header">{title}</h3>
+      <div className="panel-body">{children}</div>
     </section>
   );
 }

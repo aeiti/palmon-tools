@@ -29,7 +29,7 @@ function ProfileDetailsForm({ profile, onCancel, onSave }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-sm rounded-lg bg-slate-800 p-5 shadow-xl ring-1 ring-slate-700"
+      className="w-full max-w-sm rounded-lg bg-slate-800 p-5 shadow-2xl ring-1 ring-slate-700"
       onClick={(e) => e.stopPropagation()}
     >
       <h2 className="text-lg font-semibold text-slate-100">
@@ -49,24 +49,17 @@ function ProfileDetailsForm({ profile, onCancel, onSave }) {
               value={values[key] ?? ''}
               onChange={handleChange(key)}
               placeholder={placeholder}
-              className="rounded bg-slate-700 px-2 py-1.5 text-sm text-slate-100 ring-1 ring-slate-600 focus:outline-none focus:ring-indigo-400"
+              className="input"
             />
           </label>
         ))}
       </div>
 
       <div className="mt-5 flex justify-end gap-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded bg-slate-700 px-3 py-1.5 text-sm font-medium text-slate-100 hover:bg-slate-600"
-        >
+        <button type="button" onClick={onCancel} className="btn-secondary">
           Cancel
         </button>
-        <button
-          type="submit"
-          className="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
-        >
+        <button type="submit" className="btn-primary">
           Save
         </button>
       </div>
@@ -78,7 +71,7 @@ export default function ProfileDetailsDialog({ open, profile, onCancel, onSave }
   if (!open || !profile) return null;
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
       onClick={onCancel}
     >
       <ProfileDetailsForm

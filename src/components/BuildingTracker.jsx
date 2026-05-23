@@ -32,9 +32,9 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
   const gridCols = 'grid-cols-[max-content_3rem_max-content]';
 
   return (
-    <div className="rounded-lg ring-1 ring-slate-700">
-      <div className="flex items-center justify-between gap-2 bg-slate-800/80 px-3 py-1.5">
-        <h3 className="truncate text-sm font-semibold text-slate-100">
+    <div className="panel">
+      <div className="panel-header flex items-center justify-between gap-2 py-1.5">
+        <h3 className="truncate">
           {card.label}
           {card.showInstanceCount && totalCount > 1 && (
             <span className="ml-1 text-xs font-normal text-slate-400">
@@ -43,13 +43,13 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
           )}
         </h3>
         {card.seasonal && (
-          <span className="rounded bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-300 ring-1 ring-amber-500/30">
+          <span className="badge bg-amber-500/15 text-amber-300 ring-amber-500/30">
             Seasonal
           </span>
         )}
       </div>
       <div
-        className={`grid items-center gap-x-2 gap-y-1 bg-slate-900/40 px-3 py-2 ${gridCols}`}
+        className={`panel-body grid items-center gap-x-2 gap-y-1 px-3 py-2 ${gridCols}`}
       >
         <span aria-hidden="true" />
         <span className="text-center text-[10px] font-medium uppercase tracking-wide text-slate-500">
@@ -76,7 +76,7 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
               }
               onFocus={(e) => e.target.select()}
               aria-label={`${r.fullName} level`}
-              className="h-7 w-full rounded bg-slate-800 px-1 text-center tabular-nums text-sm leading-none text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-indigo-400"
+              className="h-7 w-full rounded-md bg-slate-800 px-1 text-center tabular-nums text-sm leading-none text-slate-100 ring-1 ring-slate-700 transition-shadow focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
             <select
               value={r.instance.palmon || ''}
@@ -87,7 +87,7 @@ function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
               title={
                 r.isDupe ? 'Already assigned to another building' : undefined
               }
-              className={`h-7 rounded bg-slate-800 px-1.5 text-sm leading-none text-slate-100 ring-1 focus:outline-none focus:ring-indigo-400 ${
+              className={`h-7 rounded-md bg-slate-800 px-1.5 text-sm leading-none text-slate-100 ring-1 transition-shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
                 r.isDupe ? 'ring-red-500/70' : 'ring-slate-700'
               }`}
             >
@@ -133,9 +133,7 @@ export default function BuildingTracker({ buildings, palmons = [], onChange }) {
           key={category.key}
           className="flex flex-col gap-3 sm:mb-6 sm:break-inside-avoid"
         >
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-            {category.label}
-          </h2>
+          <h2 className="h-eyebrow">{category.label}</h2>
           {category.subcategories ? (
             <div className="flex flex-col gap-4">
               {category.subcategories.map((sub) => (

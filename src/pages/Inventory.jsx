@@ -44,22 +44,20 @@ export default function Inventory() {
   return (
     <div className="flex flex-col gap-6">
       <header>
-        <h1 className="text-xl font-semibold text-slate-100 sm:text-2xl">
-          Inventory
-        </h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="h-page">Inventory</h1>
+        <p className="mt-1 text-subtle">
           Track everything in your bag: miscellaneous items, resource chests,
           and speedups.
         </p>
       </header>
 
       {profiles.length > 1 && (
-        <div className="flex flex-wrap items-center gap-2 rounded-lg bg-slate-800/60 p-3 ring-1 ring-slate-700">
+        <div className="toolbar">
           <label className="text-sm text-slate-300">Profile</label>
           <select
             value={activeProfile.id}
             onChange={(e) => setActiveProfile(e.target.value)}
-            className="min-w-0 flex-1 rounded bg-slate-700 px-2 py-1.5 text-sm text-slate-100 ring-1 ring-slate-600 focus:outline-none focus:ring-indigo-400 sm:flex-none"
+            className="select min-w-0 flex-1 sm:flex-none"
           >
             {profiles.map((p) => (
               <option key={p.id} value={p.id}>
@@ -72,11 +70,11 @@ export default function Inventory() {
 
       <section className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-slate-100">Other</h2>
+          <h2 className="h-section">Other</h2>
           <button
             type="button"
             onClick={() => setConfirmReset('other')}
-            className="rounded bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-200 ring-1 ring-slate-700 hover:bg-red-700 hover:text-white"
+            className="btn-ghost"
           >
             Reset
           </button>
@@ -89,11 +87,11 @@ export default function Inventory() {
 
       <section className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-slate-100">Resources</h2>
+          <h2 className="h-section">Resources</h2>
           <button
             type="button"
             onClick={() => setConfirmReset('resources')}
-            className="rounded bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-200 ring-1 ring-slate-700 hover:bg-red-700 hover:text-white"
+            className="btn-ghost"
           >
             Reset
           </button>
@@ -106,11 +104,11 @@ export default function Inventory() {
 
       <section className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-slate-100">Speedups</h2>
+          <h2 className="h-section">Speedups</h2>
           <button
             type="button"
             onClick={() => setConfirmReset('speedups')}
-            className="rounded bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-200 ring-1 ring-slate-700 hover:bg-red-700 hover:text-white"
+            className="btn-ghost"
           >
             Reset
           </button>
