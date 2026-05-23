@@ -1,7 +1,7 @@
 import {
   CHEST_RESOURCES,
-  CHEST_TIERS,
   CHEST_TYPES,
+  tiersForType,
 } from '../lib/chests.js';
 
 export default function ChestInventory({ chests, onChange }) {
@@ -30,7 +30,7 @@ export default function ChestInventory({ chests, onChange }) {
               </tr>
             </thead>
             <tbody className="panel-body">
-              {CHEST_TIERS.map((tier) => (
+              {tiersForType(type.key).map((tier) => (
                 <tr key={tier.key} className="border-t border-slate-800">
                   <td
                     className={`px-3 py-2 font-medium ${tier.accent}`}

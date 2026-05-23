@@ -43,14 +43,21 @@ function TotalView({ chests }) {
             <td className="py-1.5 pr-2 font-medium text-slate-300">
               {type.label}
             </td>
-            {CHEST_TIERS.map((tier) => (
-              <td
-                key={tier.key}
-                className="px-2 py-1.5 text-center tabular-nums text-slate-100"
-              >
-                {tierTypeTotal(chests, type.key, tier.key)}
-              </td>
-            ))}
+            {CHEST_TIERS.map((tier) => {
+              const supported = type.tiers.includes(tier.key);
+              return (
+                <td
+                  key={tier.key}
+                  className="px-2 py-1.5 text-center tabular-nums text-slate-100"
+                >
+                  {supported ? (
+                    tierTypeTotal(chests, type.key, tier.key)
+                  ) : (
+                    <span className="text-slate-600">—</span>
+                  )}
+                </td>
+              );
+            })}
           </tr>
         ))}
       </tbody>
