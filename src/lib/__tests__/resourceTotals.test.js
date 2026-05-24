@@ -2,8 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { emptyChests } from '../chests.js';
 import {
   LEVELED_CHEST_VALUES,
+  combinedResourceTotals,
+  emptyOnHand,
   formatResourceAmount,
   formatResourceAmountFull,
+  hasAnyOnHand,
+  normalizeOnHand,
   totalResourcesFromChests,
 } from '../resourceTotals.js';
 import {
@@ -151,5 +155,80 @@ describe('formatResourceAmountFull', () => {
     expect(formatResourceAmountFull(0)).toBe('0');
     expect(formatResourceAmountFull(null)).toBe('0');
     expect(formatResourceAmountFull(undefined)).toBe('0');
+  });
+});
+
+describe('emptyOnHand', () => {
+  it('returns an object with every resource at 0', () => {
+    expect(emptyOnHand()).toEqual({
+      xp: 0,
+      electricity: 0,
+      gold: 0,
+      lumber: 0,
+      steel: 0,
+    });
+  });
+});
+
+describe('normalizeOnHand', () => {
+  it('returns all-zero for null / non-object input', () => {
+    expect(normalizeOnHand(null)).toEqual(emptyOnHand());
+    expect(normalizeOnHand('garbage')).toEqual(emptyOnHand());
+  });
+
+  it('keeps valid counts and floors fractional values', () => {
+    expect(normalizeOnHand({ xp: 1234.7 })).toEqual({
+      ...emptyOnHand(),
+      xp: 1234,
+    });
+  });
+
+  it('coerces negatives to 0', () => {
+    expect(normalizeOnHand({ gold: -5 })).toEqual(emptyOnHand());
+  });
+
+  it('drops unknown resource keys', () => {
+    const out = normalizeOnHand({ xp: 10, garbage: 99 });
+    expect(out.xp).toBe(10);
+    expect(out.garbage).toBeUndefined();
+  });
+});
+
+describe('hasAnyOnHand', () => {
+  it('returns false for null / empty', () => {
+    expect(hasAnyOnHand(null)).toBe(false);
+    expect(hasAnyOnHand(emptyOnHand())).toBe(false);
+  });
+
+  it('returns true once any resource has a nonzero amount', () => {
+    expect(hasAnyOnHand({ ...emptyOnHand(), gold: 1 })).toBe(true);
+  });
+});
+
+describe('combinedResourceTotals', () => {
+  it('returns just on-hand when chests are empty', () => {
+    const onHand = { ...emptyOnHand(), gold: 500 };
+    expect(combinedResourceTotals(null, 30, onHand)).toEqual({
+      ...emptyOnHand(),
+      gold: 500,
+    });
+  });
+
+  it('returns just chest totals when on-hand is empty', () => {
+    const chests = emptyChests();
+    chests.standard.gold.xp = 1; // 3M
+    expect(combinedResourceTotals(chests, 30, null)).toEqual({
+      ...emptyOnHand(),
+      xp: 3_000_000,
+    });
+  });
+
+  it('sums on-hand and chest totals per resource', () => {
+    const chests = emptyChests();
+    chests.standard.gold.gold = 1; // 3M gold
+    const onHand = { ...emptyOnHand(), gold: 500_000, xp: 1_000 };
+    const out = combinedResourceTotals(chests, 30, onHand);
+    expect(out.gold).toBe(3_000_000 + 500_000);
+    expect(out.xp).toBe(1_000);
   });
 });

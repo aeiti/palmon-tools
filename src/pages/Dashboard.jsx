@@ -4,6 +4,7 @@ import { useProfiles } from '../hooks/useProfiles.js';
 import ProfileDetailsDialog from '../components/profile/ProfileDetailsDialog.jsx';
 import ProfileDeleteDialog from '../components/profile/ProfileDeleteDialog.jsx';
 import ChestSummary from '../components/inventory/ChestSummary.jsx';
+import OnHandResources from '../components/inventory/OnHandResources.jsx';
 import ResourceTotals from '../components/inventory/ResourceTotals.jsx';
 import SpeedupSummary from '../components/speedups/SpeedupSummary.jsx';
 import OtherSummary from '../components/inventory/OtherSummary.jsx';
@@ -23,6 +24,7 @@ import {
 import { hasAnyChests } from '../lib/chests.js';
 import { hasAnySpeedups } from '../lib/speedups.js';
 import { hasAnyOther } from '../lib/other.js';
+import { hasAnyOnHand } from '../lib/resourceTotals.js';
 
 const tools = toolsInSection(SECTIONS.PROFILE);
 
@@ -69,6 +71,7 @@ export default function Dashboard() {
     updateProfileDetails,
     deleteProfile,
     replaceAllProfiles,
+    updateOnHand,
   } = useProfiles();
 
   const [editOpen, setEditOpen] = useState(false);
@@ -82,6 +85,9 @@ export default function Dashboard() {
   const showOther = hasAnyOther(activeProfile.other, activeProfile.customOther);
   const showChests = hasAnyChests(activeProfile.chests);
   const showSpeedups = hasAnySpeedups(activeProfile.inventory);
+  // Resource Totals card is interesting any time there's *something* to total —
+  // on-hand or chests. On-hand inputs themselves are always editable below.
+  const showResourceTotals = showChests || hasAnyOnHand(activeProfile.onHand);
 
   const handleCreate = () => {
     const name = window.prompt('Profile name:', '');
@@ -219,7 +225,17 @@ export default function Dashboard() {
         </SectionCard>
       )}
 
-      {showChests && (
+      <SectionCard
+        title="On-hand"
+        actions={<EditLink to={ROUTES.inventoryResources} />}
+      >
+        <OnHandResources
+          onHand={activeProfile.onHand}
+          onChange={updateOnHand}
+        />
+      </SectionCard>
+
+      {showResourceTotals && (
         <SectionCard
           title="Resource Totals"
           actions={<EditLink to={ROUTES.inventoryResources} />}
@@ -227,6 +243,7 @@ export default function Dashboard() {
           <ResourceTotals
             chests={activeProfile.chests}
             playerLevel={activeProfile.level}
+            onHand={activeProfile.onHand}
           />
         </SectionCard>
       )}

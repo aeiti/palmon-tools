@@ -54,6 +54,31 @@ function leveledValuesFor(playerLevel) {
   return LEVELED_CHEST_VALUES[L];
 }
 
+// ---- On-hand resources ------------------------------------------------------
+// The player's raw resource stockpile, sitting outside of any chest.
+
+export function emptyOnHand() {
+  return CHEST_RESOURCES.reduce((acc, r) => {
+    acc[r.key] = 0;
+    return acc;
+  }, {});
+}
+
+export function normalizeOnHand(onHand) {
+  const base = emptyOnHand();
+  if (!onHand || typeof onHand !== 'object') return base;
+  for (const r of CHEST_RESOURCES) {
+    const raw = Number(onHand[r.key]);
+    base[r.key] = Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : 0;
+  }
+  return base;
+}
+
+export function hasAnyOnHand(onHand) {
+  if (!onHand) return false;
+  return CHEST_RESOURCES.some((r) => (Number(onHand[r.key]) || 0) > 0);
+}
+
 // ---- Totals -----------------------------------------------------------------
 
 function emptyTotals() {
@@ -82,6 +107,18 @@ export function totalResourcesFromChests(chests, playerLevel) {
     }
   }
   return totals;
+}
+
+// On-hand stockpile + everything you'd get from opening every chest, in one
+// total per resource. Pass null/undefined for either side to omit it.
+export function combinedResourceTotals(chests, playerLevel, onHand) {
+  const chestTotals = totalResourcesFromChests(chests, playerLevel);
+  const handTotals = normalizeOnHand(onHand);
+  const combined = emptyTotals();
+  for (const r of CHEST_RESOURCES) {
+    combined[r.key] = chestTotals[r.key] + handTotals[r.key];
+  }
+  return combined;
 }
 
 // ---- Formatting -------------------------------------------------------------
