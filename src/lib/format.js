@@ -39,3 +39,32 @@ function formatScaled(scaled, suffix) {
 export function formatCompactFull(n) {
   return NUMBER_FORMATTER.format(n || 0);
 }
+
+// Parse a compact-format string back into a number. Accepts:
+//   "1500000"     → 1500000
+//   "1,500,000"   → 1500000  (commas / underscores / whitespace stripped)
+//   "1.5M"        → 1500000  (case-insensitive K / M / B)
+//   "0.1k"        → 100
+//   ""            → 0
+//
+// Returns null if the input doesn't match the expected shape, so callers can
+// distinguish "user typed garbage" from "user cleared the field".
+export function parseCompact(input) {
+  if (input === null || input === undefined) return null;
+  const cleaned = String(input).trim().replace(/[,_\s]/g, '');
+  if (cleaned === '') return 0;
+  const match = /^(-?\d+(?:\.\d+)?)([kmb])?$/i.exec(cleaned);
+  if (!match) return null;
+  const base = Number(match[1]);
+  if (!Number.isFinite(base)) return null;
+  const suffix = match[2]?.toLowerCase();
+  const multiplier =
+    suffix === 'b'
+      ? 1_000_000_000
+      : suffix === 'm'
+      ? 1_000_000
+      : suffix === 'k'
+      ? 1_000
+      : 1;
+  return Math.trunc(base * multiplier);
+}
