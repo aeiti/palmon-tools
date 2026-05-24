@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { OTHER_GROUPS, itemsByGroup } from '../lib/other.js';
+import { OTHER_GROUPS } from '../lib/data/other.js';
+import { itemsByGroup } from '../lib/other.js';
 import CardColumns from './CardColumns.jsx';
 import ConfirmDialog from './ConfirmDialog.jsx';
 import CustomItemDialog from './CustomItemDialog.jsx';
