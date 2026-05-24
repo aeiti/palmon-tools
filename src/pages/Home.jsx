@@ -5,6 +5,7 @@ import ChestSummary from '../components/ChestSummary.jsx';
 import ResourceTotals from '../components/ResourceTotals.jsx';
 import SpeedupSummary from '../components/SpeedupSummary.jsx';
 import OtherSummary from '../components/OtherSummary.jsx';
+import { ROUTES } from '../routes.js';
 import { hasProfileDetails, profileLabel } from '../lib/profile.js';
 import { hasAnyChests } from '../lib/chests.js';
 import { hasAnySpeedups } from '../lib/speedups.js';
@@ -12,28 +13,28 @@ import { hasAnyOther } from '../lib/other.js';
 
 const tools = [
   {
-    to: '/buildings',
+    to: ROUTES.buildings,
     title: 'Buildings',
     description:
       'Track the level and assigned palmon for each building in your camp.',
     available: true,
   },
   {
-    to: '/inventory',
+    to: ROUTES.inventory,
     title: 'Inventory',
     description:
       'Track everything in your bag: miscellaneous items, resource chests, and speedups.',
     available: true,
   },
   {
-    to: '/palmon',
+    to: ROUTES.palmon,
     title: 'Palmon',
     description:
       'Track your Palmon roster: level, stars, squad, equipment, skills, and traits.',
     available: true,
   },
   {
-    to: '/squads',
+    to: ROUTES.squads,
     title: 'Squads',
     description: 'See each squad and the Palmon assigned to it.',
     available: true,
@@ -70,7 +71,7 @@ export default function Home() {
         <section className="card">
           <div className="flex items-center justify-between gap-2">
             <h2 className="h-section">Other Inventory</h2>
-            <Link to="/inventory/other" className="btn-secondary text-xs">
+            <Link to={ROUTES.inventoryOther} className="btn-secondary text-xs">
               Edit
             </Link>
           </div>
@@ -87,7 +88,7 @@ export default function Home() {
         <section className="card">
           <div className="flex items-center justify-between gap-2">
             <h2 className="h-section">Resource Totals</h2>
-            <Link to="/inventory/resources" className="btn-secondary text-xs">
+            <Link to={ROUTES.inventoryResources} className="btn-secondary text-xs">
               Edit
             </Link>
           </div>
@@ -104,7 +105,7 @@ export default function Home() {
         <section className="card">
           <div className="flex items-center justify-between gap-2">
             <h2 className="h-section">Resource Inventory</h2>
-            <Link to="/inventory/resources" className="btn-secondary text-xs">
+            <Link to={ROUTES.inventoryResources} className="btn-secondary text-xs">
               Edit
             </Link>
           </div>
@@ -118,7 +119,7 @@ export default function Home() {
         <section className="card">
           <div className="flex items-center justify-between gap-2">
             <h2 className="h-section">Speedup Inventory</h2>
-            <Link to="/inventory/speedups" className="btn-secondary text-xs">
+            <Link to={ROUTES.inventorySpeedups} className="btn-secondary text-xs">
               Edit
             </Link>
           </div>

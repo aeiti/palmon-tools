@@ -1,23 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { ROUTES } from '../routes.js';
 
 const profileTools = [
-  { to: '/buildings', label: 'Buildings' },
-  { to: '/inventory', label: 'Inventory' },
-  { to: '/palmon', label: 'Palmon' },
-  { to: '/squads', label: 'Squads' },
+  { to: ROUTES.buildings, label: 'Buildings' },
+  { to: ROUTES.inventory, label: 'Inventory' },
+  { to: ROUTES.palmon, label: 'Palmon' },
+  { to: ROUTES.squads, label: 'Squads' },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 const navItems = [
-  { type: 'link', to: '/', label: 'Home', end: true },
+  { type: 'link', to: ROUTES.home, label: 'Home', end: true },
   { type: 'profile' },
-  { type: 'link', to: '/about', label: 'About' },
+  { type: 'link', to: ROUTES.about, label: 'About' },
 ];
 
 const footerColumns = [
-  { header: { to: '/', label: 'Home', end: true }, items: [] },
-  { header: { to: '/profile', label: 'Profile' }, items: profileTools },
-  { header: { to: '/about', label: 'About' }, items: [] },
+  { header: { to: ROUTES.home, label: 'Home', end: true }, items: [] },
+  { header: { to: ROUTES.profile, label: 'Profile' }, items: profileTools },
+  { header: { to: ROUTES.about, label: 'About' }, items: [] },
 ];
 
 function linkClass({ isActive }) {
@@ -34,7 +35,7 @@ function ProfileMenu() {
   const ref = useRef(null);
   const location = useLocation();
   const menuItems = [
-    { to: '/profile', label: 'Profile' },
+    { to: ROUTES.profile, label: 'Profile' },
     ...profileTools,
   ];
   const isProfileSectionActive = menuItems.some(
@@ -130,7 +131,7 @@ export default function Layout() {
       <header className="sticky top-0 z-20 border-b border-slate-800/80 bg-slate-900/70 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-2 px-4 py-3">
           <NavLink
-            to="/"
+            to={ROUTES.home}
             className="text-base font-semibold tracking-tight text-slate-100 transition-colors hover:text-indigo-300"
           >
             Palmon Tools

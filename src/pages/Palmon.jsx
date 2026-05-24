@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import { ROUTES } from '../routes.js';
 import { findPalmonBuildingAssignment } from '../lib/buildings.js';
 import { profileLabel } from '../lib/profile.js';
 import {
@@ -205,7 +206,7 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
         <div className="flex shrink-0 items-center gap-2 pr-3 text-xs tabular-nums">
           {buildingAssignment && (
             <Link
-              to="/buildings"
+              to={ROUTES.buildings}
               className="rounded-md bg-emerald-500/15 px-1.5 py-0.5 text-emerald-300 ring-1 ring-emerald-500/30 transition-colors hover:bg-emerald-500/25"
               aria-label={`Assigned to ${buildingAssignment.label}`}
             >

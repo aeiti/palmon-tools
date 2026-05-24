@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Layout from './components/Layout.jsx';
 import PageTracker from './components/PageTracker.jsx';
+import { LEGACY_REDIRECTS, ROUTES } from './routes.js';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
 import Profile from './pages/Profile.jsx';
@@ -19,24 +20,23 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="inventory" element={<Inventory />} />
-          <Route path="inventory/other" element={<Other />} />
-          <Route path="inventory/resources" element={<Resources />} />
-          <Route path="inventory/speedups" element={<Speedups />} />
-          <Route
-            path="resources"
-            element={<Navigate to="/inventory/resources" replace />}
-          />
-          <Route
-            path="speedups"
-            element={<Navigate to="/inventory/speedups" replace />}
-          />
-          <Route path="buildings" element={<Buildings />} />
-          <Route path="palmon" element={<Palmon />} />
-          <Route path="squads" element={<Squads />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="about" element={<About />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path={ROUTES.inventory} element={<Inventory />} />
+          <Route path={ROUTES.inventoryOther} element={<Other />} />
+          <Route path={ROUTES.inventoryResources} element={<Resources />} />
+          <Route path={ROUTES.inventorySpeedups} element={<Speedups />} />
+          {LEGACY_REDIRECTS.map(({ from, to }) => (
+            <Route
+              key={from}
+              path={from}
+              element={<Navigate to={to} replace />}
+            />
+          ))}
+          <Route path={ROUTES.buildings} element={<Buildings />} />
+          <Route path={ROUTES.palmon} element={<Palmon />} />
+          <Route path={ROUTES.squads} element={<Squads />} />
+          <Route path={ROUTES.profile} element={<Profile />} />
+          <Route path={ROUTES.about} element={<About />} />
+          <Route path="*" element={<Navigate to={ROUTES.home} replace />} />
         </Route>
       </Routes>
     </BrowserRouter>

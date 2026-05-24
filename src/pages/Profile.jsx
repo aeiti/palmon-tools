@@ -4,6 +4,7 @@ import { useProfiles } from '../hooks/useProfiles.js';
 import ProfileDetailsDialog from '../components/ProfileDetailsDialog.jsx';
 import ProfileDeleteDialog from '../components/ProfileDeleteDialog.jsx';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import { ROUTES } from '../routes.js';
 import { buildExport, parseImport } from '../lib/storage.js';
 import {
   formatProfileValue,
@@ -203,7 +204,7 @@ export default function Profile() {
       <p className="text-xs text-slate-500">
         Profiles also let you keep separate speedup inventories — manage them on
         the{' '}
-        <Link to="/speedups" className="link-inline">
+        <Link to={ROUTES.inventorySpeedups} className="link-inline">
           Speedups
         </Link>{' '}
         page.

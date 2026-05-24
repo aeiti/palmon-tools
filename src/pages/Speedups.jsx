@@ -5,6 +5,7 @@ import InventoryGrid from '../components/InventoryGrid.jsx';
 import Totals from '../components/Totals.jsx';
 import TargetChecker from '../components/TargetChecker.jsx';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import { ROUTES } from '../routes.js';
 import { profileLabel } from '../lib/profile.js';
 
 export default function Speedups() {
@@ -37,7 +38,7 @@ export default function Speedups() {
             )}
           </p>
         </div>
-        <Link to="/inventory" className="btn-secondary">
+        <Link to={ROUTES.inventory} className="btn-secondary">
           <span aria-hidden="true">←</span> Back
         </Link>
       </header>

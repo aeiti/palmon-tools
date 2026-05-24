@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import OtherInventory from '../components/OtherInventory.jsx';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import { ROUTES } from '../routes.js';
 import { profileLabel } from '../lib/profile.js';
 
 export default function Other() {
@@ -29,7 +30,7 @@ export default function Other() {
             Pearls, and more.
           </p>
         </div>
-        <Link to="/inventory" className="btn-secondary">
+        <Link to={ROUTES.inventory} className="btn-secondary">
           <span aria-hidden="true">←</span> Back
         </Link>
       </header>
