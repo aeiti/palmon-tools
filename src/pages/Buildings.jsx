@@ -1,51 +1,27 @@
-import { useState } from 'react';
 import { useProfiles } from '../hooks/useProfiles.js';
 import BuildingTracker from '../components/buildings/BuildingTracker.jsx';
-import ConfirmDialog from '../components/ui/ConfirmDialog.jsx';
-import { profileLabel } from '../lib/profile.js';
+import ProfilePicker from '../components/ui/ProfilePicker.jsx';
+import ResetButton from '../components/ui/ResetButton.jsx';
+import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
 import { MAX_BUILDING_LEVEL } from '../lib/data/buildings.js';
 import { buildingsSummary, duplicatePalmonKeys } from '../lib/buildings.js';
 import { palmonOptions } from '../lib/palmon.js';
 
 export default function Buildings() {
-  const {
-    profiles,
-    activeProfile,
-    setActiveProfile,
-    updateBuildingInstance,
-    resetActiveBuildings,
-  } = useProfiles();
+  const { activeProfile, updateBuildingInstance, resetActiveBuildings } =
+    useProfiles();
 
-  const [confirmReset, setConfirmReset] = useState(false);
   const summary = buildingsSummary(activeProfile.buildings);
   const dupeCount = duplicatePalmonKeys(activeProfile.buildings).size;
 
   return (
     <div className="flex flex-col gap-6">
-      <header>
-        <h1 className="h-page">Buildings</h1>
-        <p className="mt-1 text-subtle">
-          Track the level and assigned palmon for each building. Each palmon can
-          only be assigned to one building. Max level is {MAX_BUILDING_LEVEL}.
-        </p>
-      </header>
+      <ToolPageHeader
+        title="Buildings"
+        subtitle={`Track the level and assigned palmon for each building. Each palmon can only be assigned to one building. Max level is ${MAX_BUILDING_LEVEL}.`}
+      />
 
-      {profiles.length > 1 && (
-        <div className="toolbar">
-          <label className="text-sm text-slate-300">Profile</label>
-          <select
-            value={activeProfile.id}
-            onChange={(e) => setActiveProfile(e.target.value)}
-            className="select min-w-0 flex-1 sm:flex-none"
-          >
-            {profiles.map((p) => (
-              <option key={p.id} value={p.id}>
-                {profileLabel(p)}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+      <ProfilePicker />
 
       <div className="toolbar justify-between text-sm text-slate-300">
         <div className="flex flex-wrap gap-x-4 gap-y-1">
@@ -61,32 +37,17 @@ export default function Buildings() {
             </span>
           )}
         </div>
-        <button
-          type="button"
-          onClick={() => setConfirmReset(true)}
-          className="btn-ghost"
-        >
-          Reset
-        </button>
+        <ResetButton
+          onReset={resetActiveBuildings}
+          confirmTitle="Reset buildings?"
+          confirmMessage={`Clear all building levels and palmon assignments for "${activeProfile.name}".`}
+        />
       </div>
 
       <BuildingTracker
         buildings={activeProfile.buildings}
         palmons={palmonOptions(activeProfile.palmons)}
         onChange={updateBuildingInstance}
-      />
-
-      <ConfirmDialog
-        open={confirmReset}
-        title="Reset buildings?"
-        message={`Clear all building levels and palmon assignments for "${activeProfile.name}".`}
-        confirmLabel="Reset"
-        danger
-        onCancel={() => setConfirmReset(false)}
-        onConfirm={() => {
-          resetActiveBuildings();
-          setConfirmReset(false);
-        }}
       />
     </div>
   );
