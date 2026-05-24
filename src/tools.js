@@ -1,6 +1,6 @@
 // Single source of truth for the app's tools and pages. Every routable
 // destination lives here. App.jsx builds the route table from it, Layout
-// builds the nav + footer from it, Home builds its tool grid from it.
+// builds the nav + footer from it, the Dashboard builds its tool grid from it.
 //
 // To add a new tool: append one entry. Sort happens automatically by label
 // within each section, so alphabetical ordering is enforced for free.
@@ -10,23 +10,22 @@ import { ROUTES } from './routes.js';
 
 // IA sections. Each value drives which nav surfaces a tool appears on.
 export const SECTIONS = {
-  TOP: 'top', // top-level nav links (Home, About)
-  PROFILE: 'profile', // the Profile dropdown, footer column, home tool grid
+  TOP: 'top', // top-level nav links (Dashboard, About)
+  PROFILE: 'profile', // the Tools dropdown, footer column, dashboard tool grid
   INVENTORY: 'inventory', // sub-pages of the Inventory hub
-  STANDALONE: 'standalone', // routed pages with no nav surface (just Profile for now)
 };
 
 // All routable destinations. Order doesn't matter — consumers re-sort by label.
 export const TOOLS = [
   // Top-level
   {
-    key: 'home',
+    key: 'dashboard',
     path: ROUTES.home,
-    label: 'Home',
+    label: 'Dashboard',
     section: SECTIONS.TOP,
     index: true, // mounts at the layout's index route
     end: true, // NavLink end-match
-    page: lazy(() => import('./pages/Home.jsx')),
+    page: lazy(() => import('./pages/Dashboard.jsx')),
   },
   {
     key: 'about',
@@ -36,16 +35,7 @@ export const TOOLS = [
     page: lazy(() => import('./pages/About.jsx')),
   },
 
-  // Standalone (has a route, but renders its own nav surface)
-  {
-    key: 'profile',
-    path: ROUTES.profile,
-    label: 'Profile',
-    section: SECTIONS.STANDALONE,
-    page: lazy(() => import('./pages/Profile.jsx')),
-  },
-
-  // Profile-section tools (dropdown + footer column + home grid)
+  // Profile-section tools (dropdown + footer column + dashboard grid)
   {
     key: 'buildings',
     path: ROUTES.buildings,
