@@ -9,17 +9,14 @@ import { ROUTES } from '../routes.js';
 import { findPalmonBuildingAssignment } from '../lib/buildings.js';
 import {
   ELEMENT_BY_KEY,
-  EQUIPMENT_SLOTS,
   MAX_PALMON_LEVEL,
   MAX_SKILL_LEVEL,
   PALMON_SPECIES,
   PALMON_SPECIES_BY_KEY,
   RARITY_BY_KEY,
-  SKILL_SLOTS,
   SQUAD_COUNT,
   STAR_LEVELS,
   SUB_STAR_LEVELS,
-  TRAIT_SLOTS,
   placeholderEquipmentName,
   placeholderSkillName,
   placeholderTraitName,
