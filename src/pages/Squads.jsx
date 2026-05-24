@@ -8,9 +8,8 @@ import {
   PALMON_SPECIES_BY_KEY,
   RARITY_BY_KEY,
   SQUAD_COUNT,
-  palmonDisplayName,
-  palmonsInSquad,
-} from '../lib/palmon.js';
+} from '../lib/data/palmon.js';
+import { palmonDisplayName, palmonsInSquad } from '../lib/palmon.js';
 
 const ELEMENT_BADGE_CLASS = {
   fire: 'bg-red-500/15 text-red-300 ring-red-500/30',

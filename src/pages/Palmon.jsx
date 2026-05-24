@@ -17,12 +17,11 @@ import {
   STAR_LEVELS,
   SUB_STAR_LEVELS,
   TRAIT_SLOTS,
-  palmonDisplayName,
   placeholderEquipmentName,
   placeholderSkillName,
   placeholderTraitName,
-  squadIsFull,
-} from '../lib/palmon.js';
+} from '../lib/data/palmon.js';
+import { palmonDisplayName, squadIsFull } from '../lib/palmon.js';
 
 const ELEMENT_BADGE_CLASS = {
   fire: 'bg-red-500/15 text-red-300 ring-red-500/30',

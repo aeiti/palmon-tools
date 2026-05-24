@@ -10,8 +10,8 @@ import {
 } from '../lib/other.js';
 import { BUILDINGS, MAX_BUILDING_LEVEL } from '../lib/data/buildings.js';
 import { emptyBuildings, normalizeBuildings } from '../lib/buildings.js';
+import { PALMON_SPECIES_BY_KEY } from '../lib/data/palmon.js';
 import {
-  PALMON_SPECIES_BY_KEY,
   emptyPalmon,
   normalizePalmon,
   normalizePalmonList,
