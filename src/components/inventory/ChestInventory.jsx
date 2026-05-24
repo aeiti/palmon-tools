@@ -2,7 +2,7 @@ import {
   CHEST_RESOURCES,
   CHEST_TYPES,
   tiersForType,
-} from '../lib/data/chests.js';
+} from '../../lib/data/chests.js';
 
 export default function ChestInventory({ chests, onChange }) {
   return (

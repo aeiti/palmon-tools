@@ -1,9 +1,9 @@
-import { CHEST_RESOURCES } from '../lib/data/chests.js';
+import { CHEST_RESOURCES } from '../../lib/data/chests.js';
 import {
   formatResourceAmount,
   formatResourceAmountFull,
   totalResourcesFromChests,
-} from '../lib/resourceTotals.js';
+} from '../../lib/resourceTotals.js';
 
 export default function ResourceTotals({ chests, playerLevel }) {
   const totals = totalResourcesFromChests(chests, playerLevel);

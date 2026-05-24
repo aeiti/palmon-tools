@@ -1,5 +1,5 @@
-import { OTHER_GROUPS } from '../lib/data/other.js';
-import { itemsByGroup } from '../lib/other.js';
+import { OTHER_GROUPS } from '../../lib/data/other.js';
+import { itemsByGroup } from '../../lib/other.js';
 
 const NUMBER_FORMATTER = new Intl.NumberFormat('en-US');
 

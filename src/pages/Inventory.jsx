@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
-import ChestInventory from '../components/ChestInventory.jsx';
-import InventoryGrid from '../components/InventoryGrid.jsx';
-import OtherInventory from '../components/OtherInventory.jsx';
+import ChestInventory from '../components/inventory/ChestInventory.jsx';
+import InventoryGrid from '../components/inventory/InventoryGrid.jsx';
+import OtherInventory from '../components/inventory/OtherInventory.jsx';
 import ConfirmDialog from '../components/ui/ConfirmDialog.jsx';
 import { profileLabel } from '../lib/profile.js';
 
