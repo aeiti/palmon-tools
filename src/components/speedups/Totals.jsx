@@ -1,9 +1,9 @@
-import { CATEGORIES } from '../lib/data/speedups.js';
+import { CATEGORIES } from '../../lib/data/speedups.js';
 import {
   categoryTotalMinutes,
   categoryTotalWithUniversal,
-} from '../lib/speedups.js';
-import { formatDHM, formatDecimalHours } from '../lib/time.js';
+} from '../../lib/speedups.js';
+import { formatDHM, formatDecimalHours } from '../../lib/time.js';
 
 export default function Totals({ inventory }) {
   return (

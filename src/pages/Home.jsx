@@ -3,7 +3,7 @@ import { useProfiles } from '../hooks/useProfiles.js';
 import ProfileSummary from '../components/profile/ProfileSummary.jsx';
 import ChestSummary from '../components/inventory/ChestSummary.jsx';
 import ResourceTotals from '../components/inventory/ResourceTotals.jsx';
-import SpeedupSummary from '../components/SpeedupSummary.jsx';
+import SpeedupSummary from '../components/speedups/SpeedupSummary.jsx';
 import OtherSummary from '../components/inventory/OtherSummary.jsx';
 import { ROUTES } from '../routes.js';
 import { hasProfileDetails, profileLabel } from '../lib/profile.js';
