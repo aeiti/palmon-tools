@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { emptyInventory } from '../lib/speedups.js';
 import { emptyChests, normalizeChests } from '../lib/chests.js';
+import { emptyOnHand, normalizeOnHand } from '../lib/resourceTotals.js';
+import { CHEST_RESOURCES } from '../lib/data/chests.js';
 import {
   customItemKey,
   emptyCustomOther,
@@ -43,6 +45,7 @@ function makeProfile(name) {
     ...emptyDetails(),
     inventory: emptyInventory(),
     chests: emptyChests(),
+    onHand: emptyOnHand(),
     other: emptyOther(),
     customOther: emptyCustomOther(),
     buildings: emptyBuildings(),
@@ -113,6 +116,7 @@ function normalize(state) {
       power: parseNonNegativeInt(p.power),
       inventory: { ...emptyInventory(), ...(p.inventory || {}) },
       chests: normalizeChests(p.chests),
+      onHand: normalizeOnHand(p.onHand),
       customOther: normalizeCustomOther(p.customOther),
       other: normalizeOther(p.other, normalizeCustomOther(p.customOther)),
       buildings,
@@ -254,6 +258,29 @@ export function useProfiles() {
       ...s,
       profiles: s.profiles.map((p) =>
         p.id !== s.activeProfileId ? p : { ...p, chests: emptyChests() },
+      ),
+    }));
+  }, []);
+
+  const updateOnHand = useCallback((resourceKey, value) => {
+    const knownKeys = new Set(CHEST_RESOURCES.map((r) => r.key));
+    if (!knownKeys.has(resourceKey)) return;
+    const v = Math.max(0, Math.floor(Number(value) || 0));
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId
+          ? p
+          : { ...p, onHand: { ...p.onHand, [resourceKey]: v } },
+      ),
+    }));
+  }, []);
+
+  const resetActiveOnHand = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId ? p : { ...p, onHand: emptyOnHand() },
       ),
     }));
   }, []);
@@ -458,6 +485,8 @@ export function useProfiles() {
     resetActiveInventory,
     updateChestCount,
     resetActiveChests,
+    updateOnHand,
+    resetActiveOnHand,
     updateOtherCount,
     resetActiveOther,
     addCustomOther,
