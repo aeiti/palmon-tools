@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
-import ProfileDetailsDialog from '../components/ProfileDetailsDialog.jsx';
-import ProfileDeleteDialog from '../components/ProfileDeleteDialog.jsx';
+import ProfileDetailsDialog from '../components/profile/ProfileDetailsDialog.jsx';
+import ProfileDeleteDialog from '../components/profile/ProfileDeleteDialog.jsx';
 import ConfirmDialog from '../components/ui/ConfirmDialog.jsx';
 import { ROUTES } from '../routes.js';
 import { buildExport, parseImport } from '../lib/storage.js';

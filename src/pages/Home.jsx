@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
-import ProfileSummary from '../components/ProfileSummary.jsx';
+import ProfileSummary from '../components/profile/ProfileSummary.jsx';
 import ChestSummary from '../components/ChestSummary.jsx';
 import ResourceTotals from '../components/ResourceTotals.jsx';
 import SpeedupSummary from '../components/SpeedupSummary.jsx';
