@@ -160,17 +160,18 @@ function buildSquadOptions(palmon, allPalmons) {
 
 function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
   const species = PALMON_SPECIES_BY_KEY[palmon.speciesKey];
-  const [expanded, setExpanded] = useState(false);
-  const displayName = palmonDisplayName(palmon, allPalmons);
   const cardRef = useRef(null);
   const { hash } = useLocation();
   const anchorId = `palmon-${palmon.id}`;
+  // Auto-expand if the card is the URL hash target on mount. Effect below
+  // handles scrollIntoView; once expanded, the user can collapse normally.
+  const [expanded, setExpanded] = useState(() => hash === `#${anchorId}`);
+  const displayName = palmonDisplayName(palmon, allPalmons);
   const squadOptions = buildSquadOptions(palmon, allPalmons);
   const buildingAssignment = findPalmonBuildingAssignment(palmon.id, buildings);
 
   useEffect(() => {
     if (hash === `#${anchorId}`) {
-      setExpanded(true);
       cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [hash, anchorId]);
