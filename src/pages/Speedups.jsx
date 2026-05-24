@@ -4,7 +4,7 @@ import { useProfiles } from '../hooks/useProfiles.js';
 import InventoryGrid from '../components/InventoryGrid.jsx';
 import Totals from '../components/Totals.jsx';
 import TargetChecker from '../components/TargetChecker.jsx';
-import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import ConfirmDialog from '../components/ui/ConfirmDialog.jsx';
 import { ROUTES } from '../routes.js';
 import { profileLabel } from '../lib/profile.js';
 

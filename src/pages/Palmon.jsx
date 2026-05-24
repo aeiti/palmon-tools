@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
-import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import ConfirmDialog from '../components/ui/ConfirmDialog.jsx';
 import { ROUTES } from '../routes.js';
 import { findPalmonBuildingAssignment } from '../lib/buildings.js';
 import { profileLabel } from '../lib/profile.js';

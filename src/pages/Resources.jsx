@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ChestInventory from '../components/ChestInventory.jsx';
-import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import ConfirmDialog from '../components/ui/ConfirmDialog.jsx';
 import ResourceTotals from '../components/ResourceTotals.jsx';
 import { ROUTES } from '../routes.js';
 import { profileLabel } from '../lib/profile.js';

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ProfileDetailsDialog from '../components/ProfileDetailsDialog.jsx';
 import ProfileDeleteDialog from '../components/ProfileDeleteDialog.jsx';
-import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import ConfirmDialog from '../components/ui/ConfirmDialog.jsx';
 import { ROUTES } from '../routes.js';
 import { buildExport, parseImport } from '../lib/storage.js';
 import {
