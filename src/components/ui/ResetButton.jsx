@@ -11,6 +11,7 @@ export default function ResetButton({
   label = 'Reset',
   confirmLabel,
   className = 'btn-ghost',
+  disabled = false,
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -18,6 +19,7 @@ export default function ResetButton({
       <button
         type="button"
         onClick={() => setOpen(true)}
+        disabled={disabled}
         className={className}
       >
         {label}
