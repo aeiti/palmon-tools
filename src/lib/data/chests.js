@@ -12,8 +12,8 @@ export const CHEST_TIERS = [
 export const TIER_ORDER = CHEST_TIERS.map((t) => t.key);
 
 export const CHEST_TYPES = [
-  { key: 'standard', label: 'Standard', tiers: ['gold', 'purple', 'blue', 'green'] },
   { key: 'leveled', label: 'Leveled', tiers: ['gold', 'purple', 'blue'] },
+  { key: 'standard', label: 'Standard', tiers: ['gold', 'purple', 'blue', 'green'] },
 ];
 
 export const CHEST_RESOURCES = [
