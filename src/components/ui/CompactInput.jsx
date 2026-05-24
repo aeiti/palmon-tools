@@ -27,12 +27,14 @@ export default function CompactInput({
     e.target.select();
   };
 
-  const handleBlur = () => {
-    if (draft === null) return;
-    const parsed = parseCompact(draft);
+  const handleBlur = (e) => {
+    // Read from the DOM, not from `draft` closure — focus → type → blur
+    // can fire faster than React re-renders, leaving the closure's draft
+    // stale (null) on commit and silently dropping the edit.
+    const current = e.currentTarget.value;
     setDraft(null);
-    // null = unparseable. Drop the edit and revert to current value.
-    if (parsed === null) return;
+    const parsed = parseCompact(current);
+    if (parsed === null) return; // unparseable: revert to formatted value
     if (parsed !== value) onChange(parsed);
   };
 
