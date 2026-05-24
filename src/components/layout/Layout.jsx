@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { ROUTES } from '../routes.js';
+import { ROUTES } from '../../routes.js';
 
 const profileTools = [
   { to: ROUTES.buildings, label: 'Buildings' },
