@@ -22,7 +22,6 @@ export default class ErrorBoundary extends Component {
   componentDidCatch(error, info) {
     // Surface to the dev console at minimum; if we ever add telemetry, this
     // is the hook for it.
-    // eslint-disable-next-line no-console
     console.error('Tool render error:', error, info);
   }
 
