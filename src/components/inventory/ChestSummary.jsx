@@ -5,6 +5,7 @@ import {
   CHEST_TYPES,
 } from '../../lib/data/chests.js';
 import { resourceTierTotal, tierTypeTotal } from '../../lib/chests.js';
+import { formatCompact, formatCompactFull } from '../../lib/format.js';
 
 const VIEWS = [
   { key: 'by-resource', label: 'By resource' },
@@ -44,13 +45,17 @@ function TotalView({ chests }) {
             </td>
             {CHEST_TIERS.map((tier) => {
               const supported = type.tiers.includes(tier.key);
+              const count = supported
+                ? tierTypeTotal(chests, type.key, tier.key)
+                : 0;
               return (
                 <td
                   key={tier.key}
                   className="px-2 py-1.5 text-center tabular-nums text-slate-100"
+                  title={supported ? formatCompactFull(count) : undefined}
                 >
                   {supported ? (
-                    tierTypeTotal(chests, type.key, tier.key)
+                    formatCompact(count)
                   ) : (
                     <span className="text-slate-600">—</span>
                   )}
@@ -86,14 +91,18 @@ function ByResourceView({ chests }) {
             <td className={`py-1.5 pr-2 font-medium ${tier.accent}`}>
               {tier.label}
             </td>
-            {CHEST_RESOURCES.map((resource) => (
-              <td
-                key={resource.key}
-                className="px-2 py-1.5 text-center tabular-nums text-slate-100"
-              >
-                {resourceTierTotal(chests, tier.key, resource.key)}
-              </td>
-            ))}
+            {CHEST_RESOURCES.map((resource) => {
+              const count = resourceTierTotal(chests, tier.key, resource.key);
+              return (
+                <td
+                  key={resource.key}
+                  className="px-2 py-1.5 text-center tabular-nums text-slate-100"
+                  title={formatCompactFull(count)}
+                >
+                  {formatCompact(count)}
+                </td>
+              );
+            })}
           </tr>
         ))}
       </tbody>
