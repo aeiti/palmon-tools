@@ -3,9 +3,8 @@ import {
   CHEST_RESOURCES,
   CHEST_TIERS,
   CHEST_TYPES,
-  resourceTierTotal,
-  tierTypeTotal,
-} from '../lib/chests.js';
+} from '../lib/data/chests.js';
+import { resourceTierTotal, tierTypeTotal } from '../lib/chests.js';
 
 const VIEWS = [
   { key: 'by-resource', label: 'By resource' },

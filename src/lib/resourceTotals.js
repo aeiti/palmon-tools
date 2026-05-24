@@ -1,7 +1,7 @@
 // Turns chest counts into total resource amounts using the per-chest reward
 // data in chestValues.js, plus shared formatters for those totals.
 
-import { CHEST_RESOURCES, CHEST_TYPES } from './chests.js';
+import { CHEST_RESOURCES, CHEST_TYPES } from './data/chests.js';
 import {
   LEVELED_ANCHOR_LEVEL,
   LEVELED_BASE_BY_TIER,

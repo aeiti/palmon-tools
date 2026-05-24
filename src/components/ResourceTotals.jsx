@@ -1,4 +1,4 @@
-import { CHEST_RESOURCES } from '../lib/chests.js';
+import { CHEST_RESOURCES } from '../lib/data/chests.js';
 import {
   formatResourceAmount,
   formatResourceAmountFull,

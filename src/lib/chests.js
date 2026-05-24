@@ -1,40 +1,11 @@
-export const CHEST_TIERS = [
-  { key: 'gold', label: 'UR', accent: 'text-amber-300' },
-  { key: 'purple', label: 'SSR', accent: 'text-purple-300' },
-  { key: 'blue', label: 'SR', accent: 'text-sky-300' },
-  { key: 'green', label: 'R', accent: 'text-emerald-300' },
-];
+// Chest state helpers — empty/normalize and total computations. Pure catalog
+// data lives in src/lib/data/chests.js.
 
-const TIER_ORDER = CHEST_TIERS.map((t) => t.key);
-
-export const CHEST_TYPES = [
-  { key: 'standard', label: 'Standard', tiers: ['gold', 'purple', 'blue', 'green'] },
-  { key: 'leveled', label: 'Leveled', tiers: ['gold', 'purple', 'blue'] },
-];
-
-export const CHEST_RESOURCES = [
-  { key: 'xp', label: 'XP', accent: 'text-fuchsia-300' },
-  { key: 'electricity', label: 'Electricity', accent: 'text-cyan-300' },
-  { key: 'gold', label: 'Gold', accent: 'text-amber-300' },
-  { key: 'lumber', label: 'Lumber', accent: 'text-orange-300' },
-  { key: 'steel', label: 'Steel', accent: 'text-slate-300' },
-];
-
-const CHEST_TIER_BY_KEY = Object.fromEntries(
-  CHEST_TIERS.map((t) => [t.key, t]),
-);
-
-export function tiersForType(typeKey) {
-  const type = CHEST_TYPES.find((t) => t.key === typeKey);
-  if (!type) return [];
-  return type.tiers
-    .map((k) => CHEST_TIER_BY_KEY[k])
-    .filter(Boolean);
-}
-
-export function typesWithTier(tierKey) {
-  return CHEST_TYPES.filter((t) => t.tiers.includes(tierKey));
-}
+import {
+  CHEST_RESOURCES,
+  CHEST_TYPES,
+  typesWithTier,
+} from './data/chests.js';
 
 export function emptyResourceCounts() {
   return CHEST_RESOURCES.reduce((acc, r) => {
@@ -91,5 +62,3 @@ export function normalizeChests(chests) {
   }
   return base;
 }
-
-export { TIER_ORDER };
