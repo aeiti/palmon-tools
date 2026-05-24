@@ -1,17 +1,17 @@
+import { Suspense } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout.jsx';
 import PageTracker from './components/layout/PageTracker.jsx';
 import { LEGACY_REDIRECTS, ROUTES } from './routes.js';
-import Home from './pages/Home.jsx';
-import About from './pages/About.jsx';
-import Profile from './pages/Profile.jsx';
-import Inventory from './pages/Inventory.jsx';
-import Other from './pages/Other.jsx';
-import Speedups from './pages/Speedups.jsx';
-import Resources from './pages/Resources.jsx';
-import Buildings from './pages/Buildings.jsx';
-import Palmon from './pages/Palmon.jsx';
-import Squads from './pages/Squads.jsx';
+import { TOOLS } from './tools.js';
+
+function RouteSuspenseFallback() {
+  return (
+    <div className="px-4 py-8 text-center text-sm text-slate-400">
+      Loading…
+    </div>
+  );
+}
 
 export default function App() {
   return (
@@ -19,11 +19,18 @@ export default function App() {
       <PageTracker />
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path={ROUTES.inventory} element={<Inventory />} />
-          <Route path={ROUTES.inventoryOther} element={<Other />} />
-          <Route path={ROUTES.inventoryResources} element={<Resources />} />
-          <Route path={ROUTES.inventorySpeedups} element={<Speedups />} />
+          {TOOLS.map(({ key, path, index, page: Page }) => {
+            const element = (
+              <Suspense fallback={<RouteSuspenseFallback />}>
+                <Page />
+              </Suspense>
+            );
+            return index ? (
+              <Route key={key} index element={element} />
+            ) : (
+              <Route key={key} path={path} element={element} />
+            );
+          })}
           {LEGACY_REDIRECTS.map(({ from, to }) => (
             <Route
               key={from}
@@ -31,11 +38,6 @@ export default function App() {
               element={<Navigate to={to} replace />}
             />
           ))}
-          <Route path={ROUTES.buildings} element={<Buildings />} />
-          <Route path={ROUTES.palmon} element={<Palmon />} />
-          <Route path={ROUTES.squads} element={<Squads />} />
-          <Route path={ROUTES.profile} element={<Profile />} />
-          <Route path={ROUTES.about} element={<About />} />
           <Route path="*" element={<Navigate to={ROUTES.home} replace />} />
         </Route>
       </Routes>
