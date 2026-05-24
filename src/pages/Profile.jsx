@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ProfileDetailsDialog from '../components/ProfileDetailsDialog.jsx';
 import ProfileDeleteDialog from '../components/ProfileDeleteDialog.jsx';
+import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import { buildExport, parseImport } from '../lib/storage.js';
 import {
   formatProfileValue,
   formatServer,
@@ -45,10 +47,60 @@ export default function Profile() {
     renameProfile,
     updateProfileDetails,
     deleteProfile,
+    replaceAllProfiles,
   } = useProfiles();
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [pendingImport, setPendingImport] = useState(null);
+  const [importError, setImportError] = useState('');
+  const fileInputRef = useRef(null);
   const canDelete = profiles.length > 1;
+
+  const handleExport = () => {
+    const payload = buildExport({
+      activeProfileId: activeProfile.id,
+      profiles,
+    });
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+      type: 'application/json',
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `palmon-tools-backup-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportClick = () => {
+    setImportError('');
+    fileInputRef.current?.click();
+  };
+
+  const handleImportFile = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const state = parseImport(text);
+      setPendingImport(state);
+    } catch (err) {
+      setImportError(err.message || 'Could not read that file.');
+    }
+  };
+
+  const confirmImport = () => {
+    if (pendingImport) replaceAllProfiles(pendingImport);
+    setPendingImport(null);
+  };
+
+  const pendingProfileCount = Array.isArray(pendingImport?.profiles)
+    ? pendingImport.profiles.length
+    : 0;
 
   const handleCreate = () => {
     const name = window.prompt('Profile name:', '');
@@ -157,6 +209,36 @@ export default function Profile() {
         page.
       </p>
 
+      <section className="card">
+        <h2 className="h-section">Backup</h2>
+        <p className="mt-2 text-sm text-slate-400">
+          Save all of your profiles to a file, or restore from one you saved
+          earlier. Importing replaces every profile in this browser.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button type="button" onClick={handleExport} className="btn-secondary">
+            Export data
+          </button>
+          <button
+            type="button"
+            onClick={handleImportClick}
+            className="btn-secondary"
+          >
+            Import data
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json,.json"
+            onChange={handleImportFile}
+            className="hidden"
+          />
+        </div>
+        {importError && (
+          <p className="mt-3 text-sm text-red-400">{importError}</p>
+        )}
+      </section>
+
       <ProfileDetailsDialog
         open={editOpen}
         profile={activeProfile}
@@ -175,6 +257,19 @@ export default function Profile() {
           deleteProfile(activeProfile.id);
           setDeleteOpen(false);
         }}
+      />
+
+      <ConfirmDialog
+        open={pendingImport !== null}
+        title="Replace all profiles?"
+        message={`This will replace your ${profiles.length} current profile${
+          profiles.length === 1 ? '' : 's'
+        } with ${pendingProfileCount} from the backup file. This can't be undone.`}
+        confirmLabel="Replace"
+        cancelLabel="Cancel"
+        danger
+        onCancel={() => setPendingImport(null)}
+        onConfirm={confirmImport}
       />
     </div>
   );

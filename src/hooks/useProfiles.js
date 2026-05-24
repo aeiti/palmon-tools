@@ -435,6 +435,10 @@ export function useProfiles() {
     }));
   }, []);
 
+  const replaceAllProfiles = useCallback((nextState) => {
+    setState(normalize(nextState));
+  }, []);
+
   const resetActivePalmons = useCallback(() => {
     setState((s) => ({
       ...s,
@@ -469,5 +473,6 @@ export function useProfiles() {
     updatePalmon,
     deletePalmon,
     resetActivePalmons,
+    replaceAllProfiles,
   };
 }
