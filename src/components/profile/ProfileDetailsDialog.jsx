@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { formatProfileValue, formatServer } from '../lib/profile.js';
+import { formatProfileValue, formatServer } from '../../lib/profile.js';
 
 const FIELDS = [
   { key: 'ign', label: 'In-game name', placeholder: 'username', inputMode: 'text' },

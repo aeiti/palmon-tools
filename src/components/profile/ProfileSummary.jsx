@@ -1,4 +1,4 @@
-import { formatProfileValue, formatServer } from '../lib/profile.js';
+import { formatProfileValue, formatServer } from '../../lib/profile.js';
 
 function DetailChip({ label, display }) {
   if (display === '') return null;
