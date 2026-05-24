@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { NON_UNIVERSAL_CATEGORIES } from '../lib/data/speedups.js';
-import { categoryTotalWithUniversal } from '../lib/speedups.js';
-import { dhmToMinutes, formatDHM } from '../lib/time.js';
+import { NON_UNIVERSAL_CATEGORIES } from '../../lib/data/speedups.js';
+import { categoryTotalWithUniversal } from '../../lib/speedups.js';
+import { dhmToMinutes, formatDHM } from '../../lib/time.js';
 
 export default function TargetChecker({ inventory }) {
   const [category, setCategory] = useState(NON_UNIVERSAL_CATEGORIES[0].key);

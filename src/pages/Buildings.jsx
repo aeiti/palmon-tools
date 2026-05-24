@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useProfiles } from '../hooks/useProfiles.js';
-import BuildingTracker from '../components/BuildingTracker.jsx';
-import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import BuildingTracker from '../components/buildings/BuildingTracker.jsx';
+import ConfirmDialog from '../components/ui/ConfirmDialog.jsx';
 import { profileLabel } from '../lib/profile.js';
 import { MAX_BUILDING_LEVEL } from '../lib/data/buildings.js';
 import { buildingsSummary, duplicatePalmonKeys } from '../lib/buildings.js';

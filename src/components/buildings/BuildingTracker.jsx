@@ -4,8 +4,8 @@ import {
   MAX_BUILDING_LEVEL,
   groupBuildingsForDisplay,
   instanceLabel,
-} from '../lib/data/buildings.js';
-import { duplicatePalmonKeys } from '../lib/buildings.js';
+} from '../../lib/data/buildings.js';
+import { duplicatePalmonKeys } from '../../lib/buildings.js';
 
 function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
   const totalCount = card.buildings.reduce((sum, b) => sum + b.count, 0);

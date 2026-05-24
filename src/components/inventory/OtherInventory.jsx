@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { OTHER_GROUPS } from '../lib/data/other.js';
-import { itemsByGroup } from '../lib/other.js';
-import CardColumns from './CardColumns.jsx';
-import ConfirmDialog from './ConfirmDialog.jsx';
+import { OTHER_GROUPS } from '../../lib/data/other.js';
+import { itemsByGroup } from '../../lib/other.js';
+import CardColumns from '../ui/CardColumns.jsx';
+import ConfirmDialog from '../ui/ConfirmDialog.jsx';
 import CustomItemDialog from './CustomItemDialog.jsx';
 
 function ItemRow({ item, count, onChange, onEdit, onDelete }) {

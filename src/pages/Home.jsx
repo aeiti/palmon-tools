@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
-import ProfileSummary from '../components/ProfileSummary.jsx';
-import ChestSummary from '../components/ChestSummary.jsx';
-import ResourceTotals from '../components/ResourceTotals.jsx';
-import SpeedupSummary from '../components/SpeedupSummary.jsx';
-import OtherSummary from '../components/OtherSummary.jsx';
+import ProfileSummary from '../components/profile/ProfileSummary.jsx';
+import ChestSummary from '../components/inventory/ChestSummary.jsx';
+import ResourceTotals from '../components/inventory/ResourceTotals.jsx';
+import SpeedupSummary from '../components/speedups/SpeedupSummary.jsx';
+import OtherSummary from '../components/inventory/OtherSummary.jsx';
 import { ROUTES } from '../routes.js';
 import { hasProfileDetails, profileLabel } from '../lib/profile.js';
 import { hasAnyChests } from '../lib/chests.js';

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
-import OtherInventory from '../components/OtherInventory.jsx';
-import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import OtherInventory from '../components/inventory/OtherInventory.jsx';
+import ConfirmDialog from '../components/ui/ConfirmDialog.jsx';
 import { ROUTES } from '../routes.js';
 import { profileLabel } from '../lib/profile.js';
 

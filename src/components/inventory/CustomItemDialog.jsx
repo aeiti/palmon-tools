@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { OTHER_GROUPS } from '../lib/data/other.js';
+import { OTHER_GROUPS } from '../../lib/data/other.js';
 
 export default function CustomItemDialog({
   open,

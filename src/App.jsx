@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import Layout from './components/Layout.jsx';
-import PageTracker from './components/PageTracker.jsx';
+import Layout from './components/layout/Layout.jsx';
+import PageTracker from './components/layout/PageTracker.jsx';
 import { LEGACY_REDIRECTS, ROUTES } from './routes.js';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
