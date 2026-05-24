@@ -9,25 +9,32 @@ const profileTools = toolsInSection(SECTIONS.PROFILE).map((t) => ({
   label: t.label,
 }));
 
-const homeTool = findTool('home');
+const dashboardTool = findTool('dashboard');
 const aboutTool = findTool('about');
-const profilePageTool = findTool('profile');
+
+const TOOLS_MENU_LABEL = 'Tools';
 
 const navItems = [
-  { type: 'link', to: homeTool.path, label: homeTool.label, end: homeTool.end },
-  { type: 'profile' },
+  {
+    type: 'link',
+    to: dashboardTool.path,
+    label: dashboardTool.label,
+    end: dashboardTool.end,
+  },
+  { type: 'tools' },
   { type: 'link', to: aboutTool.path, label: aboutTool.label },
 ];
 
 const footerColumns = [
   {
-    header: { to: homeTool.path, label: homeTool.label, end: homeTool.end },
+    header: {
+      to: dashboardTool.path,
+      label: dashboardTool.label,
+      end: dashboardTool.end,
+    },
     items: [],
   },
-  {
-    header: { to: profilePageTool.path, label: profilePageTool.label },
-    items: profileTools,
-  },
+  { header: { label: TOOLS_MENU_LABEL }, items: profileTools },
   { header: { to: aboutTool.path, label: aboutTool.label }, items: [] },
 ];
 
@@ -40,15 +47,11 @@ function linkClass({ isActive }) {
   ].join(' ');
 }
 
-function ProfileMenu() {
+function ToolsMenu() {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   const location = useLocation();
-  const menuItems = [
-    { to: profilePageTool.path, label: profilePageTool.label },
-    ...profileTools,
-  ];
-  const isProfileSectionActive = menuItems.some(
+  const isSectionActive = profileTools.some(
     (t) =>
       location.pathname === t.to ||
       location.pathname.startsWith(`${t.to}/`),
@@ -72,7 +75,7 @@ function ProfileMenu() {
 
   const buttonClass = [
     'inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-    isProfileSectionActive
+    isSectionActive
       ? 'bg-indigo-600 text-white shadow-sm'
       : 'text-slate-300 hover:bg-slate-800 hover:text-white',
   ].join(' ');
@@ -86,7 +89,7 @@ function ProfileMenu() {
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        Profile
+        {TOOLS_MENU_LABEL}
         <svg
           aria-hidden="true"
           viewBox="0 0 20 20"
@@ -105,7 +108,7 @@ function ProfileMenu() {
           role="menu"
           className="absolute right-0 z-10 mt-1 min-w-[12rem] overflow-hidden rounded-md border border-slate-700 bg-slate-800 shadow-xl ring-1 ring-black/20"
         >
-          {menuItems.map((t) => {
+          {profileTools.map((t) => {
             const active =
               location.pathname === t.to ||
               location.pathname.startsWith(`${t.to}/`);
@@ -146,8 +149,8 @@ export default function Layout() {
           </NavLink>
           <nav className="flex items-center gap-1">
             {navItems.map((item) =>
-              item.type === 'profile' ? (
-                <ProfileMenu key="profile" />
+              item.type === 'tools' ? (
+                <ToolsMenu key="tools" />
               ) : (
                 <NavLink
                   key={item.to}

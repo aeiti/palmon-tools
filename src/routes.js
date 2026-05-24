@@ -5,7 +5,6 @@
 export const ROUTES = {
   home: '/',
   about: '/about',
-  profile: '/profile',
   buildings: '/buildings',
   inventory: '/inventory',
   inventoryOther: '/inventory/other',
