@@ -1,24 +1,33 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../routes.js';
+import { SECTIONS, findTool, toolsInSection } from '../../tools.js';
 
-const profileTools = [
-  { to: ROUTES.buildings, label: 'Buildings' },
-  { to: ROUTES.inventory, label: 'Inventory' },
-  { to: ROUTES.palmon, label: 'Palmon' },
-  { to: ROUTES.squads, label: 'Squads' },
-].sort((a, b) => a.label.localeCompare(b.label));
+const profileTools = toolsInSection(SECTIONS.PROFILE).map((t) => ({
+  to: t.path,
+  label: t.label,
+}));
+
+const homeTool = findTool('home');
+const aboutTool = findTool('about');
+const profilePageTool = findTool('profile');
 
 const navItems = [
-  { type: 'link', to: ROUTES.home, label: 'Home', end: true },
+  { type: 'link', to: homeTool.path, label: homeTool.label, end: homeTool.end },
   { type: 'profile' },
-  { type: 'link', to: ROUTES.about, label: 'About' },
+  { type: 'link', to: aboutTool.path, label: aboutTool.label },
 ];
 
 const footerColumns = [
-  { header: { to: ROUTES.home, label: 'Home', end: true }, items: [] },
-  { header: { to: ROUTES.profile, label: 'Profile' }, items: profileTools },
-  { header: { to: ROUTES.about, label: 'About' }, items: [] },
+  {
+    header: { to: homeTool.path, label: homeTool.label, end: homeTool.end },
+    items: [],
+  },
+  {
+    header: { to: profilePageTool.path, label: profilePageTool.label },
+    items: profileTools,
+  },
+  { header: { to: aboutTool.path, label: aboutTool.label }, items: [] },
 ];
 
 function linkClass({ isActive }) {
@@ -35,7 +44,7 @@ function ProfileMenu() {
   const ref = useRef(null);
   const location = useLocation();
   const menuItems = [
-    { to: ROUTES.profile, label: 'Profile' },
+    { to: profilePageTool.path, label: profilePageTool.label },
     ...profileTools,
   ];
   const isProfileSectionActive = menuItems.some(
