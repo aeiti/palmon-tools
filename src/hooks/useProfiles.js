@@ -8,12 +8,8 @@ import {
   normalizeCustomOther,
   normalizeOther,
 } from '../lib/other.js';
-import {
-  BUILDINGS,
-  MAX_BUILDING_LEVEL,
-  emptyBuildings,
-  normalizeBuildings,
-} from '../lib/buildings.js';
+import { BUILDINGS, MAX_BUILDING_LEVEL } from '../lib/data/buildings.js';
+import { emptyBuildings, normalizeBuildings } from '../lib/buildings.js';
 import {
   PALMON_SPECIES_BY_KEY,
   emptyPalmon,

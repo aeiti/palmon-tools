@@ -2,10 +2,10 @@ import { Fragment } from 'react';
 import {
   BUILDINGS_BY_CATEGORY,
   MAX_BUILDING_LEVEL,
-  duplicatePalmonKeys,
   groupBuildingsForDisplay,
   instanceLabel,
-} from '../lib/buildings.js';
+} from '../lib/data/buildings.js';
+import { duplicatePalmonKeys } from '../lib/buildings.js';
 
 function BuildingCard({ card, profileBuildings, palmons, onChange, dupes }) {
   const totalCount = card.buildings.reduce((sum, b) => sum + b.count, 0);
