@@ -1,22 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { OTHER_GROUPS } from '../../lib/data/other.js';
 
-export default function CustomItemDialog({
-  open,
-  initial,
-  onCancel,
-  onSave,
-}) {
-  const [label, setLabel] = useState('');
-  const [group, setGroup] = useState(OTHER_GROUPS[0].key);
-
-  useEffect(() => {
-    if (!open) return;
-    setLabel(initial?.label || '');
-    setGroup(initial?.group || OTHER_GROUPS[0].key);
-  }, [open, initial]);
-
+// Wrapper only mounts the form when open, so each open initializes useState
+// from `initial` directly — no useEffect needed to keep the form fields in
+// sync with props.
+export default function CustomItemDialog({ open, initial, onCancel, onSave }) {
   if (!open) return null;
+  return (
+    <CustomItemDialogForm
+      initial={initial}
+      onCancel={onCancel}
+      onSave={onSave}
+    />
+  );
+}
+
+function CustomItemDialogForm({ initial, onCancel, onSave }) {
+  const [label, setLabel] = useState(initial?.label || '');
+  const [group, setGroup] = useState(initial?.group || OTHER_GROUPS[0].key);
 
   const trimmed = label.trim();
   const isEdit = Boolean(initial?.id);

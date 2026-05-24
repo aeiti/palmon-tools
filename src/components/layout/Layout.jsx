@@ -54,10 +54,6 @@ function ProfileMenu() {
   );
 
   useEffect(() => {
-    setOpen(false);
-  }, [location.pathname]);
-
-  useEffect(() => {
     if (!open) return;
     function onDocClick(e) {
       if (ref.current && !ref.current.contains(e.target)) setOpen(false);
@@ -117,6 +113,7 @@ function ProfileMenu() {
                 key={t.to}
                 to={t.to}
                 role="menuitem"
+                onClick={() => setOpen(false)}
                 className={[
                   'block px-3 py-2 text-sm transition-colors',
                   active
