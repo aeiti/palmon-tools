@@ -122,24 +122,9 @@ export function combinedResourceTotals(chests, playerLevel, onHand) {
 }
 
 // ---- Formatting -------------------------------------------------------------
-
-const NUMBER_FORMATTER = new Intl.NumberFormat('en-US');
-
-export function formatResourceAmount(n) {
-  if (!Number.isFinite(n) || n === 0) return '0';
-  const abs = Math.abs(n);
-  if (abs >= 1_000_000_000) return `${trim(n / 1_000_000_000)}B`;
-  if (abs >= 1_000_000) return `${trim(n / 1_000_000)}M`;
-  if (abs >= 10_000) return `${trim(n / 1_000)}K`;
-  return NUMBER_FORMATTER.format(n);
-}
-
-export function formatResourceAmountFull(n) {
-  return NUMBER_FORMATTER.format(n || 0);
-}
-
-function trim(n) {
-  // 1 decimal, but drop trailing .0
-  const rounded = Math.round(n * 10) / 10;
-  return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
-}
+// Re-export the shared compact formatters under their resource-specific
+// historical names. New callers should import from src/lib/format.js
+// directly; these stay so the resource-totals consumers don't need to be
+// re-pointed and existing tests keep passing.
+export { formatCompact as formatResourceAmount } from './format.js';
+export { formatCompactFull as formatResourceAmountFull } from './format.js';
