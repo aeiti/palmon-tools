@@ -4,6 +4,7 @@ import { useProfiles } from '../hooks/useProfiles.js';
 import ChestInventory from '../components/ChestInventory.jsx';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
 import ResourceTotals from '../components/ResourceTotals.jsx';
+import { ROUTES } from '../routes.js';
 import { profileLabel } from '../lib/profile.js';
 
 export default function Resources() {
@@ -26,7 +27,7 @@ export default function Resources() {
             Track unopened chests. Leveled chests scale with your player level.
           </p>
         </div>
-        <Link to="/inventory" className="btn-secondary">
+        <Link to={ROUTES.inventory} className="btn-secondary">
           <span aria-hidden="true">←</span> Back
         </Link>
       </header>
