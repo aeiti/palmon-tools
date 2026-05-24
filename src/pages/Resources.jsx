@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ChestInventory from '../components/ChestInventory.jsx';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
+import ResourceTotals from '../components/ResourceTotals.jsx';
 import { profileLabel } from '../lib/profile.js';
 
 export default function Resources() {
@@ -46,6 +47,11 @@ export default function Resources() {
           </select>
         </div>
       )}
+
+      <ResourceTotals
+        chests={activeProfile.chests}
+        playerLevel={activeProfile.level}
+      />
 
       <section className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
