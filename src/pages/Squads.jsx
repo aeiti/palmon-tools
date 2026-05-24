@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
+import { ROUTES } from '../routes.js';
 import { profileLabel } from '../lib/profile.js';
 import {
   ELEMENT_BY_KEY,
@@ -105,7 +106,7 @@ function SquadCard({ squadNumber, palmons, hashTarget }) {
         {members.length === 0 ? (
           <p className="text-center text-sm text-slate-500">
             No Palmon assigned. Open{' '}
-            <Link to="/palmon" className="link-inline">
+            <Link to={ROUTES.palmon} className="link-inline">
               Palmon
             </Link>{' '}
             and set a squad on one of your Palmon.
@@ -142,7 +143,7 @@ export default function Squads() {
         <p className="mt-1 text-subtle">
           Each squad holds up to {MAX_PALMON_PER_SQUAD} Palmon. Assign squad on
           the{' '}
-          <Link to="/palmon" className="link-inline">
+          <Link to={ROUTES.palmon} className="link-inline">
             Palmon page
           </Link>
           .
