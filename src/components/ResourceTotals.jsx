@@ -3,7 +3,7 @@ import {
   formatResourceAmount,
   formatResourceAmountFull,
   totalResourcesFromChests,
-} from '../lib/chestValues.js';
+} from '../lib/resourceTotals.js';
 
 export default function ResourceTotals({ chests, playerLevel }) {
   const totals = totalResourcesFromChests(chests, playerLevel);
