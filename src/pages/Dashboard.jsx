@@ -4,7 +4,6 @@ import { useProfiles } from '../hooks/useProfiles.js';
 import ProfileDetailsDialog from '../components/profile/ProfileDetailsDialog.jsx';
 import ProfileDeleteDialog from '../components/profile/ProfileDeleteDialog.jsx';
 import ChestSummary from '../components/inventory/ChestSummary.jsx';
-import OnHandResources from '../components/inventory/OnHandResources.jsx';
 import ResourceTotals from '../components/inventory/ResourceTotals.jsx';
 import SpeedupSummary from '../components/speedups/SpeedupSummary.jsx';
 import OtherSummary from '../components/inventory/OtherSummary.jsx';
@@ -71,7 +70,6 @@ export default function Dashboard() {
     updateProfileDetails,
     deleteProfile,
     replaceAllProfiles,
-    updateOnHand,
   } = useProfiles();
 
   const [editOpen, setEditOpen] = useState(false);
@@ -86,7 +84,7 @@ export default function Dashboard() {
   const showChests = hasAnyChests(activeProfile.chests);
   const showSpeedups = hasAnySpeedups(activeProfile.inventory);
   // Resource Totals card is interesting any time there's *something* to total —
-  // on-hand or chests. On-hand inputs themselves are always editable below.
+  // on-hand stockpile (edited on the Resources page) or unopened chests.
   const showResourceTotals = showChests || hasAnyOnHand(activeProfile.onHand);
 
   const handleCreate = () => {
@@ -224,16 +222,6 @@ export default function Dashboard() {
           />
         </SectionCard>
       )}
-
-      <SectionCard
-        title="On-hand"
-        actions={<EditLink to={ROUTES.inventoryResources} />}
-      >
-        <OnHandResources
-          onHand={activeProfile.onHand}
-          onChange={updateOnHand}
-        />
-      </SectionCard>
 
       {showResourceTotals && (
         <SectionCard
