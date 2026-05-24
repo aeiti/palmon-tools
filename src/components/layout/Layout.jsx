@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import ErrorBoundary from './ErrorBoundary.jsx';
 import { ROUTES } from '../../routes.js';
 import { SECTIONS, findTool, toolsInSection } from '../../tools.js';
 
@@ -132,6 +133,7 @@ function ProfileMenu() {
 }
 
 export default function Layout() {
+  const { pathname } = useLocation();
   return (
     <div className="min-h-screen text-slate-100">
       <header className="sticky top-0 z-20 border-b border-slate-800/80 bg-slate-900/70 backdrop-blur-md">
@@ -162,7 +164,9 @@ export default function Layout() {
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-6">
-        <Outlet />
+        <ErrorBoundary key={pathname}>
+          <Outlet />
+        </ErrorBoundary>
       </main>
 
       <footer className="mt-6 border-t border-slate-800/80 bg-slate-900/40">
