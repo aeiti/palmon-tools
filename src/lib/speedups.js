@@ -1,36 +1,7 @@
-export const DENOMINATIONS = [
-  { key: '8h', label: '8h', minutes: 480 },
-  { key: '3h', label: '3h', minutes: 180 },
-  { key: '1h', label: '1h', minutes: 60 },
-  { key: '5m', label: '5m', minutes: 5 },
-  { key: '1m', label: '1m', minutes: 1 },
-];
+// Speedup state helpers — empty inventories and minute totals.
+// Catalog data lives in src/lib/data/speedups.js.
 
-export const CATEGORIES = [
-  { key: 'universal', label: 'Universal' },
-  { key: 'construction', label: 'Construction' },
-  { key: 'research', label: 'Research' },
-  { key: 'training', label: 'Training' },
-  { key: 'healing', label: 'Healing' },
-  { key: 'breeding', label: 'Breeding', denominations: ['1h'] },
-];
-
-export function denominationsForCategory(categoryKey) {
-  const c = CATEGORIES.find((x) => x.key === categoryKey);
-  if (!c || !c.denominations) return DENOMINATIONS;
-  const allowed = new Set(c.denominations);
-  return DENOMINATIONS.filter((d) => allowed.has(d.key));
-}
-
-export function categorySupportsDenomination(categoryKey, denomKey) {
-  const c = CATEGORIES.find((x) => x.key === categoryKey);
-  if (!c || !c.denominations) return true;
-  return c.denominations.includes(denomKey);
-}
-
-export const NON_UNIVERSAL_CATEGORIES = CATEGORIES.filter(
-  (c) => c.key !== 'universal',
-);
+import { CATEGORIES, DENOMINATIONS } from './data/speedups.js';
 
 export function emptyCategoryCounts() {
   return DENOMINATIONS.reduce((acc, d) => {

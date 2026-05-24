@@ -2,7 +2,7 @@ import {
   CATEGORIES,
   DENOMINATIONS,
   categorySupportsDenomination,
-} from '../lib/speedups.js';
+} from '../lib/data/speedups.js';
 
 export default function InventoryGrid({ inventory, onChange }) {
   return (

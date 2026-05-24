@@ -1,5 +1,5 @@
+import { CATEGORIES } from '../lib/data/speedups.js';
 import {
-  CATEGORIES,
   categoryTotalMinutes,
   categoryTotalWithUniversal,
 } from '../lib/speedups.js';
