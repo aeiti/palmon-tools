@@ -5,6 +5,7 @@ import ChestSummary from '../components/inventory/ChestSummary.jsx';
 import ResourceTotals from '../components/inventory/ResourceTotals.jsx';
 import SpeedupSummary from '../components/speedups/SpeedupSummary.jsx';
 import OtherSummary from '../components/inventory/OtherSummary.jsx';
+import SectionCard from '../components/ui/SectionCard.jsx';
 import { ROUTES } from '../routes.js';
 import { SECTIONS, toolsInSection } from '../tools.js';
 import { hasProfileDetails, profileLabel } from '../lib/profile.js';
@@ -13,6 +14,14 @@ import { hasAnySpeedups } from '../lib/speedups.js';
 import { hasAnyOther } from '../lib/other.js';
 
 const tools = toolsInSection(SECTIONS.PROFILE);
+
+function EditLink({ to }) {
+  return (
+    <Link to={to} className="btn-secondary text-xs">
+      Edit
+    </Link>
+  );
+}
 
 export default function Home() {
   const { activeProfile } = useProfiles();
@@ -32,74 +41,51 @@ export default function Home() {
       </section>
 
       {showProfile && (
-        <section className="card">
-          <h2 className="h-section">{profileLabel(activeProfile)}</h2>
-          <div className="mt-3">
-            <ProfileSummary profile={activeProfile} />
-          </div>
-        </section>
+        <SectionCard title={profileLabel(activeProfile)}>
+          <ProfileSummary profile={activeProfile} />
+        </SectionCard>
       )}
 
       {showOther && (
-        <section className="card">
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="h-section">Other Inventory</h2>
-            <Link to={ROUTES.inventoryOther} className="btn-secondary text-xs">
-              Edit
-            </Link>
-          </div>
-          <div className="mt-3">
-            <OtherSummary
-              other={activeProfile.other}
-              customItems={activeProfile.customOther}
-            />
-          </div>
-        </section>
+        <SectionCard
+          title="Other Inventory"
+          actions={<EditLink to={ROUTES.inventoryOther} />}
+        >
+          <OtherSummary
+            other={activeProfile.other}
+            customItems={activeProfile.customOther}
+          />
+        </SectionCard>
       )}
 
       {showChests && (
-        <section className="card">
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="h-section">Resource Totals</h2>
-            <Link to={ROUTES.inventoryResources} className="btn-secondary text-xs">
-              Edit
-            </Link>
-          </div>
-          <div className="mt-3">
-            <ResourceTotals
-              chests={activeProfile.chests}
-              playerLevel={activeProfile.level}
-            />
-          </div>
-        </section>
+        <SectionCard
+          title="Resource Totals"
+          actions={<EditLink to={ROUTES.inventoryResources} />}
+        >
+          <ResourceTotals
+            chests={activeProfile.chests}
+            playerLevel={activeProfile.level}
+          />
+        </SectionCard>
       )}
 
       {showChests && (
-        <section className="card">
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="h-section">Resource Inventory</h2>
-            <Link to={ROUTES.inventoryResources} className="btn-secondary text-xs">
-              Edit
-            </Link>
-          </div>
-          <div className="mt-3">
-            <ChestSummary chests={activeProfile.chests} />
-          </div>
-        </section>
+        <SectionCard
+          title="Resource Inventory"
+          actions={<EditLink to={ROUTES.inventoryResources} />}
+        >
+          <ChestSummary chests={activeProfile.chests} />
+        </SectionCard>
       )}
 
       {showSpeedups && (
-        <section className="card">
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="h-section">Speedup Inventory</h2>
-            <Link to={ROUTES.inventorySpeedups} className="btn-secondary text-xs">
-              Edit
-            </Link>
-          </div>
-          <div className="mt-3">
-            <SpeedupSummary inventory={activeProfile.inventory} />
-          </div>
-        </section>
+        <SectionCard
+          title="Speedup Inventory"
+          actions={<EditLink to={ROUTES.inventorySpeedups} />}
+        >
+          <SpeedupSummary inventory={activeProfile.inventory} />
+        </SectionCard>
       )}
 
       <section>
