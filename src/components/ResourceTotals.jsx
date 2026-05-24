@@ -7,19 +7,14 @@ import {
 
 export default function ResourceTotals({ chests, playerLevel }) {
   const totals = totalResourcesFromChests(chests, playerLevel);
-  const levelLabel = Number.isFinite(playerLevel) && playerLevel > 0
-    ? `level ${playerLevel}`
-    : 'level 30 (default)';
+  const levelLabel =
+    Number.isFinite(playerLevel) && playerLevel > 0
+      ? `level ${playerLevel}`
+      : 'level 30 (default)';
 
   return (
-    <section className="card">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="h-section">Resource Totals</h2>
-        <span className="text-xs text-slate-500">
-          Leveled chests valued at {levelLabel}
-        </span>
-      </div>
-      <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-5">
+    <div className="flex flex-col gap-2">
+      <dl className="grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-5">
         {CHEST_RESOURCES.map((r) => (
           <div
             key={r.key}
@@ -35,6 +30,9 @@ export default function ResourceTotals({ chests, playerLevel }) {
           </div>
         ))}
       </dl>
-    </section>
+      <p className="self-end text-xs text-slate-500">
+        Leveled chests valued at {levelLabel}
+      </p>
+    </div>
   );
 }

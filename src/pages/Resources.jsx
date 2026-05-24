@@ -48,10 +48,15 @@ export default function Resources() {
         </div>
       )}
 
-      <ResourceTotals
-        chests={activeProfile.chests}
-        playerLevel={activeProfile.level}
-      />
+      <section className="card">
+        <h2 className="h-section">Resource Totals</h2>
+        <div className="mt-3">
+          <ResourceTotals
+            chests={activeProfile.chests}
+            playerLevel={activeProfile.level}
+          />
+        </div>
+      </section>
 
       <section className="flex flex-col gap-2">
         <div className="flex items-center justify-between">

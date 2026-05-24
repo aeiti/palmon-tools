@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ProfileSummary from '../components/ProfileSummary.jsx';
 import ChestSummary from '../components/ChestSummary.jsx';
+import ResourceTotals from '../components/ResourceTotals.jsx';
 import SpeedupSummary from '../components/SpeedupSummary.jsx';
 import OtherSummary from '../components/OtherSummary.jsx';
 import { hasProfileDetails, profileLabel } from '../lib/profile.js';
@@ -77,6 +78,23 @@ export default function Home() {
             <OtherSummary
               other={activeProfile.other}
               customItems={activeProfile.customOther}
+            />
+          </div>
+        </section>
+      )}
+
+      {showChests && (
+        <section className="card">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="h-section">Resource Totals</h2>
+            <Link to="/inventory/resources" className="btn-secondary text-xs">
+              Edit
+            </Link>
+          </div>
+          <div className="mt-3">
+            <ResourceTotals
+              chests={activeProfile.chests}
+              playerLevel={activeProfile.level}
             />
           </div>
         </section>
