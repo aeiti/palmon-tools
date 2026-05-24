@@ -2,9 +2,9 @@ import { OTHER_GROUPS, itemsByGroup } from '../lib/other.js';
 
 const NUMBER_FORMATTER = new Intl.NumberFormat('en-US');
 
-export default function OtherSummary({ other }) {
+export default function OtherSummary({ other, customItems = [] }) {
   const groupsWithItems = OTHER_GROUPS.map((group) => {
-    const items = itemsByGroup(group.key).filter(
+    const items = itemsByGroup(group.key, customItems).filter(
       (item) => (Number(other?.[item.key]) || 0) > 0,
     );
     return { ...group, items };

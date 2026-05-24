@@ -18,6 +18,9 @@ export default function Inventory() {
     resetActiveChests,
     updateOtherCount,
     resetActiveOther,
+    addCustomOther,
+    updateCustomOther,
+    removeCustomOther,
   } = useProfiles();
 
   const [confirmReset, setConfirmReset] = useState(null);
@@ -51,7 +54,11 @@ export default function Inventory() {
       editor: (
         <OtherInventory
           other={activeProfile.other}
+          customItems={activeProfile.customOther}
           onChange={updateOtherCount}
+          onAddCustom={addCustomOther}
+          onUpdateCustom={updateCustomOther}
+          onRemoveCustom={removeCustomOther}
         />
       ),
     },

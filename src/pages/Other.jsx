@@ -12,6 +12,9 @@ export default function Other() {
     setActiveProfile,
     updateOtherCount,
     resetActiveOther,
+    addCustomOther,
+    updateCustomOther,
+    removeCustomOther,
   } = useProfiles();
 
   const [confirmReset, setConfirmReset] = useState(false);
@@ -61,7 +64,11 @@ export default function Other() {
         </div>
         <OtherInventory
           other={activeProfile.other}
+          customItems={activeProfile.customOther}
           onChange={updateOtherCount}
+          onAddCustom={addCustomOther}
+          onUpdateCustom={updateCustomOther}
+          onRemoveCustom={removeCustomOther}
         />
       </section>
 

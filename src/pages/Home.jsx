@@ -42,7 +42,7 @@ const tools = [
 export default function Home() {
   const { activeProfile } = useProfiles();
   const showProfile = hasProfileDetails(activeProfile);
-  const showOther = hasAnyOther(activeProfile.other);
+  const showOther = hasAnyOther(activeProfile.other, activeProfile.customOther);
   const showChests = hasAnyChests(activeProfile.chests);
   const showSpeedups = hasAnySpeedups(activeProfile.inventory);
 
@@ -74,7 +74,10 @@ export default function Home() {
             </Link>
           </div>
           <div className="mt-3">
-            <OtherSummary other={activeProfile.other} />
+            <OtherSummary
+              other={activeProfile.other}
+              customItems={activeProfile.customOther}
+            />
           </div>
         </section>
       )}

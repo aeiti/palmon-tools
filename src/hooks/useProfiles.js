@@ -1,7 +1,13 @@
 import { useEffect, useState, useCallback } from 'react';
 import { emptyInventory } from '../lib/speedups.js';
 import { emptyChests, normalizeChests } from '../lib/chests.js';
-import { emptyOther, normalizeOther } from '../lib/other.js';
+import {
+  customItemKey,
+  emptyCustomOther,
+  emptyOther,
+  normalizeCustomOther,
+  normalizeOther,
+} from '../lib/other.js';
 import {
   BUILDINGS,
   MAX_BUILDING_LEVEL,
@@ -42,6 +48,7 @@ function makeProfile(name) {
     inventory: emptyInventory(),
     chests: emptyChests(),
     other: emptyOther(),
+    customOther: emptyCustomOther(),
     buildings: emptyBuildings(),
     palmons: [],
   };
@@ -110,7 +117,8 @@ function normalize(state) {
       power: parseNonNegativeInt(p.power),
       inventory: { ...emptyInventory(), ...(p.inventory || {}) },
       chests: normalizeChests(p.chests),
-      other: normalizeOther(p.other),
+      customOther: normalizeCustomOther(p.customOther),
+      other: normalizeOther(p.other, normalizeCustomOther(p.customOther)),
       buildings,
       palmons,
     });
@@ -270,8 +278,64 @@ export function useProfiles() {
     setState((s) => ({
       ...s,
       profiles: s.profiles.map((p) =>
-        p.id !== s.activeProfileId ? p : { ...p, other: emptyOther() },
+        p.id !== s.activeProfileId
+          ? p
+          : { ...p, other: emptyOther(p.customOther) },
       ),
+    }));
+  }, []);
+
+  const addCustomOther = useCallback(({ label, group }) => {
+    const trimmed = String(label || '').trim().slice(0, 80);
+    if (!trimmed) return;
+    const id = makeId();
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) => {
+        if (p.id !== s.activeProfileId) return p;
+        const item = { id, label: trimmed, group };
+        const nextCustom = [...(p.customOther || []), item];
+        return {
+          ...p,
+          customOther: nextCustom,
+          other: { ...p.other, [customItemKey(id)]: 0 },
+        };
+      }),
+    }));
+  }, []);
+
+  const updateCustomOther = useCallback((id, patch) => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) => {
+        if (p.id !== s.activeProfileId) return p;
+        const nextCustom = (p.customOther || []).map((c) => {
+          if (c.id !== id) return c;
+          const merged = { ...c };
+          if ('label' in patch) {
+            const trimmed = String(patch.label || '').trim().slice(0, 80);
+            if (trimmed) merged.label = trimmed;
+          }
+          if ('group' in patch && typeof patch.group === 'string') {
+            merged.group = patch.group;
+          }
+          return merged;
+        });
+        return { ...p, customOther: nextCustom };
+      }),
+    }));
+  }, []);
+
+  const removeCustomOther = useCallback((id) => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) => {
+        if (p.id !== s.activeProfileId) return p;
+        const nextCustom = (p.customOther || []).filter((c) => c.id !== id);
+        const nextOther = { ...p.other };
+        delete nextOther[customItemKey(id)];
+        return { ...p, customOther: nextCustom, other: nextOther };
+      }),
     }));
   }, []);
 
@@ -396,6 +460,9 @@ export function useProfiles() {
     resetActiveChests,
     updateOtherCount,
     resetActiveOther,
+    addCustomOther,
+    updateCustomOther,
+    removeCustomOther,
     updateBuildingInstance,
     resetActiveBuildings,
     createPalmon,
