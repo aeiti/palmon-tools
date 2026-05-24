@@ -4,6 +4,8 @@ import { useProfiles } from '../hooks/useProfiles.js';
 import ProfileDetailsDialog from '../components/profile/ProfileDetailsDialog.jsx';
 import ProfileDeleteDialog from '../components/profile/ProfileDeleteDialog.jsx';
 import ConfirmDialog from '../components/ui/ConfirmDialog.jsx';
+import ProfilePicker from '../components/ui/ProfilePicker.jsx';
+import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
 import { ROUTES } from '../routes.js';
 import { buildExport, parseImport } from '../lib/storage.js';
 import {
@@ -43,7 +45,6 @@ export default function Profile() {
   const {
     profiles,
     activeProfile,
-    setActiveProfile,
     createProfile,
     renameProfile,
     updateProfileDetails,
@@ -117,63 +118,46 @@ export default function Profile() {
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="h-page">Profile</h1>
-          <p className="mt-1 text-subtle">
-            Your in-game info, saved locally to this browser.
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <button type="button" onClick={handleCreate} className="btn-primary">
-            New
-          </button>
-          <button
-            type="button"
-            onClick={() => setEditOpen(true)}
-            className="btn-secondary"
-          >
-            Edit
-          </button>
-          <button
-            type="button"
-            onClick={handleRename}
-            className="btn-secondary"
-          >
-            Rename
-          </button>
-          <button
-            type="button"
-            onClick={() => setDeleteOpen(true)}
-            disabled={!canDelete}
-            title={
-              canDelete
-                ? undefined
-                : 'Create another profile first before deleting this one.'
-            }
-            className="btn-secondary hover:bg-red-600 hover:text-white disabled:hover:bg-slate-700 disabled:hover:text-slate-100"
-          >
-            Delete
-          </button>
-        </div>
-      </header>
+      <ToolPageHeader
+        title="Profile"
+        subtitle="Your in-game info, saved locally to this browser."
+        actions={
+          <>
+            <button type="button" onClick={handleCreate} className="btn-primary">
+              New
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditOpen(true)}
+              className="btn-secondary"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              onClick={handleRename}
+              className="btn-secondary"
+            >
+              Rename
+            </button>
+            <button
+              type="button"
+              onClick={() => setDeleteOpen(true)}
+              disabled={!canDelete}
+              title={
+                canDelete
+                  ? undefined
+                  : 'Create another profile first before deleting this one.'
+              }
+              className="btn-secondary hover:bg-red-600 hover:text-white disabled:hover:bg-slate-700 disabled:hover:text-slate-100"
+            >
+              Delete
+            </button>
+          </>
+        }
+      />
 
-      {profiles.length > 1 && (
-        <div className="toolbar">
-          <label className="text-sm text-slate-300">Viewing</label>
-          <select
-            value={activeProfile.id}
-            onChange={(e) => setActiveProfile(e.target.value)}
-            className="select min-w-0 flex-1 sm:flex-none"
-          >
-            {profiles.map((p) => (
-              <option key={p.id} value={p.id}>
-                {profileLabel(p)}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+      <ProfilePicker label="Viewing" />
 
       <section className="card">
         <h2 className="h-section">{profileLabel(activeProfile)}</h2>
