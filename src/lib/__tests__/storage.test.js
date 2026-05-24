@@ -33,24 +33,64 @@ describe('parseImport', () => {
     expect(out).toEqual(SAMPLE_STATE);
   });
 
-  it('throws a clear error for invalid JSON', () => {
-    expect(() => parseImport('not json')).toThrow(/valid JSON/);
-  });
-
-  it('throws when the envelope is missing required fields', () => {
-    expect(() => parseImport(JSON.stringify({ format: 'palmon-tools-backup' })),
-    ).toThrow(/backup file/);
-  });
-
-  it('throws for completely unrelated JSON', () => {
-    expect(() => parseImport(JSON.stringify({ foo: 'bar' }))).toThrow(
-      /backup file/,
-    );
-  });
-
   it('round-trips buildExport → parseImport', () => {
     const payload = buildExport(SAMPLE_STATE);
     const restored = parseImport(JSON.stringify(payload));
     expect(restored).toEqual(SAMPLE_STATE);
+  });
+
+  it('throws a clear error for invalid JSON', () => {
+    expect(() => parseImport('not json')).toThrow(/valid JSON/);
+  });
+
+  it('throws for completely unrelated JSON', () => {
+    expect(() => parseImport(JSON.stringify({ foo: 'bar' }))).toThrow(
+      /Palmon Tools backup file/,
+    );
+  });
+
+  it('surfaces a specific error when an envelope is partial', () => {
+    // Has `format` so we recognize the intent — but state is missing
+    expect(() =>
+      parseImport(JSON.stringify({ format: 'palmon-tools-backup' })),
+    ).toThrow(/malformed/i);
+  });
+
+  it('surfaces a specific error when a profile is missing required fields', () => {
+    expect(() =>
+      parseImport(
+        JSON.stringify({ activeProfileId: 'p1', profiles: [{ name: 'Main' }] }),
+      ),
+    ).toThrow(/profiles\.0\.id/);
+  });
+
+  it('rejects an envelope with empty profiles', () => {
+    expect(() =>
+      parseImport(
+        JSON.stringify(
+          buildExport({ activeProfileId: 'p1', profiles: [] }),
+        ),
+      ),
+    ).toThrow(/at least one profile required/);
+  });
+
+  it('passes through unknown extra fields on profiles', () => {
+    // The schema is permissive on profile internals — normalize handles them
+    const out = parseImport(
+      JSON.stringify({
+        activeProfileId: 'p1',
+        profiles: [
+          {
+            id: 'p1',
+            name: 'Main',
+            ign: 'Adam',
+            chests: { standard: { gold: { xp: 5 } } },
+            extraField: 'whatever',
+          },
+        ],
+      }),
+    );
+    expect(out.profiles[0].ign).toBe('Adam');
+    expect(out.profiles[0].extraField).toBe('whatever');
   });
 });
