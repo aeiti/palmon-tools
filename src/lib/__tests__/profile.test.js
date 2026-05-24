@@ -13,8 +13,10 @@ describe('formatProfileValue', () => {
     expect(formatProfileValue('')).toBe('');
   });
 
-  it('formats numbers with commas', () => {
-    expect(formatProfileValue(1234567)).toBe('1,234,567');
+  it('formats numbers compactly (K/M/B)', () => {
+    expect(formatProfileValue(1_234_567)).toBe('1.2M');
+    expect(formatProfileValue(500)).toBe('500');
+    expect(formatProfileValue(1_500)).toBe('1.5K');
   });
 
   it('passes strings through unchanged', () => {

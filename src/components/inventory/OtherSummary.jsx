@@ -1,7 +1,6 @@
 import { OTHER_GROUPS } from '../../lib/data/other.js';
 import { itemsByGroup } from '../../lib/other.js';
-
-const NUMBER_FORMATTER = new Intl.NumberFormat('en-US');
+import { formatCompact, formatCompactFull } from '../../lib/format.js';
 
 export default function OtherSummary({ other, customItems = [] }) {
   const groupsWithItems = OTHER_GROUPS.map((group) => {
@@ -23,17 +22,23 @@ export default function OtherSummary({ other, customItems = [] }) {
             {group.label}
           </div>
           <dl className="mt-1 grid grid-cols-1 gap-x-4 gap-y-1 sm:grid-cols-2">
-            {group.items.map((item) => (
-              <div
-                key={item.key}
-                className="flex items-baseline justify-between gap-2 border-b border-slate-800/60 py-0.5 text-sm"
-              >
-                <dt className="text-slate-300">{item.label}</dt>
-                <dd className="tabular-nums text-slate-100">
-                  {NUMBER_FORMATTER.format(other[item.key])}
-                </dd>
-              </div>
-            ))}
+            {group.items.map((item) => {
+              const count = Number(other[item.key]) || 0;
+              return (
+                <div
+                  key={item.key}
+                  className="flex items-baseline justify-between gap-2 border-b border-slate-800/60 py-0.5 text-sm"
+                >
+                  <dt className="text-slate-300">{item.label}</dt>
+                  <dd
+                    className="tabular-nums text-slate-100"
+                    title={formatCompactFull(count)}
+                  >
+                    {formatCompact(count)}
+                  </dd>
+                </div>
+              );
+            })}
           </dl>
         </div>
       ))}

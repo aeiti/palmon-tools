@@ -1,8 +1,8 @@
-const NUMBER_FORMATTER = new Intl.NumberFormat('en-US');
+import { formatCompact } from './format.js';
 
 export function formatProfileValue(value) {
   if (value === null || value === undefined || value === '') return '';
-  return typeof value === 'number' ? NUMBER_FORMATTER.format(value) : value;
+  return typeof value === 'number' ? formatCompact(value) : value;
 }
 
 export function formatServer(value) {

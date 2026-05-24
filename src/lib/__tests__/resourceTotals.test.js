@@ -112,49 +112,23 @@ describe('totalResourcesFromChests', () => {
   });
 });
 
-describe('formatResourceAmount', () => {
-  it('formats 0 as "0"', () => {
+// formatResourceAmount + formatResourceAmountFull are now re-exports of the
+// shared compact formatters in src/lib/format.js (see format.test.js for the
+// full coverage). Smoke-test the re-export so we notice if the alias ever
+// drifts from the underlying behavior.
+describe('formatResourceAmount (re-export of formatCompact)', () => {
+  it('forwards K/M/B formatting', () => {
     expect(formatResourceAmount(0)).toBe('0');
-  });
-
-  it('formats invalid numbers as "0"', () => {
-    expect(formatResourceAmount(NaN)).toBe('0');
-    expect(formatResourceAmount(Infinity)).toBe('0');
-  });
-
-  it('uses K above 10,000', () => {
-    expect(formatResourceAmount(12_300)).toBe('12.3K');
-    expect(formatResourceAmount(99_900)).toBe('99.9K');
-  });
-
-  it('falls back to commas below 10,000', () => {
-    expect(formatResourceAmount(9_999)).toBe('9,999');
-  });
-
-  it('uses M above 1,000,000', () => {
+    expect(formatResourceAmount(1_500)).toBe('1.5K');
     expect(formatResourceAmount(5_400_000)).toBe('5.4M');
-    expect(formatResourceAmount(1_000_000)).toBe('1M');
-  });
-
-  it('uses B above 1,000,000,000', () => {
     expect(formatResourceAmount(2_500_000_000)).toBe('2.5B');
-  });
-
-  it('drops trailing .0', () => {
-    expect(formatResourceAmount(2_000_000)).toBe('2M');
-    expect(formatResourceAmount(10_000)).toBe('10K');
   });
 });
 
-describe('formatResourceAmountFull', () => {
-  it('uses comma-grouped digits', () => {
+describe('formatResourceAmountFull (re-export of formatCompactFull)', () => {
+  it('forwards comma-grouped full digits', () => {
     expect(formatResourceAmountFull(1_234_567)).toBe('1,234,567');
-  });
-
-  it('handles 0 and nullish', () => {
-    expect(formatResourceAmountFull(0)).toBe('0');
     expect(formatResourceAmountFull(null)).toBe('0');
-    expect(formatResourceAmountFull(undefined)).toBe('0');
   });
 });
 
