@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
+import ProfilePicker from '../components/ui/ProfilePicker.jsx';
+import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
 import { ROUTES } from '../routes.js';
-import { profileLabel } from '../lib/profile.js';
 import {
   ELEMENT_BY_KEY,
   MAX_PALMON_PER_SQUAD,
@@ -132,40 +133,27 @@ function SquadCard({ squadNumber, palmons, hashTarget }) {
 }
 
 export default function Squads() {
-  const { profiles, activeProfile, setActiveProfile } = useProfiles();
+  const { activeProfile } = useProfiles();
   const { hash } = useLocation();
   const hashTarget = hash.startsWith('#') ? hash.slice(1) : '';
 
   return (
     <div className="flex flex-col gap-6">
-      <header>
-        <h1 className="h-page">Squads</h1>
-        <p className="mt-1 text-subtle">
-          Each squad holds up to {MAX_PALMON_PER_SQUAD} Palmon. Assign squad on
-          the{' '}
-          <Link to={ROUTES.palmon} className="link-inline">
-            Palmon page
-          </Link>
-          .
-        </p>
-      </header>
+      <ToolPageHeader
+        title="Squads"
+        subtitle={
+          <>
+            Each squad holds up to {MAX_PALMON_PER_SQUAD} Palmon. Assign squad
+            on the{' '}
+            <Link to={ROUTES.palmon} className="link-inline">
+              Palmon page
+            </Link>
+            .
+          </>
+        }
+      />
 
-      {profiles.length > 1 && (
-        <div className="toolbar">
-          <label className="text-sm text-slate-300">Profile</label>
-          <select
-            value={activeProfile.id}
-            onChange={(e) => setActiveProfile(e.target.value)}
-            className="select min-w-0 flex-1 sm:flex-none"
-          >
-            {profiles.map((p) => (
-              <option key={p.id} value={p.id}>
-                {profileLabel(p)}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+      <ProfilePicker />
 
       <div className="grid gap-3 sm:grid-cols-2">
         {Array.from({ length: SQUAD_COUNT }, (_, i) => (
