@@ -3,6 +3,7 @@ import {
   CHEST_TYPES,
   tiersForType,
 } from '../../lib/data/chests.js';
+import CompactInput from '../ui/CompactInput.jsx';
 
 export default function ChestInventory({ chests, onChange }) {
   return (
@@ -39,21 +40,13 @@ export default function ChestInventory({ chests, onChange }) {
                   </td>
                   {CHEST_RESOURCES.map((resource) => (
                     <td key={resource.key} className="px-1 py-1.5">
-                      <input
-                        type="number"
-                        inputMode="numeric"
-                        min="0"
+                      <CompactInput
                         value={chests[type.key][tier.key][resource.key]}
-                        onChange={(e) =>
-                          onChange(
-                            type.key,
-                            tier.key,
-                            resource.key,
-                            e.target.value,
-                          )
+                        onChange={(value) =>
+                          onChange(type.key, tier.key, resource.key, value)
                         }
-                        onFocus={(e) => e.target.select()}
                         className="input-cell"
+                        ariaLabel={`${type.label} ${tier.label} ${resource.label} chests`}
                       />
                     </td>
                   ))}

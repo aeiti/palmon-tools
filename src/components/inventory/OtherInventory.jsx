@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { OTHER_GROUPS } from '../../lib/data/other.js';
 import { itemsByGroup } from '../../lib/other.js';
 import CardColumns from '../ui/CardColumns.jsx';
+import CompactInput from '../ui/CompactInput.jsx';
 import ConfirmDialog from '../ui/ConfirmDialog.jsx';
 import CustomItemDialog from './CustomItemDialog.jsx';
 
@@ -49,15 +50,12 @@ function ItemRow({ item, count, onChange, onEdit, onDelete }) {
           </button>
         </div>
       )}
-      <input
+      <CompactInput
         id={`other-${item.key}`}
-        type="number"
-        inputMode="numeric"
-        min="0"
         value={count ?? 0}
-        onChange={(e) => onChange(item.key, e.target.value)}
-        onFocus={(e) => e.target.select()}
+        onChange={(value) => onChange(item.key, value)}
         className="h-7 w-20 rounded-md bg-slate-800 px-1.5 text-center tabular-nums text-sm leading-none text-slate-100 ring-1 ring-slate-700 transition-shadow focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        ariaLabel={item.label}
       />
     </div>
   );

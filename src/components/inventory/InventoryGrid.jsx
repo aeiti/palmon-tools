@@ -3,6 +3,7 @@ import {
   DENOMINATIONS,
   categorySupportsDenomination,
 } from '../../lib/data/speedups.js';
+import CompactInput from '../ui/CompactInput.jsx';
 
 export default function InventoryGrid({ inventory, onChange }) {
   return (
@@ -32,14 +33,11 @@ export default function InventoryGrid({ inventory, onChange }) {
                 return (
                   <td key={d.key} className="px-1 py-1.5">
                     {supported ? (
-                      <input
-                        type="number"
-                        inputMode="numeric"
-                        min="0"
+                      <CompactInput
                         value={inventory[c.key][d.key]}
-                        onChange={(e) => onChange(c.key, d.key, e.target.value)}
-                        onFocus={(e) => e.target.select()}
+                        onChange={(value) => onChange(c.key, d.key, value)}
                         className="input-cell"
+                        ariaLabel={`${c.label} ${d.label} speedups`}
                       />
                     ) : (
                       <div className="text-center text-slate-600">—</div>
