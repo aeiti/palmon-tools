@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ConfirmDialog from '../components/ui/ConfirmDialog.jsx';
+import ProfilePicker from '../components/ui/ProfilePicker.jsx';
+import ResetButton from '../components/ui/ResetButton.jsx';
+import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
 import { ROUTES } from '../routes.js';
 import { findPalmonBuildingAssignment } from '../lib/buildings.js';
-import { profileLabel } from '../lib/profile.js';
 import {
   ELEMENT_BY_KEY,
   EQUIPMENT_SLOTS,
@@ -367,9 +369,7 @@ const SPECIES_GROUPS = TIER_ORDER.map((tier) => {
 
 export default function Palmon() {
   const {
-    profiles,
     activeProfile,
-    setActiveProfile,
     createPalmon,
     updatePalmon,
     deletePalmon,
@@ -377,7 +377,6 @@ export default function Palmon() {
   } = useProfiles();
 
   const [pendingSpecies, setPendingSpecies] = useState('');
-  const [confirmReset, setConfirmReset] = useState(false);
   const [pendingDelete, setPendingDelete] = useState(null);
 
   const palmons = activeProfile.palmons;
@@ -390,44 +389,24 @@ export default function Palmon() {
 
   return (
     <div className="flex flex-col gap-6">
-      <header>
-        <h1 className="h-page">Palmon</h1>
-        <p className="mt-1 text-subtle">
-          Track your Palmon roster: level (max {MAX_PALMON_LEVEL}), star tier,
-          squad, equipment, skills, and traits.
-        </p>
-      </header>
+      <ToolPageHeader
+        title="Palmon"
+        subtitle={`Track your Palmon roster: level (max ${MAX_PALMON_LEVEL}), star tier, squad, equipment, skills, and traits.`}
+      />
 
-      {profiles.length > 1 && (
-        <div className="toolbar">
-          <label className="text-sm text-slate-300">Profile</label>
-          <select
-            value={activeProfile.id}
-            onChange={(e) => setActiveProfile(e.target.value)}
-            className="select min-w-0 flex-1 sm:flex-none"
-          >
-            {profiles.map((p) => (
-              <option key={p.id} value={p.id}>
-                {profileLabel(p)}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+      <ProfilePicker />
 
       <div className="toolbar justify-between text-sm text-slate-300">
         <span>
           <span className="text-slate-400">Roster:</span>{' '}
           <span className="tabular-nums text-slate-100">{palmons.length}</span>
         </span>
-        <button
-          type="button"
-          onClick={() => setConfirmReset(true)}
+        <ResetButton
+          onReset={resetActivePalmons}
           disabled={palmons.length === 0}
-          className="btn-ghost"
-        >
-          Reset
-        </button>
+          confirmTitle="Reset Palmon roster?"
+          confirmMessage={`Delete all Palmon for "${activeProfile.name}". This also clears any building assignments.`}
+        />
       </div>
 
       <div className="flex flex-wrap items-end gap-2 rounded-lg bg-slate-800/60 p-3 ring-1 ring-slate-700/80">
@@ -467,19 +446,6 @@ export default function Palmon() {
           ))}
         </div>
       )}
-
-      <ConfirmDialog
-        open={confirmReset}
-        title="Reset Palmon roster?"
-        message={`Delete all Palmon for "${activeProfile.name}". This also clears any building assignments.`}
-        confirmLabel="Reset"
-        danger
-        onCancel={() => setConfirmReset(false)}
-        onConfirm={() => {
-          resetActivePalmons();
-          setConfirmReset(false);
-        }}
-      />
 
       <ConfirmDialog
         open={Boolean(pendingDelete)}
