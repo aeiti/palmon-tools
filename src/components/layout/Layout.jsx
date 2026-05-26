@@ -20,8 +20,7 @@ const toLink = (tool) => ({
 const profileTools = toolsInSection(SECTIONS.PROFILE).map(toLink);
 
 // Top nav order: the index tool (Dashboard) first, then the Tools dropdown,
-// then any remaining TOP tools alphabetically. Footer columns mirror this 1:1
-// so both surfaces stay in sync as tools are added.
+// then any remaining TOP tools alphabetically.
 const topTools = toolsInSection(SECTIONS.TOP);
 const indexTool = topTools.find((t) => t.index);
 const trailingTopTools = topTools.filter((t) => !t.index);
@@ -32,14 +31,10 @@ const navItems = [
   ...trailingTopTools.map((t) => ({ type: 'link', ...toLink(t) })),
 ];
 
-const footerColumns = navItems.map((item) =>
-  item.type === 'tools'
-    ? { header: { label: TOOLS_MENU_LABEL }, items: profileTools }
-    : {
-        header: { to: item.to, end: item.end, label: item.label },
-        items: item.children,
-      },
-);
+// Footer is a single flat row of every routable destination, alphabetical.
+const footerLinks = [...topTools, ...toolsInSection(SECTIONS.PROFILE)]
+  .map(toLink)
+  .sort((a, b) => a.label.localeCompare(b.label));
 
 function linkClass({ isActive }) {
   return [
@@ -197,74 +192,29 @@ export default function Layout() {
         <div className="mx-auto max-w-3xl px-4 py-6">
           <nav
             aria-label="Footer"
-            className="grid gap-x-4 gap-y-4"
-            style={{
-              gridTemplateColumns: `repeat(${footerColumns.length}, minmax(0, 1fr))`,
-            }}
+            className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2"
           >
-            {footerColumns.map((col, i) => (
-              <div
-                key={col.header.label + i}
-                className="flex flex-col items-center gap-1 text-center"
-              >
-                {col.header.to ? (
-                  <NavLink
-                    to={col.header.to}
-                    end={col.header.end}
-                    className={({ isActive }) =>
-                      [
-                        'text-xs font-semibold uppercase tracking-wide transition-colors',
-                        isActive
-                          ? 'text-indigo-300'
-                          : 'text-slate-300 hover:text-white',
-                      ].join(' ')
-                    }
-                  >
-                    {col.header.label}
-                  </NavLink>
-                ) : (
-                  <span className="text-xs font-semibold uppercase tracking-wide text-slate-300">
-                    {col.header.label}
+            {footerLinks.map((item, i) => (
+              <div key={item.to} className="flex items-center gap-x-4">
+                {i > 0 && (
+                  <span aria-hidden className="text-slate-700">
+                    ·
                   </span>
                 )}
-                {col.items.map((item) => (
-                  <div
-                    key={item.to}
-                    className="flex flex-col items-center gap-1"
-                  >
-                    <NavLink
-                      to={item.to}
-                      end={item.end}
-                      className={({ isActive }) =>
-                        [
-                          'text-xs transition-colors',
-                          isActive
-                            ? 'text-indigo-300'
-                            : 'text-slate-400 hover:text-slate-100',
-                        ].join(' ')
-                      }
-                    >
-                      {item.label}
-                    </NavLink>
-                    {item.children?.map((child) => (
-                      <NavLink
-                        key={child.to}
-                        to={child.to}
-                        end={child.end}
-                        className={({ isActive }) =>
-                          [
-                            'text-[11px] transition-colors',
-                            isActive
-                              ? 'text-indigo-300'
-                              : 'text-slate-500 hover:text-slate-200',
-                          ].join(' ')
-                        }
-                      >
-                        {child.label}
-                      </NavLink>
-                    ))}
-                  </div>
-                ))}
+                <NavLink
+                  to={item.to}
+                  end={item.end}
+                  className={({ isActive }) =>
+                    [
+                      'text-xs transition-colors',
+                      isActive
+                        ? 'text-indigo-300'
+                        : 'text-slate-400 hover:text-slate-100',
+                    ].join(' ')
+                  }
+                >
+                  {item.label}
+                </NavLink>
               </div>
             ))}
           </nav>
