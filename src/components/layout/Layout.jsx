@@ -107,49 +107,55 @@ function ToolsMenu() {
         </svg>
       </button>
       {open && (
-        <div
-          role="menu"
-          className="absolute right-0 z-10 mt-1 min-w-[12rem] overflow-hidden rounded-md border border-slate-700 bg-slate-800 shadow-xl ring-1 ring-black/20"
-        >
-          {profileTools.map((t) => {
-            const active = isPathActive(t.to);
-            return (
-              <div key={t.to}>
-                <Link
-                  to={t.to}
-                  role="menuitem"
-                  onClick={() => setOpen(false)}
-                  className={[
-                    'block px-3 py-2 text-sm transition-colors',
-                    active
-                      ? 'bg-indigo-600 text-white'
-                      : 'text-slate-200 hover:bg-slate-700 hover:text-white',
-                  ].join(' ')}
-                >
-                  {t.label}
-                </Link>
-                {t.children.map((c) => {
-                  const childActive = isPathActive(c.to);
-                  return (
-                    <Link
-                      key={c.to}
-                      to={c.to}
-                      role="menuitem"
-                      onClick={() => setOpen(false)}
-                      className={[
-                        'block py-1.5 pl-6 pr-3 text-xs transition-colors',
-                        childActive
-                          ? 'bg-indigo-600 text-white'
-                          : 'text-slate-300 hover:bg-slate-700 hover:text-white',
-                      ].join(' ')}
-                    >
-                      {c.label}
-                    </Link>
-                  );
-                })}
-              </div>
-            );
-          })}
+        // Wrapper sits flush against the button (no margin gap) and uses
+        // transparent top padding to preserve the visual offset. Without
+        // this the cursor crosses a dead zone when moving from the button
+        // to the menu, triggering onMouseLeave on the parent and closing.
+        <div className="absolute right-0 top-full z-10 pt-1">
+          <div
+            role="menu"
+            className="min-w-[12rem] overflow-hidden rounded-md border border-slate-700 bg-slate-800 shadow-xl ring-1 ring-black/20"
+          >
+            {profileTools.map((t) => {
+              const active = isPathActive(t.to);
+              return (
+                <div key={t.to}>
+                  <Link
+                    to={t.to}
+                    role="menuitem"
+                    onClick={() => setOpen(false)}
+                    className={[
+                      'block px-3 py-2 text-sm transition-colors',
+                      active
+                        ? 'bg-indigo-600 text-white'
+                        : 'text-slate-200 hover:bg-slate-700 hover:text-white',
+                    ].join(' ')}
+                  >
+                    {t.label}
+                  </Link>
+                  {t.children.map((c) => {
+                    const childActive = isPathActive(c.to);
+                    return (
+                      <Link
+                        key={c.to}
+                        to={c.to}
+                        role="menuitem"
+                        onClick={() => setOpen(false)}
+                        className={[
+                          'block py-1.5 pl-6 pr-3 text-xs transition-colors',
+                          childActive
+                            ? 'bg-indigo-600 text-white'
+                            : 'text-slate-300 hover:bg-slate-700 hover:text-white',
+                        ].join(' ')}
+                      >
+                        {c.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>
