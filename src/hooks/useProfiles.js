@@ -1,7 +1,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import { emptyInventory } from '../lib/speedups.js';
 import { emptyChests, normalizeChests } from '../lib/chests.js';
-import { emptyOnHand, normalizeOnHand } from '../lib/resourceTotals.js';
+import {
+  emptyLeveledOverrides,
+  emptyOnHand,
+  LEVELED_OVERRIDE_FIELDS,
+  LEVELED_OVERRIDE_TIERS,
+  normalizeLeveledOverrides,
+  normalizeOnHand,
+} from '../lib/resourceTotals.js';
 import { CHEST_RESOURCES } from '../lib/data/chests.js';
 import {
   customItemKey,
@@ -45,6 +52,7 @@ function makeProfile(name) {
     ...emptyDetails(),
     inventory: emptyInventory(),
     chests: emptyChests(),
+    leveledChestOverrides: emptyLeveledOverrides(),
     onHand: emptyOnHand(),
     other: emptyOther(),
     customOther: emptyCustomOther(),
@@ -116,6 +124,7 @@ function normalize(state) {
       power: parseNonNegativeInt(p.power),
       inventory: { ...emptyInventory(), ...(p.inventory || {}) },
       chests: normalizeChests(p.chests),
+      leveledChestOverrides: normalizeLeveledOverrides(p.leveledChestOverrides),
       onHand: normalizeOnHand(p.onHand),
       customOther: normalizeCustomOther(p.customOther),
       other: normalizeOther(p.other, normalizeCustomOther(p.customOther)),
@@ -258,6 +267,43 @@ export function useProfiles() {
       ...s,
       profiles: s.profiles.map((p) =>
         p.id !== s.activeProfileId ? p : { ...p, chests: emptyChests() },
+      ),
+    }));
+  }, []);
+
+  const updateLeveledChestOverride = useCallback(
+    (tierKey, fieldKey, value) => {
+      if (!LEVELED_OVERRIDE_TIERS.includes(tierKey)) return;
+      if (!LEVELED_OVERRIDE_FIELDS.includes(fieldKey)) return;
+      const v = Math.max(0, Math.floor(Number(value) || 0));
+      setState((s) => ({
+        ...s,
+        profiles: s.profiles.map((p) => {
+          if (p.id !== s.activeProfileId) return p;
+          const current = p.leveledChestOverrides || emptyLeveledOverrides();
+          return {
+            ...p,
+            leveledChestOverrides: {
+              ...current,
+              [tierKey]: {
+                ...(current[tierKey] || {}),
+                [fieldKey]: v,
+              },
+            },
+          };
+        }),
+      }));
+    },
+    [],
+  );
+
+  const resetActiveLeveledChestOverrides = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId
+          ? p
+          : { ...p, leveledChestOverrides: emptyLeveledOverrides() },
       ),
     }));
   }, []);
@@ -485,6 +531,8 @@ export function useProfiles() {
     resetActiveInventory,
     updateChestCount,
     resetActiveChests,
+    updateLeveledChestOverride,
+    resetActiveLeveledChestOverrides,
     updateOnHand,
     resetActiveOnHand,
     updateOtherCount,

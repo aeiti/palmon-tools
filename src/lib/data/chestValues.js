@@ -30,8 +30,9 @@ export const STANDARD_CHEST_VALUES = {
 
 // ---- Leveled chests ---------------------------------------------------------
 // Per-resource value of a single leveled chest at the anchor player level,
-// broken out per tier. Levels below the anchor are interpolated; levels above
-// reuse the anchor row until real data lands.
+// broken out per tier. Levels below the anchor are interpolated against the
+// L1 floor (and the L26 mid-anchor where data exists); levels above reuse the
+// anchor row until real data lands.
 export const LEVELED_ANCHOR_LEVEL = 30;
 export const LEVELED_MIN_LEVEL = 1;
 
@@ -41,7 +42,7 @@ export const LEVELED_MIN_LEVEL_SCALE = 0.5;
 export const LEVELED_BASE_BY_TIER = {
   gold: { // UR
     xp: 5_400_000,
-    electricity: 3_000_000,
+    electricity: 1_000_000,
     gold: 4_200_000,
     lumber: 4_200_000,
     steel: 4_200_000,
@@ -59,5 +60,26 @@ export const LEVELED_BASE_BY_TIER = {
     gold: 175_000,
     lumber: 175_000,
     steel: 175_000,
+  },
+};
+
+// Optional mid-curve anchor: known values at a player level between L1 and the
+// main anchor. Where a (tier, resource) entry exists here, the scaling becomes
+// piecewise linear (L1 floor → L26 → L30) instead of the single-segment taper.
+// Only resources with real in-game data should appear here.
+export const LEVELED_SECONDARY_ANCHOR_LEVEL = 26;
+
+export const LEVELED_SECONDARY_ANCHORS_BY_TIER = {
+  gold: { // UR
+    xp: 4_600_000,
+    electricity: 940_000,
+  },
+  purple: { // SSR
+    xp: 1_500_000,
+    electricity: 310_000,
+  },
+  blue: { // SR
+    xp: 195_000,
+    electricity: 39_100,
   },
 };

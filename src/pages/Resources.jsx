@@ -13,6 +13,8 @@ export default function Resources() {
     activeProfile,
     updateChestCount,
     resetActiveChests,
+    updateLeveledChestOverride,
+    resetActiveLeveledChestOverrides,
     updateOnHand,
     resetActiveOnHand,
   } = useProfiles();
@@ -32,6 +34,7 @@ export default function Resources() {
           chests={activeProfile.chests}
           playerLevel={activeProfile.level}
           onHand={activeProfile.onHand}
+          leveledOverrides={activeProfile.leveledChestOverrides}
         />
       </SectionCard>
 
@@ -63,6 +66,10 @@ export default function Resources() {
         <ChestInventory
           chests={activeProfile.chests}
           onChange={updateChestCount}
+          leveledOverrides={activeProfile.leveledChestOverrides}
+          playerLevel={activeProfile.level}
+          onLeveledOverrideChange={updateLeveledChestOverride}
+          onLeveledOverrideReset={resetActiveLeveledChestOverrides}
         />
       </section>
     </div>

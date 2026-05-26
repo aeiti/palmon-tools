@@ -232,6 +232,7 @@ export default function Dashboard() {
             chests={activeProfile.chests}
             playerLevel={activeProfile.level}
             onHand={activeProfile.onHand}
+            leveledOverrides={activeProfile.leveledChestOverrides}
           />
         </SectionCard>
       )}

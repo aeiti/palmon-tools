@@ -7,12 +7,14 @@ import {
   LEVELED_BASE_BY_TIER,
   LEVELED_MIN_LEVEL,
   LEVELED_MIN_LEVEL_SCALE,
+  LEVELED_SECONDARY_ANCHOR_LEVEL,
+  LEVELED_SECONDARY_ANCHORS_BY_TIER,
   STANDARD_CHEST_VALUES,
 } from './data/chestValues.js';
 
 // ---- Leveled scaling --------------------------------------------------------
 
-function scaleFor(level) {
+function singleAnchorFactor(level) {
   if (level >= LEVELED_ANCHOR_LEVEL) return 1;
   if (level <= LEVELED_MIN_LEVEL) return LEVELED_MIN_LEVEL_SCALE;
   const span = LEVELED_ANCHOR_LEVEL - LEVELED_MIN_LEVEL;
@@ -22,23 +24,41 @@ function scaleFor(level) {
   );
 }
 
-function scaleTier(base, factor) {
-  const out = {};
-  for (const [k, v] of Object.entries(base)) {
-    out[k] = Math.round(v * factor);
+function leveledValueAt(tier, resource, level) {
+  const anchor = LEVELED_BASE_BY_TIER[tier]?.[resource];
+  if (anchor == null) return 0;
+  if (level >= LEVELED_ANCHOR_LEVEL) return anchor;
+  const floor = anchor * LEVELED_MIN_LEVEL_SCALE;
+  if (level <= LEVELED_MIN_LEVEL) return Math.round(floor);
+  const secondary = LEVELED_SECONDARY_ANCHORS_BY_TIER[tier]?.[resource];
+  if (secondary != null) {
+    if (level >= LEVELED_SECONDARY_ANCHOR_LEVEL) {
+      const t =
+        (level - LEVELED_SECONDARY_ANCHOR_LEVEL) /
+        (LEVELED_ANCHOR_LEVEL - LEVELED_SECONDARY_ANCHOR_LEVEL);
+      return Math.round(secondary + t * (anchor - secondary));
+    }
+    const t =
+      (level - LEVELED_MIN_LEVEL) /
+      (LEVELED_SECONDARY_ANCHOR_LEVEL - LEVELED_MIN_LEVEL);
+    return Math.round(floor + t * (secondary - floor));
   }
-  return out;
+  return Math.round(anchor * singleAnchorFactor(level));
 }
 
 function buildLeveledTable() {
   const table = {};
+  const tiers = Object.keys(LEVELED_BASE_BY_TIER);
   for (let L = LEVELED_MIN_LEVEL; L <= LEVELED_ANCHOR_LEVEL; L++) {
-    const factor = scaleFor(L);
-    table[L] = {
-      gold: scaleTier(LEVELED_BASE_BY_TIER.gold, factor),
-      purple: scaleTier(LEVELED_BASE_BY_TIER.purple, factor),
-      blue: scaleTier(LEVELED_BASE_BY_TIER.blue, factor),
-    };
+    const row = {};
+    for (const tier of tiers) {
+      const tierOut = {};
+      for (const resource of Object.keys(LEVELED_BASE_BY_TIER[tier])) {
+        tierOut[resource] = leveledValueAt(tier, resource, L);
+      }
+      row[tier] = tierOut;
+    }
+    table[L] = row;
   }
   return table;
 }
@@ -52,6 +72,77 @@ function leveledValuesFor(playerLevel) {
       ? Math.min(LEVELED_ANCHOR_LEVEL, Math.max(LEVELED_MIN_LEVEL, Math.floor(raw)))
       : LEVELED_ANCHOR_LEVEL;
   return LEVELED_CHEST_VALUES[L];
+}
+
+// ---- Leveled chest value overrides ------------------------------------------
+// Per-profile, user-entered per-chest values for the leveled chest tiers.
+// Gold/Lumber/Steel share a single "ore" field because the in-game chest pays
+// the same amount for any of the three. A zero / missing entry means
+// "no override — fall back to the interpolated model value".
+
+export const LEVELED_OVERRIDE_TIERS = ['gold', 'purple', 'blue'];
+export const LEVELED_OVERRIDE_FIELDS = ['xp', 'electricity', 'ore'];
+const ORE_RESOURCES = new Set(['gold', 'lumber', 'steel']);
+
+function overrideFieldForResource(resourceKey) {
+  if (resourceKey === 'xp' || resourceKey === 'electricity') return resourceKey;
+  if (ORE_RESOURCES.has(resourceKey)) return 'ore';
+  return null;
+}
+
+export function emptyLeveledOverrides() {
+  return LEVELED_OVERRIDE_TIERS.reduce((acc, tier) => {
+    acc[tier] = LEVELED_OVERRIDE_FIELDS.reduce((fAcc, field) => {
+      fAcc[field] = 0;
+      return fAcc;
+    }, {});
+    return acc;
+  }, {});
+}
+
+export function normalizeLeveledOverrides(raw) {
+  const base = emptyLeveledOverrides();
+  if (!raw || typeof raw !== 'object') return base;
+  for (const tier of LEVELED_OVERRIDE_TIERS) {
+    const tierRaw = raw[tier];
+    if (!tierRaw || typeof tierRaw !== 'object') continue;
+    for (const field of LEVELED_OVERRIDE_FIELDS) {
+      const n = Number(tierRaw[field]);
+      base[tier][field] =
+        Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
+    }
+  }
+  return base;
+}
+
+export function hasAnyLeveledOverrides(overrides) {
+  if (!overrides) return false;
+  return LEVELED_OVERRIDE_TIERS.some((tier) =>
+    LEVELED_OVERRIDE_FIELDS.some(
+      (field) => (Number(overrides[tier]?.[field]) || 0) > 0,
+    ),
+  );
+}
+
+// Apply overrides on top of a leveled-values row, returning a new row of the
+// same shape that totalResourcesFromChests expects. Zero / missing override
+// values fall through to the model.
+function applyLeveledOverrides(values, overrides) {
+  if (!overrides) return values;
+  const out = {};
+  for (const tier of Object.keys(values)) {
+    const tierValues = values[tier];
+    const tierOverrides = overrides[tier];
+    const tierOut = {};
+    for (const [resourceKey, modelValue] of Object.entries(tierValues)) {
+      const field = overrideFieldForResource(resourceKey);
+      const overrideValue =
+        field != null ? Number(tierOverrides?.[field]) || 0 : 0;
+      tierOut[resourceKey] = overrideValue > 0 ? overrideValue : modelValue;
+    }
+    out[tier] = tierOut;
+  }
+  return out;
 }
 
 // ---- On-hand resources ------------------------------------------------------
@@ -88,15 +179,18 @@ function emptyTotals() {
   }, {});
 }
 
-export function totalResourcesFromChests(chests, playerLevel) {
+export function totalResourcesFromChests(chests, playerLevel, overrides) {
   const totals = emptyTotals();
   if (!chests) return totals;
   for (const type of CHEST_TYPES) {
-    const values =
+    let values =
       type.key === 'leveled'
         ? leveledValuesFor(playerLevel)
         : STANDARD_CHEST_VALUES;
     if (!values) continue;
+    if (type.key === 'leveled' && hasAnyLeveledOverrides(overrides)) {
+      values = applyLeveledOverrides(values, overrides);
+    }
     for (const tierKey of type.tiers) {
       const counts = chests[type.key]?.[tierKey];
       const tierValues = values[tierKey];
@@ -109,10 +203,19 @@ export function totalResourcesFromChests(chests, playerLevel) {
   return totals;
 }
 
+// Per-chest leveled values for the given player level, with user-entered
+// overrides applied on top. Same shape as a row of LEVELED_CHEST_VALUES.
+// Useful for UI that displays the actual value being used per (tier, resource).
+export function leveledValuesWithOverrides(playerLevel, overrides) {
+  const base = leveledValuesFor(playerLevel);
+  if (!hasAnyLeveledOverrides(overrides)) return base;
+  return applyLeveledOverrides(base, overrides);
+}
+
 // On-hand stockpile + everything you'd get from opening every chest, in one
 // total per resource. Pass null/undefined for either side to omit it.
-export function combinedResourceTotals(chests, playerLevel, onHand) {
-  const chestTotals = totalResourcesFromChests(chests, playerLevel);
+export function combinedResourceTotals(chests, playerLevel, onHand, overrides) {
+  const chestTotals = totalResourcesFromChests(chests, playerLevel, overrides);
   const handTotals = normalizeOnHand(onHand);
   const combined = emptyTotals();
   for (const r of CHEST_RESOURCES) {
