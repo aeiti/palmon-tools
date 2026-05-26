@@ -9,10 +9,12 @@ const TOOLS_MENU_LABEL = 'Tools';
 const toLink = (tool) => ({
   to: tool.path,
   label: tool.label,
+  shortLabel: tool.shortLabel ?? tool.label,
   end: tool.end,
   children: childrenOf(tool.key).map((c) => ({
     to: c.path,
     label: c.label,
+    shortLabel: c.shortLabel ?? c.label,
     end: c.end,
   })),
 });
@@ -29,14 +31,6 @@ const navItems = [
   ...(indexTool ? [{ type: 'link', ...toLink(indexTool) }] : []),
   { type: 'tools' },
   ...trailingTopTools.map((t) => ({ type: 'link', ...toLink(t) })),
-];
-
-// Footer columns are purposeful groupings, not a 1:1 mirror of the top nav:
-// "Tools" lists the profile tools (with Inventory's children indented), and
-// "Site" lists the top-level pages (Dashboard, About).
-const footerColumns = [
-  { header: TOOLS_MENU_LABEL, items: profileTools },
-  { header: 'Site', items: topTools.map(toLink) },
 ];
 
 function linkClass({ isActive }) {
@@ -197,54 +191,79 @@ export default function Layout() {
             aria-label="Footer"
             className="grid grid-cols-[2fr_1fr] gap-x-8 gap-y-4"
           >
-            {footerColumns.map((col) => (
+            <div className="flex flex-col items-start gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-300">
+                {TOOLS_MENU_LABEL}
+              </span>
               <div
-                key={col.header}
-                className="flex flex-col items-start gap-1.5"
+                className="grid w-full gap-x-3 gap-y-1"
+                style={{
+                  gridTemplateColumns: `repeat(${profileTools.length}, minmax(0, 1fr))`,
+                }}
               >
-                <span className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-300">
-                  {col.header}
-                </span>
-                {col.items.map((item) => (
+                {profileTools.map((tool) => (
                   <div
-                    key={item.to}
+                    key={tool.to}
                     className="flex flex-col items-start gap-1"
                   >
                     <NavLink
-                      to={item.to}
-                      end={item.end}
+                      to={tool.to}
+                      end={tool.end}
                       className={({ isActive }) =>
                         [
-                          'text-xs transition-colors',
+                          'text-xs font-medium transition-colors',
                           isActive
                             ? 'text-indigo-300'
-                            : 'text-slate-400 hover:text-slate-100',
+                            : 'text-slate-300 hover:text-white',
                         ].join(' ')
                       }
                     >
-                      {item.label}
+                      {tool.shortLabel}
                     </NavLink>
-                    {item.children?.map((child) => (
+                    {tool.children.map((child) => (
                       <NavLink
                         key={child.to}
                         to={child.to}
                         end={child.end}
                         className={({ isActive }) =>
                           [
-                            'pl-3 text-[11px] transition-colors',
+                            'text-[11px] transition-colors',
                             isActive
                               ? 'text-indigo-300'
                               : 'text-slate-500 hover:text-slate-200',
                           ].join(' ')
                         }
                       >
-                        {child.label}
+                        {child.shortLabel}
                       </NavLink>
                     ))}
                   </div>
                 ))}
               </div>
-            ))}
+            </div>
+
+            <div className="flex flex-col items-start gap-1.5">
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-300">
+                Site
+              </span>
+              {topTools.map(toLink).map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.end}
+                  className={({ isActive }) =>
+                    [
+                      'text-xs transition-colors',
+                      isActive
+                        ? 'text-indigo-300'
+                        : 'text-slate-400 hover:text-slate-100',
+                    ].join(' ')
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </div>
           </nav>
           <div className="mt-6 border-t border-slate-800 pt-4 text-center text-xs text-slate-500">
             <p>&copy; 2026 aeiti</p>
