@@ -3,58 +3,27 @@
 
 import { CHEST_RESOURCES, CHEST_TYPES } from './data/chests.js';
 import {
-  LEVELED_ANCHOR_LEVEL,
-  LEVELED_BASE_BY_TIER,
+  LEVELED_CHEST_VALUES as LEVELED_VALUES_SOURCE,
+  LEVELED_MAX_LEVEL,
   LEVELED_MIN_LEVEL,
-  LEVELED_MIN_LEVEL_SCALE,
-  LEVELED_SECONDARY_ANCHOR_LEVEL,
-  LEVELED_SECONDARY_ANCHORS_BY_TIER,
   STANDARD_CHEST_VALUES,
 } from './data/chestValues.js';
 
-// ---- Leveled scaling --------------------------------------------------------
-
-function singleAnchorFactor(level) {
-  if (level >= LEVELED_ANCHOR_LEVEL) return 1;
-  if (level <= LEVELED_MIN_LEVEL) return LEVELED_MIN_LEVEL_SCALE;
-  const span = LEVELED_ANCHOR_LEVEL - LEVELED_MIN_LEVEL;
-  return (
-    LEVELED_MIN_LEVEL_SCALE +
-    ((level - LEVELED_MIN_LEVEL) / span) * (1 - LEVELED_MIN_LEVEL_SCALE)
-  );
-}
-
-function leveledValueAt(tier, resource, level) {
-  const anchor = LEVELED_BASE_BY_TIER[tier]?.[resource];
-  if (anchor == null) return 0;
-  if (level >= LEVELED_ANCHOR_LEVEL) return anchor;
-  const floor = anchor * LEVELED_MIN_LEVEL_SCALE;
-  if (level <= LEVELED_MIN_LEVEL) return Math.round(floor);
-  const secondary = LEVELED_SECONDARY_ANCHORS_BY_TIER[tier]?.[resource];
-  if (secondary != null) {
-    if (level >= LEVELED_SECONDARY_ANCHOR_LEVEL) {
-      const t =
-        (level - LEVELED_SECONDARY_ANCHOR_LEVEL) /
-        (LEVELED_ANCHOR_LEVEL - LEVELED_SECONDARY_ANCHOR_LEVEL);
-      return Math.round(secondary + t * (anchor - secondary));
-    }
-    const t =
-      (level - LEVELED_MIN_LEVEL) /
-      (LEVELED_SECONDARY_ANCHOR_LEVEL - LEVELED_MIN_LEVEL);
-    return Math.round(floor + t * (secondary - floor));
-  }
-  return Math.round(anchor * singleAnchorFactor(level));
-}
+// ---- Leveled lookup ---------------------------------------------------------
+//
+// LEVELED_VALUES_SOURCE is shape `tier -> resource -> { [level]: amount }`.
+// We pivot it once at module load into `level -> tier -> { [resource]: amount }`
+// so per-player-level lookups are O(1) and read the same shape as
+// STANDARD_CHEST_VALUES (tier -> resource -> amount).
 
 function buildLeveledTable() {
   const table = {};
-  const tiers = Object.keys(LEVELED_BASE_BY_TIER);
-  for (let L = LEVELED_MIN_LEVEL; L <= LEVELED_ANCHOR_LEVEL; L++) {
+  for (let L = LEVELED_MIN_LEVEL; L <= LEVELED_MAX_LEVEL; L++) {
     const row = {};
-    for (const tier of tiers) {
+    for (const [tier, resources] of Object.entries(LEVELED_VALUES_SOURCE)) {
       const tierOut = {};
-      for (const resource of Object.keys(LEVELED_BASE_BY_TIER[tier])) {
-        tierOut[resource] = leveledValueAt(tier, resource, L);
+      for (const [resource, byLevel] of Object.entries(resources)) {
+        tierOut[resource] = byLevel[L] ?? 0;
       }
       row[tier] = tierOut;
     }
@@ -69,8 +38,8 @@ function leveledValuesFor(playerLevel) {
   const raw = Number(playerLevel);
   const L =
     Number.isFinite(raw) && raw > 0
-      ? Math.min(LEVELED_ANCHOR_LEVEL, Math.max(LEVELED_MIN_LEVEL, Math.floor(raw)))
-      : LEVELED_ANCHOR_LEVEL;
+      ? Math.min(LEVELED_MAX_LEVEL, Math.max(LEVELED_MIN_LEVEL, Math.floor(raw)))
+      : LEVELED_MAX_LEVEL;
   return LEVELED_CHEST_VALUES[L];
 }
 

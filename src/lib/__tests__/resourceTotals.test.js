@@ -15,71 +15,59 @@ import {
   totalResourcesFromChests,
 } from '../resourceTotals.js';
 import {
-  LEVELED_ANCHOR_LEVEL,
-  LEVELED_BASE_BY_TIER,
-  LEVELED_SECONDARY_ANCHOR_LEVEL,
-  LEVELED_SECONDARY_ANCHORS_BY_TIER,
+  LEVELED_CHEST_VALUES as LEVELED_VALUES_SOURCE,
+  LEVELED_MAX_LEVEL,
+  LEVELED_MIN_LEVEL,
 } from '../data/chestValues.js';
 
 describe('LEVELED_CHEST_VALUES', () => {
-  it('matches the anchor base at the anchor level', () => {
-    const row = LEVELED_CHEST_VALUES[LEVELED_ANCHOR_LEVEL];
-    expect(row.gold).toEqual(LEVELED_BASE_BY_TIER.gold);
-    expect(row.purple).toEqual(LEVELED_BASE_BY_TIER.purple);
-    expect(row.blue).toEqual(LEVELED_BASE_BY_TIER.blue);
+  it('exposes a row for every player level from MIN to MAX', () => {
+    for (let L = LEVELED_MIN_LEVEL; L <= LEVELED_MAX_LEVEL; L++) {
+      expect(LEVELED_CHEST_VALUES[L]).toBeDefined();
+      expect(LEVELED_CHEST_VALUES[L].gold).toBeDefined();
+      expect(LEVELED_CHEST_VALUES[L].purple).toBeDefined();
+      expect(LEVELED_CHEST_VALUES[L].blue).toBeDefined();
+    }
   });
 
-  it('tapers to 50% at level 1', () => {
-    const row = LEVELED_CHEST_VALUES[1];
-    expect(row.gold.xp).toBe(
-      Math.round(LEVELED_BASE_BY_TIER.gold.xp * 0.5),
-    );
-    expect(row.blue.electricity).toBe(
-      Math.round(LEVELED_BASE_BY_TIER.blue.electricity * 0.5),
-    );
+  it('exposes every resource per tier per level', () => {
+    const resources = ['xp', 'electricity', 'gold', 'lumber', 'steel'];
+    const tiers = ['gold', 'purple', 'blue'];
+    for (let L = LEVELED_MIN_LEVEL; L <= LEVELED_MAX_LEVEL; L++) {
+      for (const tier of tiers) {
+        for (const r of resources) {
+          expect(typeof LEVELED_CHEST_VALUES[L][tier][r]).toBe('number');
+        }
+      }
+    }
   });
 
-  it('interpolates linearly between L1 and L30 for resources without a mid anchor', () => {
-    // gold.gold has no L26 secondary anchor, so it uses the single-segment taper.
-    // Level 15: 0.5 + (14/29)*0.5 ≈ 0.7414 of anchor.
-    const factor = 0.5 + (14 / 29) * 0.5;
-    expect(LEVELED_CHEST_VALUES[15].gold.gold).toBe(
-      Math.round(LEVELED_BASE_BY_TIER.gold.gold * factor),
-    );
+  it('mirrors the source data shape (tier -> resource -> {level: amount})', () => {
+    // Each cell in the runtime row should match the matching source cell.
+    for (let L = LEVELED_MIN_LEVEL; L <= LEVELED_MAX_LEVEL; L++) {
+      for (const [tier, resources] of Object.entries(LEVELED_VALUES_SOURCE)) {
+        for (const [resource, byLevel] of Object.entries(resources)) {
+          expect(LEVELED_CHEST_VALUES[L][tier][resource]).toBe(byLevel[L]);
+        }
+      }
+    }
   });
 
-  it('matches the L26 secondary anchor at level 26 for XP/Electricity', () => {
-    const row = LEVELED_CHEST_VALUES[LEVELED_SECONDARY_ANCHOR_LEVEL];
-    expect(row.gold.xp).toBe(LEVELED_SECONDARY_ANCHORS_BY_TIER.gold.xp);
-    expect(row.gold.electricity).toBe(
-      LEVELED_SECONDARY_ANCHORS_BY_TIER.gold.electricity,
-    );
-    expect(row.purple.electricity).toBe(
-      LEVELED_SECONDARY_ANCHORS_BY_TIER.purple.electricity,
-    );
-    expect(row.blue.xp).toBe(LEVELED_SECONDARY_ANCHORS_BY_TIER.blue.xp);
+  it('matches known L30 anchor values', () => {
+    // These are the in-game-observed values that seeded the LUT. They are
+    // load-bearing — if you change them in chestValues.js, update here too.
+    expect(LEVELED_CHEST_VALUES[30].gold.xp).toBe(5_400_000);
+    expect(LEVELED_CHEST_VALUES[30].gold.electricity).toBe(1_000_000);
+    expect(LEVELED_CHEST_VALUES[30].gold.gold).toBe(4_200_000);
+    expect(LEVELED_CHEST_VALUES[30].purple.xp).toBe(1_800_000);
+    expect(LEVELED_CHEST_VALUES[30].blue.xp).toBe(225_000);
   });
 
-  it('piecewise-interpolates L26 → L30 for resources with a secondary anchor', () => {
-    // Level 28 sits halfway between L26 (4.6M) and L30 (5.4M) for gold.xp.
-    expect(LEVELED_CHEST_VALUES[28].gold.xp).toBe(
-      Math.round(
-        (LEVELED_SECONDARY_ANCHORS_BY_TIER.gold.xp +
-          LEVELED_BASE_BY_TIER.gold.xp) /
-          2,
-      ),
-    );
-  });
-
-  it('piecewise-interpolates L1 floor → L26 for resources with a secondary anchor', () => {
-    // gold.electricity: L1 floor = 1M * 0.5 = 500k, L26 = 940k.
-    const floor =
-      LEVELED_BASE_BY_TIER.gold.electricity * 0.5;
-    const t = (15 - 1) / (LEVELED_SECONDARY_ANCHOR_LEVEL - 1);
-    const expected = Math.round(
-      floor + t * (LEVELED_SECONDARY_ANCHORS_BY_TIER.gold.electricity - floor),
-    );
-    expect(LEVELED_CHEST_VALUES[15].gold.electricity).toBe(expected);
+  it('matches known L26 anchor values for XP and Electricity', () => {
+    expect(LEVELED_CHEST_VALUES[26].gold.xp).toBe(4_600_000);
+    expect(LEVELED_CHEST_VALUES[26].gold.electricity).toBe(940_000);
+    expect(LEVELED_CHEST_VALUES[26].purple.electricity).toBe(310_000);
+    expect(LEVELED_CHEST_VALUES[26].blue.xp).toBe(195_000);
   });
 });
 
@@ -118,18 +106,18 @@ describe('totalResourcesFromChests', () => {
     const chests = emptyChests();
     chests.leveled.gold.xp = 1;
     const totals = totalResourcesFromChests(chests, 30);
-    expect(totals.xp).toBe(LEVELED_BASE_BY_TIER.gold.xp);
+    expect(totals.xp).toBe(LEVELED_CHEST_VALUES[30].gold.xp);
   });
 
-  it('defaults to the anchor level when no level is given', () => {
+  it('defaults to the top level when no level is given', () => {
     const chests = emptyChests();
     chests.leveled.gold.xp = 1;
     const noLevel = totalResourcesFromChests(chests);
-    const anchored = totalResourcesFromChests(chests, LEVELED_ANCHOR_LEVEL);
-    expect(noLevel).toEqual(anchored);
+    const topLevel = totalResourcesFromChests(chests, LEVELED_MAX_LEVEL);
+    expect(noLevel).toEqual(topLevel);
   });
 
-  it('caps to the anchor level for higher player levels', () => {
+  it('caps to the top level for higher player levels', () => {
     const chests = emptyChests();
     chests.leveled.gold.xp = 1;
     const at30 = totalResourcesFromChests(chests, 30);
@@ -137,19 +125,19 @@ describe('totalResourcesFromChests', () => {
     expect(at100).toEqual(at30);
   });
 
-  it('uses the tapered values for levels below the anchor', () => {
+  it('uses the L1 row for levels at or below the floor', () => {
     const chests = emptyChests();
     chests.leveled.gold.xp = 1;
     const at1 = totalResourcesFromChests(chests, 1);
-    expect(at1.xp).toBe(Math.round(LEVELED_BASE_BY_TIER.gold.xp * 0.5));
+    expect(at1.xp).toBe(LEVELED_CHEST_VALUES[1].gold.xp);
   });
 
   it('combines standard and leveled contributions in one pass', () => {
     const chests = emptyChests();
     chests.standard.gold.gold = 1; // 3M gold
-    chests.leveled.gold.gold = 1; // 4.2M gold at level 30
+    chests.leveled.gold.gold = 1; // L30 leveled gold-tier gold chest value
     const totals = totalResourcesFromChests(chests, 30);
-    expect(totals.gold).toBe(3_000_000 + LEVELED_BASE_BY_TIER.gold.gold);
+    expect(totals.gold).toBe(3_000_000 + LEVELED_CHEST_VALUES[30].gold.gold);
   });
 });
 
