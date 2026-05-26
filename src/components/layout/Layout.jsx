@@ -9,12 +9,10 @@ const TOOLS_MENU_LABEL = 'Tools';
 const toLink = (tool) => ({
   to: tool.path,
   label: tool.label,
-  shortLabel: tool.shortLabel ?? tool.label,
   end: tool.end,
   children: childrenOf(tool.key).map((c) => ({
     to: c.path,
     label: c.label,
-    shortLabel: c.shortLabel ?? c.label,
     end: c.end,
   })),
 });
@@ -32,6 +30,11 @@ const navItems = [
   { type: 'tools' },
   ...trailingTopTools.map((t) => ({ type: 'link', ...toLink(t) })),
 ];
+
+// Footer is a single flat row of every routable destination, alphabetical.
+const footerLinks = [...topTools, ...toolsInSection(SECTIONS.PROFILE)]
+  .map(toLink)
+  .sort((a, b) => a.label.localeCompare(b.label));
 
 function linkClass({ isActive }) {
   return [
@@ -189,66 +192,16 @@ export default function Layout() {
         <div className="mx-auto max-w-3xl px-4 py-6">
           <nav
             aria-label="Footer"
-            className="grid grid-cols-[2fr_1fr] gap-x-8 gap-y-4"
+            className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2"
           >
-            <div className="flex flex-col items-start gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wide text-slate-300">
-                {TOOLS_MENU_LABEL}
-              </span>
-              <div
-                className="grid w-full gap-x-3 gap-y-1"
-                style={{
-                  gridTemplateColumns: `repeat(${profileTools.length}, minmax(0, 1fr))`,
-                }}
-              >
-                {profileTools.map((tool) => (
-                  <div
-                    key={tool.to}
-                    className="flex flex-col items-start gap-1"
-                  >
-                    <NavLink
-                      to={tool.to}
-                      end={tool.end}
-                      className={({ isActive }) =>
-                        [
-                          'text-xs font-medium transition-colors',
-                          isActive
-                            ? 'text-indigo-300'
-                            : 'text-slate-300 hover:text-white',
-                        ].join(' ')
-                      }
-                    >
-                      {tool.shortLabel}
-                    </NavLink>
-                    {tool.children.map((child) => (
-                      <NavLink
-                        key={child.to}
-                        to={child.to}
-                        end={child.end}
-                        className={({ isActive }) =>
-                          [
-                            'text-[11px] transition-colors',
-                            isActive
-                              ? 'text-indigo-300'
-                              : 'text-slate-500 hover:text-slate-200',
-                          ].join(' ')
-                        }
-                      >
-                        {child.shortLabel}
-                      </NavLink>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col items-start gap-1.5">
-              <span className="text-xs font-semibold uppercase tracking-wide text-slate-300">
-                Site
-              </span>
-              {topTools.map(toLink).map((item) => (
+            {footerLinks.map((item, i) => (
+              <div key={item.to} className="flex items-center gap-x-4">
+                {i > 0 && (
+                  <span aria-hidden className="text-slate-700">
+                    ·
+                  </span>
+                )}
                 <NavLink
-                  key={item.to}
                   to={item.to}
                   end={item.end}
                   className={({ isActive }) =>
@@ -262,8 +215,8 @@ export default function Layout() {
                 >
                   {item.label}
                 </NavLink>
-              ))}
-            </div>
+              </div>
+            ))}
           </nav>
           <div className="mt-6 border-t border-slate-800 pt-4 text-center text-xs text-slate-500">
             <p>&copy; 2026 aeiti</p>
