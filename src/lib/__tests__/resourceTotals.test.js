@@ -3,16 +3,22 @@ import { emptyChests } from '../chests.js';
 import {
   LEVELED_CHEST_VALUES,
   combinedResourceTotals,
+  emptyLeveledOverrides,
   emptyOnHand,
   formatResourceAmount,
   formatResourceAmountFull,
+  hasAnyLeveledOverrides,
   hasAnyOnHand,
+  leveledValuesWithOverrides,
+  normalizeLeveledOverrides,
   normalizeOnHand,
   totalResourcesFromChests,
 } from '../resourceTotals.js';
 import {
   LEVELED_ANCHOR_LEVEL,
   LEVELED_BASE_BY_TIER,
+  LEVELED_SECONDARY_ANCHOR_LEVEL,
+  LEVELED_SECONDARY_ANCHORS_BY_TIER,
 } from '../data/chestValues.js';
 
 describe('LEVELED_CHEST_VALUES', () => {
@@ -33,12 +39,47 @@ describe('LEVELED_CHEST_VALUES', () => {
     );
   });
 
-  it('interpolates linearly between levels 1 and 30', () => {
-    // Level 15 should be roughly 0.5 + (14/29)*0.5 ≈ 0.7414 of anchor
+  it('interpolates linearly between L1 and L30 for resources without a mid anchor', () => {
+    // gold.gold has no L26 secondary anchor, so it uses the single-segment taper.
+    // Level 15: 0.5 + (14/29)*0.5 ≈ 0.7414 of anchor.
     const factor = 0.5 + (14 / 29) * 0.5;
-    expect(LEVELED_CHEST_VALUES[15].gold.xp).toBe(
-      Math.round(LEVELED_BASE_BY_TIER.gold.xp * factor),
+    expect(LEVELED_CHEST_VALUES[15].gold.gold).toBe(
+      Math.round(LEVELED_BASE_BY_TIER.gold.gold * factor),
     );
+  });
+
+  it('matches the L26 secondary anchor at level 26 for XP/Electricity', () => {
+    const row = LEVELED_CHEST_VALUES[LEVELED_SECONDARY_ANCHOR_LEVEL];
+    expect(row.gold.xp).toBe(LEVELED_SECONDARY_ANCHORS_BY_TIER.gold.xp);
+    expect(row.gold.electricity).toBe(
+      LEVELED_SECONDARY_ANCHORS_BY_TIER.gold.electricity,
+    );
+    expect(row.purple.electricity).toBe(
+      LEVELED_SECONDARY_ANCHORS_BY_TIER.purple.electricity,
+    );
+    expect(row.blue.xp).toBe(LEVELED_SECONDARY_ANCHORS_BY_TIER.blue.xp);
+  });
+
+  it('piecewise-interpolates L26 → L30 for resources with a secondary anchor', () => {
+    // Level 28 sits halfway between L26 (4.6M) and L30 (5.4M) for gold.xp.
+    expect(LEVELED_CHEST_VALUES[28].gold.xp).toBe(
+      Math.round(
+        (LEVELED_SECONDARY_ANCHORS_BY_TIER.gold.xp +
+          LEVELED_BASE_BY_TIER.gold.xp) /
+          2,
+      ),
+    );
+  });
+
+  it('piecewise-interpolates L1 floor → L26 for resources with a secondary anchor', () => {
+    // gold.electricity: L1 floor = 1M * 0.5 = 500k, L26 = 940k.
+    const floor =
+      LEVELED_BASE_BY_TIER.gold.electricity * 0.5;
+    const t = (15 - 1) / (LEVELED_SECONDARY_ANCHOR_LEVEL - 1);
+    const expected = Math.round(
+      floor + t * (LEVELED_SECONDARY_ANCHORS_BY_TIER.gold.electricity - floor),
+    );
+    expect(LEVELED_CHEST_VALUES[15].gold.electricity).toBe(expected);
   });
 });
 
@@ -176,6 +217,91 @@ describe('hasAnyOnHand', () => {
 
   it('returns true once any resource has a nonzero amount', () => {
     expect(hasAnyOnHand({ ...emptyOnHand(), gold: 1 })).toBe(true);
+  });
+});
+
+describe('leveled chest value overrides', () => {
+  it('emptyLeveledOverrides has every tier × field at 0', () => {
+    const o = emptyLeveledOverrides();
+    expect(o.gold).toEqual({ xp: 0, electricity: 0, ore: 0 });
+    expect(o.purple).toEqual({ xp: 0, electricity: 0, ore: 0 });
+    expect(o.blue).toEqual({ xp: 0, electricity: 0, ore: 0 });
+  });
+
+  it('normalizeLeveledOverrides floors fractional values and clamps negatives to 0', () => {
+    const o = normalizeLeveledOverrides({
+      gold: { xp: 1234.7, electricity: -5, ore: '900000' },
+      purple: { xp: 'garbage' },
+    });
+    expect(o.gold.xp).toBe(1234);
+    expect(o.gold.electricity).toBe(0);
+    expect(o.gold.ore).toBe(900000);
+    expect(o.purple.xp).toBe(0);
+    expect(o.blue).toEqual({ xp: 0, electricity: 0, ore: 0 });
+  });
+
+  it('normalizeLeveledOverrides drops unknown tiers and fields', () => {
+    const o = normalizeLeveledOverrides({
+      green: { xp: 1 },
+      gold: { xp: 1, junk: 9 },
+    });
+    expect(o.green).toBeUndefined();
+    expect(o.gold.junk).toBeUndefined();
+    expect(o.gold.xp).toBe(1);
+  });
+
+  it('hasAnyLeveledOverrides flips once any cell is set', () => {
+    expect(hasAnyLeveledOverrides(null)).toBe(false);
+    expect(hasAnyLeveledOverrides(emptyLeveledOverrides())).toBe(false);
+    const o = emptyLeveledOverrides();
+    o.purple.electricity = 1;
+    expect(hasAnyLeveledOverrides(o)).toBe(true);
+  });
+
+  it('leveledValuesWithOverrides returns the modeled row when no overrides', () => {
+    expect(leveledValuesWithOverrides(30, null)).toEqual(
+      LEVELED_CHEST_VALUES[30],
+    );
+    expect(leveledValuesWithOverrides(30, emptyLeveledOverrides())).toEqual(
+      LEVELED_CHEST_VALUES[30],
+    );
+  });
+
+  it('leveledValuesWithOverrides applies overrides on top of the model', () => {
+    const o = emptyLeveledOverrides();
+    o.gold.xp = 9_999_999;
+    o.purple.ore = 1_234_567;
+    const row = leveledValuesWithOverrides(30, o);
+    expect(row.gold.xp).toBe(9_999_999);
+    // Electricity untouched — still the model value
+    expect(row.gold.electricity).toBe(LEVELED_CHEST_VALUES[30].gold.electricity);
+    // "ore" override applies to gold/lumber/steel uniformly
+    expect(row.purple.gold).toBe(1_234_567);
+    expect(row.purple.lumber).toBe(1_234_567);
+    expect(row.purple.steel).toBe(1_234_567);
+    // SR tier untouched
+    expect(row.blue).toEqual(LEVELED_CHEST_VALUES[30].blue);
+  });
+
+  it('totalResourcesFromChests uses overrides when computing totals', () => {
+    const chests = emptyChests();
+    chests.leveled.gold.xp = 2;
+    chests.leveled.gold.lumber = 3;
+    const o = emptyLeveledOverrides();
+    o.gold.xp = 10_000_000;
+    o.gold.ore = 1_000_000;
+    const totals = totalResourcesFromChests(chests, 30, o);
+    expect(totals.xp).toBe(2 * 10_000_000);
+    expect(totals.lumber).toBe(3 * 1_000_000);
+  });
+
+  it('overrides do not affect standard chests', () => {
+    const chests = emptyChests();
+    chests.standard.gold.xp = 1;
+    const o = emptyLeveledOverrides();
+    o.gold.xp = 999;
+    const totals = totalResourcesFromChests(chests, 30, o);
+    expect(totals.xp).toBe(3_000_000);
   });
 });
 

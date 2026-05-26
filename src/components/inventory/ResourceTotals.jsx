@@ -6,8 +6,17 @@ import {
   totalResourcesFromChests,
 } from '../../lib/resourceTotals.js';
 
-export default function ResourceTotals({ chests, playerLevel, onHand }) {
-  const chestTotals = totalResourcesFromChests(chests, playerLevel);
+export default function ResourceTotals({
+  chests,
+  playerLevel,
+  onHand,
+  leveledOverrides,
+}) {
+  const chestTotals = totalResourcesFromChests(
+    chests,
+    playerLevel,
+    leveledOverrides,
+  );
   const handTotals = normalizeOnHand(onHand);
   const levelLabel =
     Number.isFinite(playerLevel) && playerLevel > 0
