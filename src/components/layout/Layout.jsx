@@ -20,8 +20,7 @@ const toLink = (tool) => ({
 const profileTools = toolsInSection(SECTIONS.PROFILE).map(toLink);
 
 // Top nav order: the index tool (Dashboard) first, then the Tools dropdown,
-// then any remaining TOP tools alphabetically. Footer columns mirror this 1:1
-// so both surfaces stay in sync as tools are added.
+// then any remaining TOP tools alphabetically.
 const topTools = toolsInSection(SECTIONS.TOP);
 const indexTool = topTools.find((t) => t.index);
 const trailingTopTools = topTools.filter((t) => !t.index);
@@ -32,14 +31,13 @@ const navItems = [
   ...trailingTopTools.map((t) => ({ type: 'link', ...toLink(t) })),
 ];
 
-const footerColumns = navItems.map((item) =>
-  item.type === 'tools'
-    ? { header: { label: TOOLS_MENU_LABEL }, items: profileTools }
-    : {
-        header: { to: item.to, end: item.end, label: item.label },
-        items: item.children,
-      },
-);
+// Footer columns are purposeful groupings, not a 1:1 mirror of the top nav:
+// "Tools" lists the profile tools (with Inventory's children indented), and
+// "Site" lists the top-level pages (Dashboard, About).
+const footerColumns = [
+  { header: TOOLS_MENU_LABEL, items: profileTools },
+  { header: 'Site', items: topTools.map(toLink) },
+];
 
 function linkClass({ isActive }) {
   return [
@@ -197,40 +195,20 @@ export default function Layout() {
         <div className="mx-auto max-w-3xl px-4 py-6">
           <nav
             aria-label="Footer"
-            className="grid gap-x-4 gap-y-4"
-            style={{
-              gridTemplateColumns: `repeat(${footerColumns.length}, minmax(0, 1fr))`,
-            }}
+            className="grid grid-cols-[2fr_1fr] gap-x-8 gap-y-4"
           >
-            {footerColumns.map((col, i) => (
+            {footerColumns.map((col) => (
               <div
-                key={col.header.label + i}
-                className="flex flex-col items-center gap-1 text-center"
+                key={col.header}
+                className="flex flex-col items-start gap-1.5"
               >
-                {col.header.to ? (
-                  <NavLink
-                    to={col.header.to}
-                    end={col.header.end}
-                    className={({ isActive }) =>
-                      [
-                        'text-xs font-semibold uppercase tracking-wide transition-colors',
-                        isActive
-                          ? 'text-indigo-300'
-                          : 'text-slate-300 hover:text-white',
-                      ].join(' ')
-                    }
-                  >
-                    {col.header.label}
-                  </NavLink>
-                ) : (
-                  <span className="text-xs font-semibold uppercase tracking-wide text-slate-300">
-                    {col.header.label}
-                  </span>
-                )}
+                <span className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-300">
+                  {col.header}
+                </span>
                 {col.items.map((item) => (
                   <div
                     key={item.to}
-                    className="flex flex-col items-center gap-1"
+                    className="flex flex-col items-start gap-1"
                   >
                     <NavLink
                       to={item.to}
@@ -253,7 +231,7 @@ export default function Layout() {
                         end={child.end}
                         className={({ isActive }) =>
                           [
-                            'text-[11px] transition-colors',
+                            'pl-3 text-[11px] transition-colors',
                             isActive
                               ? 'text-indigo-300'
                               : 'text-slate-500 hover:text-slate-200',
