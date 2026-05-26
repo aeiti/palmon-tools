@@ -106,3 +106,17 @@ export function toolsInSection(section) {
 export function findTool(key) {
   return TOOLS.find((t) => t.key === key);
 }
+
+// Maps a parent tool key to the section whose tools render as its children
+// in nav surfaces (dropdown, footer). Adding a new nested hub means adding
+// one section here — everything else stays declarative.
+const CHILD_SECTIONS = {
+  inventory: SECTIONS.INVENTORY,
+};
+
+// Children of a tool in nav surfaces. Returns the same shape as TOOLS,
+// sorted alphabetically. Empty for leaf tools.
+export function childrenOf(toolKey) {
+  const section = CHILD_SECTIONS[toolKey];
+  return section ? toolsInSection(section) : [];
+}
