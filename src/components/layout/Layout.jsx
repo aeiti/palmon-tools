@@ -2,41 +2,44 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary.jsx';
 import { ROUTES } from '../../routes.js';
-import { SECTIONS, findTool, toolsInSection } from '../../tools.js';
-
-const profileTools = toolsInSection(SECTIONS.PROFILE).map((t) => ({
-  to: t.path,
-  label: t.label,
-}));
-
-const dashboardTool = findTool('dashboard');
-const aboutTool = findTool('about');
+import { SECTIONS, childrenOf, toolsInSection } from '../../tools.js';
 
 const TOOLS_MENU_LABEL = 'Tools';
 
+const toLink = (tool) => ({
+  to: tool.path,
+  label: tool.label,
+  end: tool.end,
+  children: childrenOf(tool.key).map((c) => ({
+    to: c.path,
+    label: c.label,
+    end: c.end,
+  })),
+});
+
+const profileTools = toolsInSection(SECTIONS.PROFILE).map(toLink);
+
+// Top nav order: the index tool (Dashboard) first, then the Tools dropdown,
+// then any remaining TOP tools alphabetically. Footer columns mirror this 1:1
+// so both surfaces stay in sync as tools are added.
+const topTools = toolsInSection(SECTIONS.TOP);
+const indexTool = topTools.find((t) => t.index);
+const trailingTopTools = topTools.filter((t) => !t.index);
+
 const navItems = [
-  {
-    type: 'link',
-    to: dashboardTool.path,
-    label: dashboardTool.label,
-    end: dashboardTool.end,
-  },
+  ...(indexTool ? [{ type: 'link', ...toLink(indexTool) }] : []),
   { type: 'tools' },
-  { type: 'link', to: aboutTool.path, label: aboutTool.label },
+  ...trailingTopTools.map((t) => ({ type: 'link', ...toLink(t) })),
 ];
 
-const footerColumns = [
-  {
-    header: {
-      to: dashboardTool.path,
-      label: dashboardTool.label,
-      end: dashboardTool.end,
-    },
-    items: [],
-  },
-  { header: { label: TOOLS_MENU_LABEL }, items: profileTools },
-  { header: { to: aboutTool.path, label: aboutTool.label }, items: [] },
-];
+const footerColumns = navItems.map((item) =>
+  item.type === 'tools'
+    ? { header: { label: TOOLS_MENU_LABEL }, items: profileTools }
+    : {
+        header: { to: item.to, end: item.end, label: item.label },
+        items: item.children,
+      },
+);
 
 function linkClass({ isActive }) {
   return [
@@ -51,10 +54,10 @@ function ToolsMenu() {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   const location = useLocation();
+  const isPathActive = (to) =>
+    location.pathname === to || location.pathname.startsWith(`${to}/`);
   const isSectionActive = profileTools.some(
-    (t) =>
-      location.pathname === t.to ||
-      location.pathname.startsWith(`${t.to}/`),
+    (t) => isPathActive(t.to) || t.children.some((c) => isPathActive(c.to)),
   );
 
   useEffect(() => {
@@ -109,24 +112,42 @@ function ToolsMenu() {
           className="absolute right-0 z-10 mt-1 min-w-[12rem] overflow-hidden rounded-md border border-slate-700 bg-slate-800 shadow-xl ring-1 ring-black/20"
         >
           {profileTools.map((t) => {
-            const active =
-              location.pathname === t.to ||
-              location.pathname.startsWith(`${t.to}/`);
+            const active = isPathActive(t.to);
             return (
-              <Link
-                key={t.to}
-                to={t.to}
-                role="menuitem"
-                onClick={() => setOpen(false)}
-                className={[
-                  'block px-3 py-2 text-sm transition-colors',
-                  active
-                    ? 'bg-indigo-600 text-white'
-                    : 'text-slate-200 hover:bg-slate-700 hover:text-white',
-                ].join(' ')}
-              >
-                {t.label}
-              </Link>
+              <div key={t.to}>
+                <Link
+                  to={t.to}
+                  role="menuitem"
+                  onClick={() => setOpen(false)}
+                  className={[
+                    'block px-3 py-2 text-sm transition-colors',
+                    active
+                      ? 'bg-indigo-600 text-white'
+                      : 'text-slate-200 hover:bg-slate-700 hover:text-white',
+                  ].join(' ')}
+                >
+                  {t.label}
+                </Link>
+                {t.children.map((c) => {
+                  const childActive = isPathActive(c.to);
+                  return (
+                    <Link
+                      key={c.to}
+                      to={c.to}
+                      role="menuitem"
+                      onClick={() => setOpen(false)}
+                      className={[
+                        'block py-1.5 pl-6 pr-3 text-xs transition-colors',
+                        childActive
+                          ? 'bg-indigo-600 text-white'
+                          : 'text-slate-300 hover:bg-slate-700 hover:text-white',
+                      ].join(' ')}
+                    >
+                      {c.label}
+                    </Link>
+                  );
+                })}
+              </div>
             );
           })}
         </div>
@@ -176,7 +197,10 @@ export default function Layout() {
         <div className="mx-auto max-w-3xl px-4 py-6">
           <nav
             aria-label="Footer"
-            className="grid grid-cols-3 gap-x-4 gap-y-4"
+            className="grid gap-x-4 gap-y-4"
+            style={{
+              gridTemplateColumns: `repeat(${footerColumns.length}, minmax(0, 1fr))`,
+            }}
           >
             {footerColumns.map((col, i) => (
               <div
@@ -204,20 +228,42 @@ export default function Layout() {
                   </span>
                 )}
                 {col.items.map((item) => (
-                  <NavLink
+                  <div
                     key={item.to}
-                    to={item.to}
-                    className={({ isActive }) =>
-                      [
-                        'text-xs transition-colors',
-                        isActive
-                          ? 'text-indigo-300'
-                          : 'text-slate-400 hover:text-slate-100',
-                      ].join(' ')
-                    }
+                    className="flex flex-col items-center gap-1"
                   >
-                    {item.label}
-                  </NavLink>
+                    <NavLink
+                      to={item.to}
+                      end={item.end}
+                      className={({ isActive }) =>
+                        [
+                          'text-xs transition-colors',
+                          isActive
+                            ? 'text-indigo-300'
+                            : 'text-slate-400 hover:text-slate-100',
+                        ].join(' ')
+                      }
+                    >
+                      {item.label}
+                    </NavLink>
+                    {item.children?.map((child) => (
+                      <NavLink
+                        key={child.to}
+                        to={child.to}
+                        end={child.end}
+                        className={({ isActive }) =>
+                          [
+                            'text-[11px] transition-colors',
+                            isActive
+                              ? 'text-indigo-300'
+                              : 'text-slate-500 hover:text-slate-200',
+                          ].join(' ')
+                        }
+                      >
+                        {child.label}
+                      </NavLink>
+                    ))}
+                  </div>
                 ))}
               </div>
             ))}
