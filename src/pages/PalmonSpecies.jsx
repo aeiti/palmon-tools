@@ -7,6 +7,10 @@ import {
 import { ROUTES } from '../routes.js';
 import { PALMON_SPECIES_BY_KEY } from '../lib/data/palmon.js';
 import { PALMON_SKILLS } from '../lib/data/palmonSkills.js';
+import {
+  renderSkillEffect,
+  skillEffectIsFullyKnown,
+} from '../lib/palmonSkills.js';
 
 export default function PalmonSpecies() {
   const { speciesKey } = useParams();
@@ -72,7 +76,14 @@ function SkillCard({ skill }) {
         </span>
       </div>
       <div className="panel-body flex flex-col gap-3 px-3 py-3">
-        <p className="text-sm text-slate-300">{skill.effect}</p>
+        <p className="text-sm text-slate-300">
+          {renderSkillEffect(skill, 30)}
+          {!skillEffectIsFullyKnown(skill, 30) && (
+            <span className="ml-2 text-xs italic text-slate-500">
+              (L30 values pending)
+            </span>
+          )}
+        </p>
         {skill.ascensionEffects.length > 0 && (
           <div>
             <h4 className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
