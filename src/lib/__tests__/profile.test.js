@@ -50,7 +50,9 @@ describe('hasProfileDetails', () => {
         server: null,
         guild: '',
         level: null,
+        vip: null,
         power: null,
+        kills: null,
       }),
     ).toBe(false);
   });
@@ -60,7 +62,9 @@ describe('hasProfileDetails', () => {
     expect(hasProfileDetails({ server: 1 })).toBe(true);
     expect(hasProfileDetails({ guild: 'g' })).toBe(true);
     expect(hasProfileDetails({ level: 30 })).toBe(true);
+    expect(hasProfileDetails({ vip: 5 })).toBe(true);
     expect(hasProfileDetails({ power: 100 })).toBe(true);
+    expect(hasProfileDetails({ kills: 1000 })).toBe(true);
   });
 
   it('ignores fields not in the recognized set', () => {

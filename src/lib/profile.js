@@ -21,7 +21,9 @@ export function hasProfileDetails(profile) {
     isPresent(profile.server) ||
     isPresent(profile.guild) ||
     isPresent(profile.level) ||
-    isPresent(profile.power)
+    isPresent(profile.vip) ||
+    isPresent(profile.power) ||
+    isPresent(profile.kills)
   );
 }
 

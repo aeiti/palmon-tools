@@ -32,7 +32,9 @@ const PROFILE_FIELDS = [
   { key: 'server', label: 'Server', format: formatServer },
   { key: 'guild', label: 'Guild', format: formatProfileValue },
   { key: 'level', label: 'Player level', format: formatProfileValue },
+  { key: 'vip', label: 'VIP', format: formatProfileValue },
   { key: 'power', label: 'Power', format: formatProfileValue },
+  { key: 'kills', label: 'Kills', format: formatProfileValue },
 ];
 
 function ProfileFieldRow({ label, display }) {

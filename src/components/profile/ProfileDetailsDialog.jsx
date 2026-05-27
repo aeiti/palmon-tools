@@ -6,7 +6,9 @@ const FIELDS = [
   { key: 'server', label: 'Server', placeholder: '#111', inputMode: 'numeric' },
   { key: 'guild', label: 'Guild', placeholder: 'guild', inputMode: 'text' },
   { key: 'level', label: 'Player level', placeholder: '1', inputMode: 'numeric' },
+  { key: 'vip', label: 'VIP', placeholder: '0', inputMode: 'numeric' },
   { key: 'power', label: 'Power', placeholder: '100,000,000', inputMode: 'numeric' },
+  { key: 'kills', label: 'Kills', placeholder: '1,000,000', inputMode: 'numeric' },
 ];
 
 function ProfileDetailsForm({ profile, onCancel, onSave }) {
@@ -15,7 +17,9 @@ function ProfileDetailsForm({ profile, onCancel, onSave }) {
     server: formatServer(profile.server),
     guild: profile.guild || '',
     level: formatProfileValue(profile.level),
+    vip: formatProfileValue(profile.vip),
     power: formatProfileValue(profile.power),
+    kills: formatProfileValue(profile.kills),
   }));
 
   const handleChange = (key) => (e) =>

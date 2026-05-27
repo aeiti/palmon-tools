@@ -18,7 +18,9 @@ export default function ProfileSummary({ profile }) {
       <DetailChip label="Server" display={formatServer(profile.server)} />
       <DetailChip label="Guild" display={formatProfileValue(profile.guild)} />
       <DetailChip label="Level" display={formatProfileValue(profile.level)} />
+      <DetailChip label="VIP" display={formatProfileValue(profile.vip)} />
       <DetailChip label="Power" display={formatProfileValue(profile.power)} />
+      <DetailChip label="Kills" display={formatProfileValue(profile.kills)} />
     </div>
   );
 }

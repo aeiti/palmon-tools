@@ -33,7 +33,15 @@ function makeId() {
 }
 
 function emptyDetails() {
-  return { ign: '', server: null, guild: '', level: null, power: null };
+  return {
+    ign: '',
+    server: null,
+    guild: '',
+    level: null,
+    vip: null,
+    power: null,
+    kills: null,
+  };
 }
 
 function parseNonNegativeInt(value) {
@@ -121,7 +129,9 @@ function normalize(state) {
       server: parseNonNegativeInt(p.server),
       guild: typeof p.guild === 'string' ? p.guild : '',
       level: parseNonNegativeInt(p.level),
+      vip: parseNonNegativeInt(p.vip),
       power: parseNonNegativeInt(p.power),
+      kills: parseNonNegativeInt(p.kills),
       inventory: { ...emptyInventory(), ...(p.inventory || {}) },
       chests: normalizeChests(p.chests),
       leveledChestOverrides: normalizeLeveledOverrides(p.leveledChestOverrides),
@@ -169,7 +179,7 @@ export function useProfiles() {
     for (const key of ['ign', 'guild']) {
       if (key in details) clean[key] = String(details[key] ?? '').trim();
     }
-    for (const key of ['server', 'power']) {
+    for (const key of ['server', 'vip', 'power', 'kills']) {
       if (key in details) clean[key] = parseNonNegativeInt(details[key]);
     }
     const hasLevel = 'level' in details;
