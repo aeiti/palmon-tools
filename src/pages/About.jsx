@@ -27,16 +27,18 @@ export default function About() {
         <h2 className="h-section">Support</h2>
         <p>
           Palmon Tools is free and ad-free. If it's saved you some time, a
-          coffee goes a long way toward fueling more updates.
+          bundle goes a long way toward fueling more updates.
         </p>
         <a
           href={BMC_URL}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex w-fit items-center gap-2 rounded-md bg-[#5F7FFF] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#4a6aef] focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+          className="w-fit rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
         >
-          <span aria-hidden="true">☕</span>
-          Buy me a coffee
+          <img
+            src="https://img.buymeacoffee.com/button-api/?text=Buy me a bundle&emoji=🎁&slug=palmontools&button_colour=5F7FFF&font_colour=ffffff&font_family=Lato&outline_colour=000000&coffee_colour=FFDD00"
+            alt="Buy me a bundle"
+          />
         </a>
       </section>
 
