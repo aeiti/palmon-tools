@@ -7,4 +7,5 @@
 
 export const PALMON_EVOLUTIONS = {
   glacewing: { name: 'Cryovern' },
+  ninjump: { name: 'Shadowkaeru' },
 };

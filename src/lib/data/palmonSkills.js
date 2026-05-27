@@ -64,6 +64,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  ninjump: [
+    {
+      name: 'Flow Like a River',
+      effectTemplate:
+        'Slashes a single enemy multiple times with a ninjato, dealing a total of {damage}% damage.',
+      effectValues: {
+        damage: { 10: 529.77, 11: 535.88 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Strike Like a Waterfall',
+      effectTemplate:
+        'Hurls 3 shuriken, dealing {damage}% damage to all enemies in a fan.',
+      effectValues: {
+        damage: { 6: 1384.58, 7: 1402.08 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Crash Like the Waves',
+      effectTemplate: 'Gains +{attack}% Attack while in combat.',
+      effectValues: {
+        attack: { 30: 30 },
+      },
+      ascensionEffects: [
+        'Attack +2%',
+        'Attack +4%',
+        'Attack +6%',
+        'Attack +8%',
+        'Attack +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
 };
 
 // Raw skillfruit upgrade-cost observations.
@@ -78,4 +132,7 @@ export const PALMON_SKILLS = {
 //     from fromLevel → fromLevel + 1)
 //   - cost: skillfruit amount required for that step
 
-export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [];
+export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
+  { species: 'ninjump', slot: 0, fromLevel: 10, cost: 3200 },
+  { species: 'ninjump', slot: 1, fromLevel: 6, cost: 5500 },
+];
