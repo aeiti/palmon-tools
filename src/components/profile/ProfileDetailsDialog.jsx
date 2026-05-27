@@ -3,12 +3,12 @@ import { formatProfileValue, formatServer } from '../../lib/profile.js';
 
 const FIELDS = [
   { key: 'ign', label: 'In-game name', placeholder: 'username', inputMode: 'text' },
-  { key: 'server', label: 'Server', placeholder: '#111', inputMode: 'numeric' },
+  { key: 'server', label: 'Server', placeholder: '#111', inputMode: 'decimal' },
   { key: 'guild', label: 'Guild', placeholder: 'guild', inputMode: 'text' },
-  { key: 'level', label: 'Player level', placeholder: '1', inputMode: 'numeric' },
-  { key: 'vip', label: 'VIP', placeholder: '0', inputMode: 'numeric' },
-  { key: 'power', label: 'Power', placeholder: '100,000,000', inputMode: 'numeric' },
-  { key: 'kills', label: 'Kills', placeholder: '1,000,000', inputMode: 'numeric' },
+  { key: 'level', label: 'Player level', placeholder: '1', inputMode: 'decimal' },
+  { key: 'vip', label: 'VIP', placeholder: '0', inputMode: 'decimal' },
+  { key: 'power', label: 'Power', placeholder: '100,000,000', inputMode: 'decimal' },
+  { key: 'kills', label: 'Kills', placeholder: '1,000,000', inputMode: 'decimal' },
 ];
 
 function ProfileDetailsForm({ profile, onCancel, onSave }) {
