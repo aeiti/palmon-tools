@@ -118,6 +118,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  regalion: [
+    {
+      name: 'Fury of the Sea',
+      effectTemplate:
+        'Regalion fires a jet of water at a single enemy, dealing {damage}% damage.',
+      effectValues: {
+        damage: { 10: 423.36, 11: 428.83 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Surging Tides',
+      effectTemplate:
+        'Regalion summons a surging sea, dealing {damage}% damage to all enemies.',
+      effectValues: {
+        damage: { 10: 1311.73, 11: 1330.75 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'King of the Waves',
+      effectTemplate: 'Allied Water Palmon deal {damage}% more damage in combat.',
+      effectValues: {
+        damage: { 30: 20 },
+      },
+      ascensionEffects: [
+        'Water Palmon Final Damage +1.5%',
+        'Water Palmon Final Damage +3%',
+        'Water Palmon Final Damage +4.5%',
+        'Water Palmon Final Damage +6%',
+        'Water Palmon Final Damage +7.5%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
 };
 
 // Raw skillfruit upgrade-cost observations.
@@ -135,4 +189,6 @@ export const PALMON_SKILLS = {
 export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'ninjump', slot: 0, fromLevel: 10, cost: 3200 },
   { species: 'ninjump', slot: 1, fromLevel: 6, cost: 5500 },
+  { species: 'regalion', slot: 0, fromLevel: 10, cost: 800 },
+  { species: 'regalion', slot: 1, fromLevel: 10, cost: 2300 },
 ];
