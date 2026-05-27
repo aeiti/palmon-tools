@@ -11,8 +11,13 @@ export const ROUTES = {
   inventoryResources: '/inventory/resources',
   inventorySpeedups: '/inventory/speedups',
   palmon: '/palmon',
+  palmonSpecies: '/palmon/species/:speciesKey',
   squads: '/squads',
 };
+
+export function palmonSpeciesUrl(speciesKey) {
+  return `/palmon/species/${speciesKey}`;
+}
 
 // Old top-level URLs we keep redirecting from. Add new aliases here as the
 // site grows so bookmarks don't break.

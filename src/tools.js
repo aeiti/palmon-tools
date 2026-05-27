@@ -13,6 +13,7 @@ export const SECTIONS = {
   TOP: 'top', // top-level nav links (Dashboard, About)
   PROFILE: 'profile', // the Tools dropdown, footer column, dashboard tool grid
   INVENTORY: 'inventory', // sub-pages of the Inventory hub
+  HIDDEN: 'hidden', // routable but absent from nav (deep links only)
 };
 
 // All routable destinations. Order doesn't matter — consumers re-sort by label.
@@ -93,6 +94,15 @@ export const TOOLS = [
     label: 'Speedup Inventory',
     section: SECTIONS.INVENTORY,
     page: lazy(() => import('./pages/Speedups.jsx')),
+  },
+
+  // Hidden deep-link routes
+  {
+    key: 'palmonSpecies',
+    path: ROUTES.palmonSpecies,
+    label: 'Palmon species detail',
+    section: SECTIONS.HIDDEN,
+    page: lazy(() => import('./pages/PalmonSpecies.jsx')),
   },
 ];
 

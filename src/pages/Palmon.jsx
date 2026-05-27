@@ -5,10 +5,9 @@ import ConfirmDialog from '../components/ui/ConfirmDialog.jsx';
 import ProfilePicker from '../components/ui/ProfilePicker.jsx';
 import ResetButton from '../components/ui/ResetButton.jsx';
 import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
-import { ROUTES } from '../routes.js';
+import { ROUTES, palmonSpeciesUrl } from '../routes.js';
 import { findPalmonBuildingAssignment } from '../lib/buildings.js';
 import {
-  ELEMENT_BY_KEY,
   MAX_PALMON_LEVEL,
   MAX_SKILL_LEVEL,
   PALMON_SPECIES,
@@ -21,41 +20,13 @@ import {
   placeholderSkillName,
   placeholderTraitName,
 } from '../lib/data/palmon.js';
+import { PALMON_SKILLS } from '../lib/data/palmonSkills.js';
 import { palmonDisplayName, squadIsFull } from '../lib/palmon.js';
-
-const ELEMENT_BADGE_CLASS = {
-  fire: 'bg-red-500/15 text-red-300 ring-red-500/30',
-  water: 'bg-sky-500/15 text-sky-300 ring-sky-500/30',
-  earth: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/30',
-  electric: 'bg-amber-500/15 text-amber-300 ring-amber-500/30',
-};
-
-const RARITY_BADGE_CLASS = {
-  sr: 'bg-blue-500/15 text-blue-300 ring-blue-500/30',
-  ssr: 'bg-purple-500/15 text-purple-300 ring-purple-500/30',
-  ur: 'bg-yellow-500/15 text-yellow-300 ring-yellow-500/30',
-};
-
-const MYTHICAL_BADGE_CLASS =
-  'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-500/30';
-
-function ElementBadge({ element }) {
-  const meta = ELEMENT_BY_KEY[element];
-  if (!meta) return null;
-  const cls = ELEMENT_BADGE_CLASS[element] || 'bg-slate-700 text-slate-300';
-  return <span className={`badge ${cls}`}>{meta.label}</span>;
-}
-
-function RarityBadge({ rarity }) {
-  const meta = RARITY_BY_KEY[rarity];
-  if (!meta) return null;
-  const cls = RARITY_BADGE_CLASS[rarity] || 'bg-slate-700 text-slate-300';
-  return <span className={`badge ${cls}`}>{meta.label}</span>;
-}
-
-function MythicalBadge() {
-  return <span className={`badge ${MYTHICAL_BADGE_CLASS}`}>Mythical</span>;
-}
+import {
+  ElementBadge,
+  MythicalBadge,
+  RarityBadge,
+} from '../components/palmon/Badges.jsx';
 
 function NumberField({ label, value, max, onChange, ariaLabel }) {
   return (
@@ -267,25 +238,39 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
           </div>
 
           <div>
-            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
-              Skills
-            </h4>
+            <div className="mb-2 flex items-baseline justify-between gap-2">
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                Skills
+              </h4>
+              {species && (
+                <Link
+                  to={palmonSpeciesUrl(species.key)}
+                  className="link-inline text-xs"
+                >
+                  View details
+                </Link>
+              )}
+            </div>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {palmon.skills.map((skill, i) => (
-                <NumberField
-                  key={i}
-                  label={`${placeholderSkillName(i)} (max ${MAX_SKILL_LEVEL})`}
-                  value={skill.level}
-                  max={MAX_SKILL_LEVEL}
-                  onChange={(v) => {
-                    const skills = palmon.skills.map((s, idx) =>
-                      idx === i ? { ...s, level: v } : s,
-                    );
-                    onChange(palmon.id, { skills });
-                  }}
-                  ariaLabel={`${displayName} ${placeholderSkillName(i)} level`}
-                />
-              ))}
+              {palmon.skills.map((skill, i) => {
+                const catalogName = PALMON_SKILLS[species?.key]?.[i]?.name;
+                const skillName = catalogName || placeholderSkillName(i);
+                return (
+                  <NumberField
+                    key={i}
+                    label={`${skillName} (max ${MAX_SKILL_LEVEL})`}
+                    value={skill.level}
+                    max={MAX_SKILL_LEVEL}
+                    onChange={(v) => {
+                      const skills = palmon.skills.map((s, idx) =>
+                        idx === i ? { ...s, level: v } : s,
+                      );
+                      onChange(palmon.id, { skills });
+                    }}
+                    ariaLabel={`${displayName} ${skillName} level`}
+                  />
+                );
+              })}
             </div>
           </div>
 

@@ -1,0 +1,99 @@
+import { Link, useParams } from 'react-router-dom';
+import {
+  ElementBadge,
+  MythicalBadge,
+  RarityBadge,
+} from '../components/palmon/Badges.jsx';
+import { ROUTES } from '../routes.js';
+import { PALMON_SPECIES_BY_KEY } from '../lib/data/palmon.js';
+import { PALMON_SKILLS } from '../lib/data/palmonSkills.js';
+
+export default function PalmonSpecies() {
+  const { speciesKey } = useParams();
+  const species = PALMON_SPECIES_BY_KEY[speciesKey];
+
+  if (!species) {
+    return (
+      <article className="flex flex-col gap-4 text-slate-300">
+        <h1 className="h-page">Palmon not found</h1>
+        <p>
+          No species matches <code className="text-slate-200">{speciesKey}</code>
+          .{' '}
+          <Link to={ROUTES.palmon} className="link-inline">
+            Back to Palmon
+          </Link>
+          .
+        </p>
+      </article>
+    );
+  }
+
+  const skills = PALMON_SKILLS[species.key] || [];
+
+  return (
+    <article className="flex flex-col gap-6 text-slate-300">
+      <header className="flex flex-col gap-2">
+        <Link to={ROUTES.palmon} className="link-inline text-sm">
+          ← Palmon
+        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="h-page">{species.name}</h1>
+          <ElementBadge element={species.element} />
+          <RarityBadge rarity={species.rarity} />
+          {species.mythical && <MythicalBadge />}
+        </div>
+      </header>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="h-section">Skills</h2>
+        {skills.length === 0 ? (
+          <p className="text-sm text-slate-400">
+            No skill data for {species.name} yet.
+          </p>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {skills.map((skill, i) => (
+              <SkillCard key={i} skill={skill} />
+            ))}
+          </div>
+        )}
+      </section>
+    </article>
+  );
+}
+
+function SkillCard({ skill }) {
+  return (
+    <div className="panel">
+      <div className="panel-header flex items-center justify-between px-3 py-2">
+        <h3 className="text-sm font-semibold text-slate-100">{skill.name}</h3>
+        <span className="text-[10px] uppercase tracking-wide text-slate-500">
+          Lv 30
+        </span>
+      </div>
+      <div className="panel-body flex flex-col gap-3 px-3 py-3">
+        <p className="text-sm text-slate-300">{skill.effect}</p>
+        {skill.ascensionEffects.length > 0 && (
+          <div>
+            <h4 className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+              Skill Ascension Effects
+            </h4>
+            <ul className="flex flex-col gap-1 text-sm text-slate-300">
+              {skill.ascensionEffects.map((eff, i) => (
+                <li key={i} className="flex items-baseline gap-2">
+                  <span
+                    aria-label={`${i + 1} star${i === 0 ? '' : 's'}`}
+                    className="text-amber-300 tabular-nums"
+                  >
+                    {'★'.repeat(i + 1)}
+                  </span>
+                  <span>{eff}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
