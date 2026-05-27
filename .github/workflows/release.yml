@@ -38,6 +38,7 @@ jobs:
           PREFIX="v${DATE}."
           LAST=$(git tag --list "${PREFIX}*" \
             | sed "s|^${PREFIX}||" \
+            | awk -F. '{print $1}' \
             | grep -E '^[0-9]+$' \
             | sort -n \
             | tail -n1 || true)
@@ -46,9 +47,10 @@ jobs:
           else
             PATCH=$((LAST + 1))
           fi
-          TAG="v${DATE}.${PATCH}"
+          VERSION="${DATE}.${PATCH}"
+          TAG="v${VERSION}.${{ github.run_number }}"
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
-          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "Computed tag: ${TAG}"
 
       - run: npm ci
@@ -56,9 +58,7 @@ jobs:
       - name: Build
         env:
           VITE_APP_VERSION: ${{ steps.version.outputs.version }}
-          VITE_APP_BUILD: ${{ github.run_number }}
           REACT_APP_VERSION: ${{ steps.version.outputs.version }}
-          REACT_APP_BUILD: ${{ github.run_number }}
         run: npm run build
 
       - name: Package build artifact
