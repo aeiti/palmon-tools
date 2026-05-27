@@ -27,6 +27,7 @@ import {
   squadIsFull,
 } from '../lib/palmon.js';
 import { loadState, saveState } from '../lib/storage.js';
+import { parseCompact } from '../lib/format.js';
 
 function makeId() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -46,11 +47,15 @@ function emptyDetails() {
 
 function parseNonNegativeInt(value) {
   if (value === null || value === undefined) return null;
-  const cleaned = String(value).replace(/[\s,_#]/g, '');
+  // Strip the leading "#" some users type for server numbers, then delegate
+  // to parseCompact so K / M / B suffixes ("1.5M", "400k") work the same way
+  // they do in the inventory inputs. Empty string means "not set" — distinct
+  // from 0 — so we short-circuit before parseCompact, which treats "" as 0.
+  const cleaned = String(value).replace(/#/g, '').trim();
   if (cleaned === '') return null;
-  const n = Number(cleaned);
-  if (!Number.isFinite(n) || n < 0) return null;
-  return Math.floor(n);
+  const parsed = parseCompact(cleaned);
+  if (parsed === null || parsed < 0) return null;
+  return Math.floor(parsed);
 }
 
 function makeProfile(name) {
