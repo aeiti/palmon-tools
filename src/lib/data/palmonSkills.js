@@ -1151,6 +1151,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  pipistrigoi: [
+    {
+      name: 'Netherflame',
+      effectTemplate:
+        'Shoots a blue fireball, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 100, 3: 101.38 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Phantom Cyclone',
+      effectTemplate:
+        'Shoots a blue fire tornado, dealing {damage}% damage to all enemies.',
+      effectValues: {
+        damage: { 2: 301.32, 3: 306.14 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: "Nocturne's Focus",
+      effectTemplate: 'Damage +{damage}% for Phantom Cyclone.',
+      effectValues: {
+        damage: { 2: 11.38, 3: 11.73 },
+      },
+      ascensionEffects: [
+        'Damage +2% for Phantom Cyclone.',
+        'Damage +4% for Phantom Cyclone.',
+        'Damage +6% for Phantom Cyclone.',
+        'Damage +8% for Phantom Cyclone.',
+        'Damage +10% for Phantom Cyclone.',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   plunderjaw: [
     {
       name: 'Hook Slash',
