@@ -58,6 +58,7 @@ export const PALMON_SPECIES = [
   { key: 'maximito', name: 'Maximito', element: 'electric', rarity: 'sr' },
   { key: 'meowdame', name: 'Meowdame', element: 'water', rarity: 'ssr' },
   { key: 'ninjump', name: 'Ninjump', element: 'water', rarity: 'ur' },
+  { key: 'oleana', name: 'Oleana', element: 'earth', rarity: 'ur' },
   { key: 'platyputz', name: 'Platyputz', element: 'water', rarity: 'sr' },
   { key: 'plunderjaw', name: 'Plunderjaw', element: 'water', rarity: 'ur', mythical: true },
   { key: 'regalion', name: 'Regalion', element: 'water', rarity: 'ur' },

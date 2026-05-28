@@ -1095,6 +1095,62 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  oleana: [
+    {
+      name: 'Olive Barrage',
+      effectTemplate:
+        'Throws an olive, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 170, 3: 172.35 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Wreath Toss',
+      effectTemplate:
+        'Summons an olive wreath overhead. Throws multiple olives at the enemy front row, dealing {damage}% damage to each enemy.',
+      effectValues: {
+        damage: { 2: 853.4, 3: 868.13 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Leafy Hug',
+      effectTemplate:
+        'Increases the HP of all Palmon by {hp} (even when undeployed). Increases Hospital capacity by {capacity}.',
+      effectValues: {
+        hp: { 2: 377587, 3: 396207 },
+        capacity: { 2: 1259, 3: 1321 },
+      },
+      ascensionEffects: [
+        'All Palmon HP +60000',
+        'All Palmon HP +150000',
+        'All Palmon HP +300000',
+        'All Palmon HP +540000',
+        '— TBD —',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   plunderjaw: [
     {
       name: 'Hook Slash',
