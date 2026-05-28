@@ -664,7 +664,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Swings its mighty tail, dealing {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 10: 441.49, 11: 446.56 },
+        damage: { 15: 441.49, 16: 446.56 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -679,7 +679,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Swings its mighty tail 3 times, dealing a total of {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 10: 4754.76, 11: 4820.88 },
+        damage: { 15: 4754.76, 16: 4820.88 },
       },
       ascensionEffects: [
         'Damage +30%',
