@@ -609,6 +609,62 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  surveilynx: [
+    {
+      name: 'Snap Shot',
+      effectTemplate:
+        'A long-ranged attack that deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 90.1, 3: 91.35 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Shadow Step',
+      effectTemplate:
+        'Surveilynx teleports to 3 nearby spots, dealing {damage}% damage to all enemies in a fan.',
+      effectValues: {
+        damage: { 2: 673.2, 3: 684.82 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Tactical Drills',
+      effectTemplate:
+        'Surveilynx can Quick Train up to {trainCount} Armigo per day. Your Armigo gain +{attack}% Attack when defending your Camp.',
+      effectValues: {
+        trainCount: { 2: 425, 3: 450 },
+        attack: { 2: 10.04, 3: 10.21 },
+      },
+      ascensionEffects: [
+        'Armigo Attack +2%',
+        'Armigo Attack +4%',
+        'Armigo Attack +6%',
+        'Armigo Attack +8%',
+        '— TBD —',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
 };
 
 // Raw skillfruit upgrade-cost observations.
@@ -651,4 +707,7 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'statchew', slot: 0, fromLevel: 2, cost: 100 },
   { species: 'statchew', slot: 1, fromLevel: 2, cost: 100 },
   { species: 'statchew', slot: 2, fromLevel: 2, cost: 100 },
+  { species: 'surveilynx', slot: 0, fromLevel: 2, cost: 100 },
+  { species: 'surveilynx', slot: 1, fromLevel: 2, cost: 100 },
+  { species: 'surveilynx', slot: 2, fromLevel: 2, cost: 1000 },
 ];
