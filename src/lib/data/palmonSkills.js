@@ -766,6 +766,61 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  kungpaw: [
+    {
+      name: 'Hydro Punch',
+      effectTemplate:
+        'Channels Qi to condense water flow onto the fist, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 248.6, 3: 252.04 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Tidal Vortex',
+      effectTemplate:
+        'Charges in place and releases Qi, dealing {damage}% damage to 3 random enemies. Each time Kungpaw is attacked for the next 5s, there is a 25% chance to ignore the damage.',
+      effectValues: {
+        damage: { 2: 965.8, 3: 982.44 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: "Shifu's Guidance",
+      effectTemplate:
+        'Whether deployed or not, back-row Palmon on your squad take {damage}% less Rage Skill damage for 12s once the battle starts.',
+      effectValues: {
+        damage: { 2: 14.42, 3: 14.68 },
+      },
+      ascensionEffects: [
+        'Rage Skill Damage Taken -1.5%',
+        'Duration Increase: 2s in total.',
+        'Rage Skill Damage Taken -4.5%',
+        'Duration Increase: 5s in total.',
+        '— TBD —',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   limudroid: [
     {
       name: 'Energy Ball',

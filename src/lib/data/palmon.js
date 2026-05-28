@@ -49,6 +49,7 @@ export const PALMON_SPECIES = [
   { key: 'hoofrit', name: 'Hoofrit', element: 'fire', rarity: 'ur' },
   { key: 'incineraptor', name: 'Incineraptor', element: 'fire', rarity: 'ssr' },
   { key: 'kilohopp', name: 'Kilohopp', element: 'electric', rarity: 'sr' },
+  { key: 'kungpaw', name: 'Kungpaw', element: 'water', rarity: 'ur' },
   { key: 'lendanear', name: 'Lendanear', element: 'water', rarity: 'sr' },
   { key: 'limudroid', name: 'Limudroid', element: 'electric', rarity: 'ur' },
   { key: 'lucidina', name: 'Lucidina', element: 'water', rarity: 'ur' },
