@@ -1812,7 +1812,7 @@ export const PALMON_SKILLS = {
       name: 'Headbutt',
       effectTemplate: 'Deals {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 4: 200, 5: 202.06 },
+        damage: { 1: 200, 2: 202.06 },
       },
       ascensionEffects: [
         'Damage +20%',
@@ -1827,7 +1827,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Turns into a rapidly-spinning pinball of death, dealing {damage}% damage to all nearby enemy targets.',
       effectValues: {
-        damage: { 4: 481.65, 5: 489.92 },
+        damage: { 1: 481.65, 2: 489.92 },
       },
       ascensionEffects: [
         'Damage +20%',
@@ -1841,7 +1841,7 @@ export const PALMON_SKILLS = {
       name: 'Drill Shell',
       effectTemplate: 'Ore output +{output}% when working a Mining job.',
       effectValues: {
-        output: { 4: 46.56, 5: 47.25 },
+        output: { 25: 46.56, 26: 47.25 },
       },
       ascensionEffects: [
         'Output +5%',
