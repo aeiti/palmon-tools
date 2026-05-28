@@ -645,8 +645,8 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Surveilynx can Quick Train up to {trainCount} Armigo per day. Your Armigo gain +{attack}% Attack when defending your Camp.',
       effectValues: {
-        trainCount: { 2: 425, 3: 450 },
-        attack: { 2: 10.04, 3: 10.21 },
+        trainCount: { 7: 425, 8: 450 },
+        attack: { 7: 10.04, 8: 10.21 },
       },
       ascensionEffects: [
         'Armigo Attack +2%',
@@ -709,5 +709,5 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'statchew', slot: 2, fromLevel: 2, cost: 100 },
   { species: 'surveilynx', slot: 0, fromLevel: 2, cost: 100 },
   { species: 'surveilynx', slot: 1, fromLevel: 2, cost: 100 },
-  { species: 'surveilynx', slot: 2, fromLevel: 2, cost: 1000 },
+  { species: 'surveilynx', slot: 2, fromLevel: 7, cost: 1000 },
 ];
