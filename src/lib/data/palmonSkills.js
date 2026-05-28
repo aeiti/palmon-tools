@@ -325,7 +325,7 @@ export const PALMON_SKILLS = {
         'Rage Build-up +5%',
         'Crit Rate +5%',
         'Rage Build-up +10%',
-        '— TBD —',
+        'Crit Rate +10%',
       ],
     },
     {
