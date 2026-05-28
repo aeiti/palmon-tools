@@ -440,6 +440,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  fingenue: [
+    {
+      name: 'Spurt',
+      effectTemplate:
+        'Fires a water projectile, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 136, 3: 137.89 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Waterspout',
+      effectTemplate:
+        'Summons a swirling column of water, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 2580.6, 3: 2625.08 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: "Ocean's Favor",
+      effectTemplate: 'Deals +{damage}% damage while in battle.',
+      effectValues: {
+        damage: { 2: 14, 3: 14.35 },
+      },
+      ascensionEffects: [
+        'Final Damage +2%',
+        'Final Damage +4%',
+        'Final Damage +6%',
+        'Final Damage +8%',
+        'Final Damage +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   glacewing: [
     {
       name: 'Icicle Barrage',
