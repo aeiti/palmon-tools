@@ -500,7 +500,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Flings a lightning bolt at a single enemy, dealing {damage}% damage.',
       effectValues: {
-        damage: { 2: 170, 3: 172.35 },
+        damage: { 1: 170, 2: 172.35 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -515,7 +515,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Fills its body with electricity, gaining a Counterattack Shield that deals {damage}% damage to attackers. Triggers up to 5 times.',
       effectValues: {
-        damage: { 2: 469.2, 3: 477.25 },
+        damage: { 1: 469.2, 2: 477.25 },
       },
       ascensionEffects: [
         'Counterattack Damage +30%',
@@ -530,7 +530,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Allied Electric Palmon take {damage}% less damage in combat.',
       effectValues: {
-        damage: { 2: 8, 3: 8.26 },
+        damage: { 1: 8, 2: 8.26 },
       },
       ascensionEffects: [
         'Damage Reduction +1.5%',
