@@ -392,7 +392,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Throws a (literally) flaming-hot pepper, dealing {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 566.1, 3: 573.91 },
+        damage: { 1: 566.1, 2: 573.91 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -407,7 +407,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Bon appétit mes amis! Tosses a perfectly cooked hamburger to the allied Palmon with the highest Attack, boosting its Attack by {attack}% for 10s.',
       effectValues: {
-        attack: { 2: 18, 3: 18.35 },
+        attack: { 1: 18, 2: 18.35 },
       },
       ascensionEffects: [
         'Attack +4%',
@@ -421,7 +421,7 @@ export const PALMON_SKILLS = {
       name: 'Rage Ignition',
       effectTemplate: 'Rage builds up {rate}% faster.',
       effectValues: {
-        rate: { 2: 14, 3: 14.35 },
+        rate: { 1: 14, 2: 14.35 },
       },
       ascensionEffects: [
         'Rage Build-up +2%',
