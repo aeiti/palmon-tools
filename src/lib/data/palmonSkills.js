@@ -10,6 +10,59 @@
 // substitutes values at the requested level; missing values render as "TBD".
 
 export const PALMON_SKILLS = {
+  abuzzinian: [
+    {
+      name: 'Electric Surge',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 147.9, 3: 149.96 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Nightstorm',
+      effectTemplate:
+        'Calls down 2 bolts of lightning, zapping the 2 enemies with the lowest HP for {damage}% damage.',
+      effectValues: {
+        damage: { 2: 1489.2, 3: 1514.94 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Phantom Step',
+      effectTemplate: 'Gains +{evasion}% Evasion in combat.',
+      effectValues: {
+        evasion: { 2: 14, 3: 14.35 },
+      },
+      ascensionEffects: [
+        'Evasion +2%',
+        'Evasion +4%',
+        'Evasion +6%',
+        'Evasion +8%',
+        'Evasion +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   barkplug: [
     {
       name: 'Maelstrom Bolt',
