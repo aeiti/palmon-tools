@@ -1156,7 +1156,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Slashes a single enemy multiple times with a ninjato, dealing a total of {damage}% damage.',
       effectValues: {
-        damage: { 10: 529.77, 11: 535.88 },
+        damage: { 15: 529.77, 16: 535.88 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1171,7 +1171,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Hurls 3 shuriken, dealing {damage}% damage to all enemies in a fan.',
       effectValues: {
-        damage: { 6: 1384.58, 7: 1402.08 },
+        damage: { 22: 1384.58, 23: 1402.08 },
       },
       ascensionEffects: [
         'Damage +30%',
