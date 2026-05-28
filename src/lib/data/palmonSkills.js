@@ -63,6 +63,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  battereina: [
+    {
+      name: 'Fulminous Strike',
+      effectTemplate:
+        'Unleashes a powerful current from the electropollen in its hand, dealing {damage}% damage to 2 random back-row enemies.',
+      effectValues: {
+        damage: { 2: 142.8, 3: 144.81 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Dynamic Discharge',
+      effectTemplate:
+        'Unleashes an immense energy surge from its electropollen, dealing {damage}% damage to 2 random back-row enemies.',
+      effectValues: {
+        damage: { 2: 949.96, 3: 966.28 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Bow to the Queen',
+      effectTemplate: 'Allied Electric Palmon deal {damage}% more damage in combat.',
+      effectValues: {
+        damage: { 2: 8, 3: 8.26 },
+      },
+      ascensionEffects: [
+        'Electric Palmon Final Damage +1.5%',
+        'Electric Palmon Final Damage +3%',
+        'Electric Palmon Final Damage +4.5%',
+        'Electric Palmon Final Damage +6%',
+        'Electric Palmon Final Damage +7.5%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   barkplug: [
     {
       name: 'Maelstrom Bolt',
