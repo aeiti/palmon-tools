@@ -941,6 +941,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  woozard: [
+    {
+      name: 'Shroomshot',
+      effectTemplate:
+        'Fires a toxic spore, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 104, 3: 105.45 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Fungiburst',
+      effectTemplate:
+        'Fires 6 shrooms at the enemy with the highest Attack, dealing {damage}% total damage and reducing their Attack by 35% for 10s.',
+      effectValues: {
+        damage: { 2: 720.2, 3: 732.63 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Dragonesque',
+      effectTemplate: 'Deals +{damage}% damage while in battle.',
+      effectValues: {
+        damage: { 2: 12, 3: 12.35 },
+      },
+      ascensionEffects: [
+        'Final Damage +2%',
+        'Final Damage +4%',
+        'Final Damage +6%',
+        'Final Damage +8%',
+        'Final Damage +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
 };
 
 // Raw skillfruit upgrade-cost observations.
@@ -1001,4 +1055,7 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'surveilynx', slot: 0, fromLevel: 2, cost: 100 },
   { species: 'surveilynx', slot: 1, fromLevel: 2, cost: 100 },
   { species: 'surveilynx', slot: 2, fromLevel: 7, cost: 1000 },
+  { species: 'woozard', slot: 0, fromLevel: 2, cost: 100 },
+  { species: 'woozard', slot: 1, fromLevel: 2, cost: 100 },
+  { species: 'woozard', slot: 2, fromLevel: 2, cost: 100 },
 ];
