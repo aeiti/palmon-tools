@@ -1430,7 +1430,7 @@ export const PALMON_SKILLS = {
       name: 'Fatal Flier',
       effectTemplate: 'Throws a dart, dealing {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 170, 3: 172.35 },
+        damage: { 1: 170, 2: 172.35 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1445,7 +1445,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Hurls 5 darts at 5 random enemies, dealing {damage}% damage to each.',
       effectValues: {
-        damage: { 2: 584.8, 3: 594.9 },
+        damage: { 1: 584.8, 2: 594.9 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1459,7 +1459,7 @@ export const PALMON_SKILLS = {
       name: 'Predator Instincts',
       effectTemplate: 'Allied Earth Palmon deal {damage}% more damage in combat.',
       effectValues: {
-        damage: { 2: 8, 3: 8.26 },
+        damage: { 1: 8, 2: 8.26 },
       },
       ascensionEffects: [
         'Earth Palmon Final Damage +1.5%',
