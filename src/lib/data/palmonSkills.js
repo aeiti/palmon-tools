@@ -353,7 +353,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Smashes violently into an enemy, dealing {damage}% damage, with a 70% chance to stun the enemy for 3s.',
       effectValues: {
-        damage: { 10: 3508.79, 11: 3560.33 },
+        damage: { 11: 3508.79, 12: 3560.33 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -367,7 +367,7 @@ export const PALMON_SKILLS = {
       name: 'Tidal Guard',
       effectTemplate: 'Gains +{hp}% max HP while in combat.',
       effectValues: {
-        hp: { 7: 26.56, 8: 26.9 },
+        hp: { 20: 26.56, 21: 26.9 },
       },
       ascensionEffects: [
         'HP +2%',
