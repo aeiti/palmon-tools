@@ -766,6 +766,61 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  incineraptor: [
+    {
+      name: 'Heat Wave',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 4: 250, 5: 252.58 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Flamewing Dive',
+      effectTemplate:
+        'Deals {damage}% damage to all enemies in a straight line.',
+      effectValues: {
+        damage: { 4: 625.3, 5: 636.03 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Eagle Eye',
+      effectTemplate:
+        "Incineraptor can always find where the treasure is hidden. Provides extra treasure (up to {extra} a day) when completing an Intel Quest. Incineraptor can burn 10 Incineraptor Plumes to generate 3 high-quality intel quests. You'll receive 1 Incineraptor Plume every {minutes} min.",
+      effectValues: {
+        extra: { 30: 42 },
+        minutes: { 30: 67 },
+      },
+      ascensionEffects: [
+        'Plume Output Time -10 min',
+        'Owl-Eyed Chests +5',
+        'Plume Output Time -20 min',
+        '— TBD —',
+        '— TBD —',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   kungpaw: [
     {
       name: 'Hydro Punch',
