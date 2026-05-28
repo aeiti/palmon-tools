@@ -69,7 +69,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Unleashes a powerful current from the electropollen in its hand, dealing {damage}% damage to 2 random back-row enemies.',
       effectValues: {
-        damage: { 2: 142.8, 3: 144.81 },
+        damage: { 1: 142.8, 2: 144.81 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -84,7 +84,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Unleashes an immense energy surge from its electropollen, dealing {damage}% damage to 2 random back-row enemies.',
       effectValues: {
-        damage: { 2: 949.96, 3: 966.28 },
+        damage: { 1: 949.96, 2: 966.28 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -98,7 +98,7 @@ export const PALMON_SKILLS = {
       name: 'Bow to the Queen',
       effectTemplate: 'Allied Electric Palmon deal {damage}% more damage in combat.',
       effectValues: {
-        damage: { 2: 8, 3: 8.26 },
+        damage: { 1: 8, 2: 8.26 },
       },
       ascensionEffects: [
         'Electric Palmon Final Damage +1.5%',
