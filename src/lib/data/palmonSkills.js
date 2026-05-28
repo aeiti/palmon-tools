@@ -1914,6 +1914,58 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  vulcanid: [
+    {
+      name: 'Blazing Bite',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 4: 200, 5: 202.06 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Trial By Fire',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 4: 1416.45, 5: 1440.85 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Hot Diggity Dog',
+      effectTemplate: 'Steel output +{output}% when working a Smelting job.',
+      effectValues: {
+        output: { 4: 46.56, 5: 47.25 },
+      },
+      ascensionEffects: [
+        'Output +5%',
+        'Output +10%',
+        'Output +15%',
+        'Output +20%',
+        'Output +30%',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   woozard: [
     {
       name: 'Shroomshot',
