@@ -1369,6 +1369,61 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  revontulet: [
+    {
+      name: 'Foxfire',
+      effectTemplate:
+        'Unleashes a fireball from its flaming tail, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 170, 3: 172.35 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Burning Tails',
+      effectTemplate:
+        'Shoots 3 to 5 fireballs, each dealing {damage}% damage to an enemy and burns them, dealing an extra {burn}% damage over 10s.',
+      effectValues: {
+        damage: { 2: 484.33, 3: 492.66 },
+        burn: { 2: 920, 3: 936.6 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Spectral Flames',
+      effectTemplate: 'Allied Fire Palmon deal {damage}% more damage in combat.',
+      effectValues: {
+        damage: { 2: 8.52, 3: 8.78 },
+      },
+      ascensionEffects: [
+        'Fire Palmon Final Damage +1.5%',
+        'Fire Palmon Final Damage +3%',
+        'Fire Palmon Final Damage +4.5%',
+        'Fire Palmon Final Damage +6%',
+        'Fire Palmon Final Damage +7.5%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   regalion: [
     {
       name: 'Fury of the Sea',
