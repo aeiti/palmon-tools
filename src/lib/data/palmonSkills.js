@@ -771,7 +771,7 @@ export const PALMON_SKILLS = {
       name: 'Heat Wave',
       effectTemplate: 'Deals {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 4: 250, 5: 252.58 },
+        damage: { 1: 250, 2: 252.58 },
       },
       ascensionEffects: [
         'Damage +20%',
@@ -786,7 +786,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Deals {damage}% damage to all enemies in a straight line.',
       effectValues: {
-        damage: { 4: 625.3, 5: 636.03 },
+        damage: { 1: 625.3, 2: 636.03 },
       },
       ascensionEffects: [
         'Damage +20%',
