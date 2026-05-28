@@ -2076,6 +2076,61 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  voltbolt: [
+    {
+      name: 'Quick Kick',
+      effectTemplate:
+        'Gives a single enemy a swift kick, dealing {damage}% damage.',
+      effectValues: {
+        damage: { 1: 160, 2: 161.64 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Tempest Dive',
+      effectTemplate:
+        'Quickly leaps into the air and dives back down, charged with electricity. Deals {damage}% damage to targets in range, with a 20% chance to stun them for 1.5s.',
+      effectValues: {
+        damage: { 1: 481.65, 2: 489.92 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Quick Study',
+      effectTemplate:
+        'When researching a tech, reduces final research time by {time} min.',
+      effectValues: {
+        time: { 25: 49, 26: 50 },
+      },
+      ascensionEffects: [
+        'Time Reduction +5 min',
+        'Time Reduction +10 min',
+        'Time Reduction +15 min',
+        'Time Reduction +20 min',
+        'Time Reduction +30 min',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   vulcanid: [
     {
       name: 'Blazing Bite',
