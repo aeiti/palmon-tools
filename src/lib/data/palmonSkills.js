@@ -174,6 +174,61 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  ghillant: [
+    {
+      name: 'Blitz',
+      effectTemplate:
+        'Delivers a powerful strike to a nearby target, dealing {damage}% damage.',
+      effectValues: {
+        damage: { 2: 160.6, 3: 162.8 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Shadow Surge',
+      effectTemplate:
+        'Hits an enemy for {damage}% damage, and takes 20% of the damage meant for allies for the next 8s.',
+      effectValues: {
+        damage: { 2: 1850.2, 3: 1882.08 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: "Nature's Guard",
+      effectTemplate:
+        'Allied back-row Earth Palmon take {damage}% less damage in combat.',
+      effectValues: {
+        damage: { 2: 16, 3: 16.35 },
+      },
+      ascensionEffects: [
+        'Damage Reduction +2%',
+        'Damage Reduction +4%',
+        'Damage Reduction +6%',
+        'Damage Reduction +8%',
+        'Damage Reduction +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   gnashley: [
     {
       name: 'Whiplash',
@@ -468,6 +523,9 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'dolphriend', slot: 0, fromLevel: 10, cost: 1700 },
   { species: 'dolphriend', slot: 1, fromLevel: 10, cost: 2000 },
   { species: 'dolphriend', slot: 2, fromLevel: 7, cost: 4700 },
+  { species: 'ghillant', slot: 0, fromLevel: 2, cost: 100 },
+  { species: 'ghillant', slot: 1, fromLevel: 2, cost: 100 },
+  { species: 'ghillant', slot: 2, fromLevel: 2, cost: 100 },
   { species: 'gnashley', slot: 0, fromLevel: 10, cost: 3200 },
   { species: 'gnashley', slot: 1, fromLevel: 10, cost: 3200 },
   { species: 'lucidina', slot: 0, fromLevel: 9, cost: 2000 },
