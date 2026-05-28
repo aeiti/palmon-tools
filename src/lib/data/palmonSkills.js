@@ -1539,7 +1539,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Regalion fires a jet of water at a single enemy, dealing {damage}% damage.',
       effectValues: {
-        damage: { 10: 423.36, 11: 428.83 },
+        damage: { 6: 423.36, 7: 428.83 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1554,7 +1554,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Regalion summons a surging sea, dealing {damage}% damage to all enemies.',
       effectValues: {
-        damage: { 10: 1311.73, 11: 1330.75 },
+        damage: { 12: 1311.73, 13: 1330.75 },
       },
       ascensionEffects: [
         'Damage +30%',
