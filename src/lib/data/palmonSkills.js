@@ -65,6 +65,59 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  bruiseberry: [
+    {
+      name: 'Berry Bash',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 1: 200, 2: 202.06 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Fruit Punch-Up',
+      effectTemplate: 'Deals {damage}% damage to a nearby enemy.',
+      effectValues: {
+        damage: { 1: 1416.45, 2: 1440.85 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Fiery Warm-Up',
+      effectTemplate:
+        'Training speed +{speed}% when working in an Armigo Hut.',
+      effectValues: {
+        speed: { 20: 43.11, 21: 43.8 },
+      },
+      ascensionEffects: [
+        'Armigo Training Speed +5%',
+        'Armigo Training Speed +10%',
+        'Armigo Training Speed +15%',
+        'Armigo Training Speed +20%',
+        'Armigo Training Speed +30%',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   abuzzinian: [
     {
       name: 'Electric Surge',

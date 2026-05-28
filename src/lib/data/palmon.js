@@ -34,7 +34,7 @@ export const PALMON_SPECIES = [
   { key: 'barkplug', name: 'Barkplug', element: 'electric', rarity: 'ur' },
   { key: 'battereina', name: 'Battereina', element: 'electric', rarity: 'ur' },
   { key: 'blazeal', name: 'Blazeal', element: 'fire', rarity: 'ur' },
-  { key: 'bruiseberry', name: 'Bruiseberry', element: 'earth', rarity: 'sr' },
+  { key: 'bruiseberry', name: 'Bruiseberry', element: 'earth', rarity: 'ssr' },
   { key: 'cerverdant', name: 'Cerverdant', element: 'earth', rarity: 'ssr' },
   { key: 'dolphriend', name: 'Dolphriend', element: 'water', rarity: 'ur' },
   { key: 'emboa', name: 'Emboa', element: 'fire', rarity: 'sr' },
