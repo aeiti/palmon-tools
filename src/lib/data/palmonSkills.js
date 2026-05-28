@@ -118,7 +118,7 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
-  gnashly: [
+  gnashley: [
     {
       name: 'Whiplash',
       effectTemplate:
@@ -353,8 +353,8 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'dolphriend', slot: 0, fromLevel: 10, cost: 1700 },
   { species: 'dolphriend', slot: 1, fromLevel: 10, cost: 2000 },
   { species: 'dolphriend', slot: 2, fromLevel: 7, cost: 4700 },
-  { species: 'gnashly', slot: 0, fromLevel: 10, cost: 3200 },
-  { species: 'gnashly', slot: 1, fromLevel: 10, cost: 3200 },
+  { species: 'gnashley', slot: 0, fromLevel: 10, cost: 3200 },
+  { species: 'gnashley', slot: 1, fromLevel: 10, cost: 3200 },
   { species: 'lucidina', slot: 0, fromLevel: 9, cost: 2000 },
   { species: 'lucidina', slot: 1, fromLevel: 8, cost: 2300 },
   { species: 'lucidina', slot: 2, fromLevel: 5, cost: 3200 },
