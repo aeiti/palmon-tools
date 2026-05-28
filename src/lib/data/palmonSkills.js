@@ -117,6 +117,59 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  blazeal: [
+    {
+      name: 'Hyah!',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 170, 3: 172.35 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Huuuah!',
+      effectTemplate:
+        'Charges up and releases a large fireball, dealing {damage}% damage to all enemies in its path. Deals 1.5x damage to enemies that are already burning.',
+      effectValues: {
+        damage: { 2: 425, 3: 432.4 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Tempered Steel',
+      effectTemplate: 'Gains +{attack}% Attack while in combat.',
+      effectValues: {
+        attack: { 2: 14, 3: 14.35 },
+      },
+      ascensionEffects: [
+        'Attack +2%',
+        'Attack +4%',
+        'Attack +6%',
+        'Attack +8%',
+        'Attack +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   barkplug: [
     {
       name: 'Maelstrom Bolt',
