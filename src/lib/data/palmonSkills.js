@@ -448,6 +448,59 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  salamantis: [
+    {
+      name: 'Fatal Flier',
+      effectTemplate: 'Throws a dart, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 170, 3: 172.35 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Blade Vortex',
+      effectTemplate:
+        'Hurls 5 darts at 5 random enemies, dealing {damage}% damage to each.',
+      effectValues: {
+        damage: { 2: 584.8, 3: 594.9 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Predator Instincts',
+      effectTemplate: 'Allied Earth Palmon deal {damage}% more damage in combat.',
+      effectValues: {
+        damage: { 2: 8, 3: 8.26 },
+      },
+      ascensionEffects: [
+        'Earth Palmon Final Damage +1.5%',
+        'Earth Palmon Final Damage +3%',
+        'Earth Palmon Final Damage +4.5%',
+        'Earth Palmon Final Damage +6%',
+        'Earth Palmon Final Damage +7.5%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   regalion: [
     {
       name: 'Fury of the Sea',
@@ -536,6 +589,9 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'plunderjaw', slot: 0, fromLevel: 15, cost: 3200 },
   { species: 'plunderjaw', slot: 1, fromLevel: 15, cost: 3200 },
   { species: 'plunderjaw', slot: 2, fromLevel: 20, cost: 4700 },
+  { species: 'salamantis', slot: 0, fromLevel: 2, cost: 100 },
+  { species: 'salamantis', slot: 1, fromLevel: 2, cost: 100 },
+  { species: 'salamantis', slot: 2, fromLevel: 2, cost: 100 },
   { species: 'regalion', slot: 0, fromLevel: 10, cost: 800 },
   { species: 'regalion', slot: 1, fromLevel: 10, cost: 2300 },
 ];

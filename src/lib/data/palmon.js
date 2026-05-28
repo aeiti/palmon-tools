@@ -58,6 +58,7 @@ export const PALMON_SPECIES = [
   { key: 'plunderjaw', name: 'Plunderjaw', element: 'water', rarity: 'ur', mythical: true },
   { key: 'regalion', name: 'Regalion', element: 'water', rarity: 'ur' },
   { key: 'rootwarden', name: 'Rootwarden', element: 'earth', rarity: 'ur', mythical: true },
+  { key: 'salamantis', name: 'Salamantis', element: 'earth', rarity: 'ur' },
   { key: 'snowkami', name: 'Snowkami', element: 'water', rarity: 'ssr' },
   { key: 'spinchilla', name: 'Spinchilla', element: 'earth', rarity: 'sr' },
   { key: 'squeezel', name: 'Squeezel', element: 'water', rarity: 'ssr' },
