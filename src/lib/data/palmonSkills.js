@@ -122,7 +122,7 @@ export const PALMON_SKILLS = {
       name: 'Hyah!',
       effectTemplate: 'Deals {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 170, 3: 172.35 },
+        damage: { 1: 170, 2: 172.35 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -137,7 +137,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Charges up and releases a large fireball, dealing {damage}% damage to all enemies in its path. Deals 1.5x damage to enemies that are already burning.',
       effectValues: {
-        damage: { 2: 425, 3: 432.4 },
+        damage: { 1: 425, 2: 432.4 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -151,7 +151,7 @@ export const PALMON_SKILLS = {
       name: 'Tempered Steel',
       effectTemplate: 'Gains +{attack}% Attack while in combat.',
       effectValues: {
-        attack: { 2: 14, 3: 14.35 },
+        attack: { 1: 14, 2: 14.35 },
       },
       ascensionEffects: [
         'Attack +2%',
