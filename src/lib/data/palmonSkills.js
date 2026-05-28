@@ -1647,7 +1647,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Bites a single enemy multiple times, dealing a total of {damage}% damage.',
       effectValues: {
-        damage: { 4: 200, 5: 202.06 },
+        damage: { 1: 200, 2: 202.06 },
       },
       ascensionEffects: [
         'Damage +20%',
@@ -1662,7 +1662,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Snowkami unleashes the wrath of winter, dealing {damage}% damage to a single enemy. Has a 70% chance to Freeze the target for 2.5s.',
       effectValues: {
-        damage: { 4: 1416.45, 5: 1440.85 },
+        damage: { 1: 1416.45, 2: 1440.85 },
       },
       ascensionEffects: [
         'Damage +20%',
@@ -1676,7 +1676,7 @@ export const PALMON_SKILLS = {
       name: 'Wolfy Will',
       effectTemplate: 'Gains +{attack}% Attack while in combat.',
       effectValues: {
-        attack: { 4: 11, 5: 11.26 },
+        attack: { 1: 11, 2: 11.26 },
       },
       ascensionEffects: [
         'Attack +1.5%',
