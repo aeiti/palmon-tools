@@ -446,7 +446,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Fires a water projectile, dealing {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 136, 3: 137.89 },
+        damage: { 1: 136, 2: 137.89 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -461,7 +461,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Summons a swirling column of water, dealing {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 2580.6, 3: 2625.08 },
+        damage: { 1: 2580.6, 2: 2625.08 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -475,7 +475,7 @@ export const PALMON_SKILLS = {
       name: "Ocean's Favor",
       effectTemplate: 'Deals +{damage}% damage while in battle.',
       effectValues: {
-        damage: { 2: 14, 3: 14.35 },
+        damage: { 1: 14, 2: 14.35 },
       },
       ascensionEffects: [
         'Final Damage +2%',
