@@ -386,6 +386,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  escarffier: [
+    {
+      name: 'Châtiment Piment',
+      effectTemplate:
+        'Throws a (literally) flaming-hot pepper, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 566.1, 3: 573.91 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Bon Appétit',
+      effectTemplate:
+        'Bon appétit mes amis! Tosses a perfectly cooked hamburger to the allied Palmon with the highest Attack, boosting its Attack by {attack}% for 10s.',
+      effectValues: {
+        attack: { 2: 18, 3: 18.35 },
+      },
+      ascensionEffects: [
+        'Attack +4%',
+        'Attack +8%',
+        'Attack +12%',
+        'Attack +16%',
+        '— TBD —',
+      ],
+    },
+    {
+      name: 'Rage Ignition',
+      effectTemplate: 'Rage builds up {rate}% faster.',
+      effectValues: {
+        rate: { 2: 14, 3: 14.35 },
+      },
+      ascensionEffects: [
+        'Rage Build-up +2%',
+        'Rage Build-up +4%',
+        'Rage Build-up +6%',
+        'Rage Build-up +8%',
+        'Rage Build-up +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   glacewing: [
     {
       name: 'Icicle Barrage',
