@@ -827,7 +827,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Channels Qi to condense water flow onto the fist, dealing {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 248.6, 3: 252.04 },
+        damage: { 1: 248.6, 2: 252.04 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -842,7 +842,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Charges in place and releases Qi, dealing {damage}% damage to 3 random enemies. Each time Kungpaw is attacked for the next 5s, there is a 25% chance to ignore the damage.',
       effectValues: {
-        damage: { 2: 965.8, 3: 982.44 },
+        damage: { 1: 965.8, 2: 982.44 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -857,7 +857,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Whether deployed or not, back-row Palmon on your squad take {damage}% less Rage Skill damage for 12s once the battle starts.',
       effectValues: {
-        damage: { 2: 14.42, 3: 14.68 },
+        damage: { 20: 14.42, 21: 14.68 },
       },
       ascensionEffects: [
         'Rage Skill Damage Taken -1.5%',
