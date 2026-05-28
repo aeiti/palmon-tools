@@ -713,6 +713,59 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  hoofrit: [
+    {
+      name: 'Fiery Charge',
+      effectTemplate: 'Rams a single enemy, dealing {damage}% damage.',
+      effectValues: {
+        damage: { 2: 260.1, 3: 263.69 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Blazing Volley',
+      effectTemplate:
+        "Deals {damage}% damage to all back-row enemies. If a target is already burning, they're also stunned for 2s.",
+      effectValues: {
+        damage: { 2: 884, 3: 899.25 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Blazing Crescendo',
+      effectTemplate: 'Gains +{rate}% Crit Rate in combat.',
+      effectValues: {
+        rate: { 2: 14, 3: 14.35 },
+      },
+      ascensionEffects: [
+        'Crit Rate +2%',
+        'Crit Rate +4%',
+        'Crit Rate +6%',
+        'Crit Rate +8%',
+        'Crit Rate +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   limudroid: [
     {
       name: 'Energy Ball',
