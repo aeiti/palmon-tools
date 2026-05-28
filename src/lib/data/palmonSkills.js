@@ -991,7 +991,7 @@ export const PALMON_SKILLS = {
       name: 'Claw',
       effectTemplate: 'Deals {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 147.4, 3: 149.47 },
+        damage: { 1: 147.4, 2: 149.47 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1006,8 +1006,8 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Slams the ground, causing volcanic spikes to hit 3 random enemies for {damage}% damage and burns them, dealing an extra {burn}% damage over 10s.',
       effectValues: {
-        damage: { 2: 583, 3: 593.04 },
-        burn: { 2: 1000, 3: 1027.6 },
+        damage: { 1: 583, 2: 593.04 },
+        burn: { 1: 1000, 2: 1027.6 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1022,8 +1022,8 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Increases Steel output by +{steel}% for all Furnaces in Camp. Allied Fire Palmon take {reduction}% less damage in combat.',
       effectValues: {
-        steel: { 2: 41.04, 3: 44.14 },
-        reduction: { 2: 12.09, 3: 12.35 },
+        steel: { 11: 41.04, 12: 44.14 },
+        reduction: { 11: 12.09, 12: 12.35 },
       },
       ascensionEffects: [
         'Fire Palmon Damage Taken -1.5%',
