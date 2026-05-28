@@ -10,6 +10,62 @@
 // substitutes values at the requested level; missing values render as "TBD".
 
 export const PALMON_SKILLS = {
+  baboom: [
+    {
+      name: 'Stifle',
+      effectTemplate:
+        'Swings a stick at a single enemy, dealing {damage}% damage.',
+      effectValues: {
+        damage: { 6: 115.5, 7: 117.08 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Power Strike',
+      effectTemplate:
+        'Launches a charged strike, dealing {damage}% damage to an enemy in melee range. Has a 100% chance to stun the enemy for 2s.',
+      effectValues: {
+        damage: { 6: 1130.93, 7: 1150.04 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Steel Smarts',
+      effectTemplate:
+        'Increases Lumber output by +{lumber}% for all Table Saws in Camp. Rage builds up {rage}% faster.',
+      effectValues: {
+        lumber: { 6: 25.52, 7: 28.63 },
+        rage: { 6: 15.73, 7: 16.07 },
+      },
+      ascensionEffects: [
+        'Rage Build-up +2%',
+        'Rage Build-up +4%',
+        'Rage Build-up +6%',
+        'Rage Build-up +8%',
+        '— TBD —',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   dolphriend: [
     {
       name: 'Smash',
@@ -406,6 +462,9 @@ export const PALMON_SKILLS = {
 //   - cost: skillfruit amount required for that step
 
 export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
+  { species: 'baboom', slot: 0, fromLevel: 6, cost: 200 },
+  { species: 'baboom', slot: 1, fromLevel: 6, cost: 200 },
+  { species: 'baboom', slot: 2, fromLevel: 6, cost: 800 },
   { species: 'dolphriend', slot: 0, fromLevel: 10, cost: 1700 },
   { species: 'dolphriend', slot: 1, fromLevel: 10, cost: 2000 },
   { species: 'dolphriend', slot: 2, fromLevel: 7, cost: 4700 },
