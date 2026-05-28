@@ -1866,7 +1866,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Deals {damage}% damage to the closest enemy target and all enemies near it.',
       effectValues: {
-        damage: { 4: 93, 5: 93.96 },
+        damage: { 1: 93, 2: 93.96 },
       },
       ascensionEffects: [
         'Damage +20%',
@@ -1881,7 +1881,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Rises up in the air and unleashes a thunderstorm, striking 4 random enemies for {damage}% damage.',
       effectValues: {
-        damage: { 4: 712.5, 5: 724.82 },
+        damage: { 1: 712.5, 2: 724.82 },
       },
       ascensionEffects: [
         'Damage +20%',
@@ -1895,7 +1895,7 @@ export const PALMON_SKILLS = {
       name: 'Ionized',
       effectTemplate: 'Electricity output +{output}% when working a Charging job.',
       effectValues: {
-        output: { 4: 43.11, 5: 43.8 },
+        output: { 20: 43.11, 21: 43.8 },
       },
       ascensionEffects: [
         'Output +5%',
