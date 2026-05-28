@@ -609,7 +609,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Delivers a powerful strike to a nearby target, dealing {damage}% damage.',
       effectValues: {
-        damage: { 2: 160.6, 3: 162.8 },
+        damage: { 1: 160.6, 2: 162.8 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -624,7 +624,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Hits an enemy for {damage}% damage, and takes 20% of the damage meant for allies for the next 8s.',
       effectValues: {
-        damage: { 2: 1850.2, 3: 1882.08 },
+        damage: { 1: 1850.2, 2: 1882.08 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -639,7 +639,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Allied back-row Earth Palmon take {damage}% less damage in combat.',
       effectValues: {
-        damage: { 2: 16, 3: 16.35 },
+        damage: { 1: 16, 2: 16.35 },
       },
       ascensionEffects: [
         'Damage Reduction +2%',
