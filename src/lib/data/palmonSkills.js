@@ -448,6 +448,62 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  magmolin: [
+    {
+      name: 'Claw',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 147.4, 3: 149.47 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Lava Shock',
+      effectTemplate:
+        'Slams the ground, causing volcanic spikes to hit 3 random enemies for {damage}% damage and burns them, dealing an extra {burn}% damage over 10s.',
+      effectValues: {
+        damage: { 2: 583, 3: 593.04 },
+        burn: { 2: 1000, 3: 1027.6 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Tempered Steel',
+      effectTemplate:
+        'Increases Steel output by +{steel}% for all Furnaces in Camp. Allied Fire Palmon take {reduction}% less damage in combat.',
+      effectValues: {
+        steel: { 2: 41.04, 3: 44.14 },
+        reduction: { 2: 12.09, 3: 12.35 },
+      },
+      ascensionEffects: [
+        'Fire Palmon Damage Taken -1.5%',
+        'Fire Palmon Damage Taken -3%',
+        'Fire Palmon Damage Taken -4.5%',
+        'Fire Palmon Damage Taken -6%',
+        'Fire Palmon Damage Taken -7.5%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   ninjump: [
     {
       name: 'Flow Like a River',
@@ -810,6 +866,9 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'lucidina', slot: 0, fromLevel: 9, cost: 2000 },
   { species: 'lucidina', slot: 1, fromLevel: 8, cost: 2300 },
   { species: 'lucidina', slot: 2, fromLevel: 5, cost: 3200 },
+  { species: 'magmolin', slot: 0, fromLevel: 2, cost: 100 },
+  { species: 'magmolin', slot: 1, fromLevel: 2, cost: 100 },
+  { species: 'magmolin', slot: 2, fromLevel: 2, cost: 2000 },
   { species: 'ninjump', slot: 0, fromLevel: 10, cost: 3200 },
   { species: 'ninjump', slot: 1, fromLevel: 6, cost: 5500 },
   { species: 'plunderjaw', slot: 0, fromLevel: 15, cost: 3200 },
