@@ -938,7 +938,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Launches an orb of dream power, dealing {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 9: 250.36, 10: 253.4 },
+        damage: { 11: 250.36, 12: 253.4 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -953,7 +953,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Pulls an enemy into a dream for 3s. When the dream shatters, deals {damage}% damage to that enemy (ignores Evasion and Invincibility).',
       effectValues: {
-        damage: { 8: 3590.25, 9: 3642.26 },
+        damage: { 12: 3590.25, 13: 3642.26 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -967,7 +967,7 @@ export const PALMON_SKILLS = {
       name: 'Dream Shadow',
       effectTemplate: 'Gains +{rate}% Crit Rate while in combat.',
       effectValues: {
-        rate: { 5: 20.83, 6: 21.18 },
+        rate: { 15: 20.83, 16: 21.18 },
       },
       ascensionEffects: [
         'Crit Rate +2%',
