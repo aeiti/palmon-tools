@@ -1101,7 +1101,7 @@ export const PALMON_SKILLS = {
       name: 'Dream Orb',
       effectTemplate: 'Deals {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 4: 250, 5: 252.58 },
+        damage: { 1: 250, 2: 252.58 },
       },
       ascensionEffects: [
         'Damage +20%',
@@ -1116,7 +1116,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Grants a random allied Palmon a {damage}% bonus to damage dealt for 5s.',
       effectValues: {
-        damage: { 4: 15, 5: 15.18 },
+        damage: { 1: 15, 2: 15.18 },
       },
       ascensionEffects: [
         'Damage +2%',
