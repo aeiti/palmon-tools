@@ -1701,7 +1701,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Launches a ghostly fireball, dealing {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 248.6, 3: 252.04 },
+        damage: { 1: 248.6, 2: 252.04 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1716,7 +1716,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Drops a pumpkin lantern from above, dealing {damage}% damage to 3 random enemies.',
       effectValues: {
-        damage: { 2: 930.6, 3: 946.71 },
+        damage: { 1: 930.6, 2: 946.71 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1731,8 +1731,8 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Increases the Attack of all Palmon by {attack} (even when undeployed). Increases Armigo Hut capacity by {capacity}.',
       effectValues: {
-        attack: { 2: 2380, 3: 2442 },
-        capacity: { 2: 4794, 3: 4914 },
+        attack: { 20: 2380, 21: 2442 },
+        capacity: { 20: 4794, 21: 4914 },
       },
       ascensionEffects: [
         'All Palmon Attack +200',
