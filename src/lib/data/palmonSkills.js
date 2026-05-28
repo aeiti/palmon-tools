@@ -1096,6 +1096,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  meowdame: [
+    {
+      name: 'Dream Orb',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 4: 250, 5: 252.58 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Starlight Blessing',
+      effectTemplate:
+        'Grants a random allied Palmon a {damage}% bonus to damage dealt for 5s.',
+      effectValues: {
+        damage: { 4: 15, 5: 15.18 },
+      },
+      ascensionEffects: [
+        'Damage +2%',
+        'Damage +4%',
+        'Damage +6%',
+        'Damage +8%',
+        'Damage +10%',
+      ],
+    },
+    {
+      name: 'Miracle-Maker',
+      effectTemplate:
+        'Meowdame has a penchant for making miracles happen. Increases Gold, Lumber, and Steel rewards by {bonus}% when it defeats a Bullymon or Bullyboss.',
+      effectValues: {
+        bonus: { 15: 51.7, 16: 53.25 },
+      },
+      ascensionEffects: [
+        'Resource Bonus +5%',
+        'Resource Bonus +10%',
+        'Resource Bonus +15%',
+        'Resource Bonus +20%',
+        '— TBD —',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   ninjump: [
     {
       name: 'Flow Like a River',
