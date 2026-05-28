@@ -1266,7 +1266,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Shoots a blue fireball, dealing {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 100, 3: 101.38 },
+        damage: { 1: 100, 2: 101.38 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1281,7 +1281,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Shoots a blue fire tornado, dealing {damage}% damage to all enemies.',
       effectValues: {
-        damage: { 2: 301.32, 3: 306.14 },
+        damage: { 5: 301.32, 6: 306.14 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1295,7 +1295,7 @@ export const PALMON_SKILLS = {
       name: "Nocturne's Focus",
       effectTemplate: 'Damage +{damage}% for Phantom Cyclone.',
       effectValues: {
-        damage: { 2: 11.38, 3: 11.73 },
+        damage: { 5: 11.38, 6: 11.73 },
       },
       ascensionEffects: [
         'Damage +2% for Phantom Cyclone.',
