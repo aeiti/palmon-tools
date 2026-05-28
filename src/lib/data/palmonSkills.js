@@ -1592,7 +1592,7 @@ export const PALMON_SKILLS = {
       name: 'Gnash',
       effectTemplate: 'Bites a nearby enemy, dealing {damage}% damage.',
       effectValues: {
-        damage: { 2: 370, 3: 375.11 },
+        damage: { 1: 370, 2: 375.11 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1607,7 +1607,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Lets out a terrifying roar, dealing {damage}% damage to all enemies and reducing their damage dealt by 30% for 5s.',
       effectValues: {
-        damage: { 2: 828.8, 3: 842.98 },
+        damage: { 1: 828.8, 2: 842.98 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1622,7 +1622,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Allied front-row Palmon take {damage}% less damage while in combat.',
       effectValues: {
-        damage: { 2: 12.5, 3: 12.76 },
+        damage: { 1: 12.5, 2: 12.76 },
       },
       ascensionEffects: [
         'Damage Reduction +1.5%',
