@@ -1484,7 +1484,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Unleashes a fireball from its flaming tail, dealing {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 170, 3: 172.35 },
+        damage: { 1: 170, 2: 172.35 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1499,8 +1499,8 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Shoots 3 to 5 fireballs, each dealing {damage}% damage to an enemy and burns them, dealing an extra {burn}% damage over 10s.',
       effectValues: {
-        damage: { 2: 484.33, 3: 492.66 },
-        burn: { 2: 920, 3: 936.6 },
+        damage: { 1: 484.33, 2: 492.66 },
+        burn: { 1: 920, 2: 936.6 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1514,7 +1514,7 @@ export const PALMON_SKILLS = {
       name: 'Spectral Flames',
       effectTemplate: 'Allied Fire Palmon deal {damage}% more damage in combat.',
       effectValues: {
-        damage: { 2: 8.52, 3: 8.78 },
+        damage: { 3: 8.52, 4: 8.78 },
       },
       ascensionEffects: [
         'Fire Palmon Final Damage +1.5%',
