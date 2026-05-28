@@ -29,6 +29,7 @@ export const RARITIES = [
 export const PALMON_SPECIES = [
   { key: 'abuzzinian', name: 'Abuzzinian', element: 'electric', rarity: 'ur' },
   { key: 'auktyke', name: 'Auktyke', element: 'water', rarity: 'sr' },
+  { key: 'axollium', name: 'Axollium', element: 'earth', rarity: 'ssr' },
   { key: 'baboom', name: 'Baboom', element: 'earth', rarity: 'ur' },
   { key: 'barkplug', name: 'Barkplug', element: 'electric', rarity: 'ur' },
   { key: 'battereina', name: 'Battereina', element: 'electric', rarity: 'ur' },

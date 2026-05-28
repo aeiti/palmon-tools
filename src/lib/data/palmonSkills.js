@@ -10,6 +10,61 @@
 // substitutes values at the requested level; missing values render as "TBD".
 
 export const PALMON_SKILLS = {
+  axollium: [
+    {
+      name: 'Lacerating Leek',
+      effectTemplate:
+        'Flings a razor-sharp leaf, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 1: 200, 2: 202.06 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Shallot Slam',
+      effectTemplate:
+        'Strikes the ground with its tail, creating a fissure that deals {damage}% damage to all enemies in its path. Targets lose 20% Accuracy for 3s.',
+      effectValues: {
+        damage: { 1: 618.45, 2: 629.09 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Dream Rush',
+      effectTemplate:
+        'Dreamium output speed +{speed}% when working in a Dreamium Siever.',
+      effectValues: {
+        speed: { 25: 46.56, 26: 47.25 },
+      },
+      ascensionEffects: [
+        'Dreamium | Output Speed +5%',
+        'Dreamium | Output Speed +10%',
+        'Dreamium | Output Speed +15%',
+        'Dreamium | Output Speed +20%',
+        'Dreamium | Output Speed +30%',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   abuzzinian: [
     {
       name: 'Electric Surge',
