@@ -1641,6 +1641,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  snowkami: [
+    {
+      name: 'Frostclaw',
+      effectTemplate:
+        'Bites a single enemy multiple times, dealing a total of {damage}% damage.',
+      effectValues: {
+        damage: { 4: 200, 5: 202.06 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Glacial Howl',
+      effectTemplate:
+        'Snowkami unleashes the wrath of winter, dealing {damage}% damage to a single enemy. Has a 70% chance to Freeze the target for 2.5s.',
+      effectValues: {
+        damage: { 4: 1416.45, 5: 1440.85 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Wolfy Will',
+      effectTemplate: 'Gains +{attack}% Attack while in combat.',
+      effectValues: {
+        attack: { 4: 11, 5: 11.26 },
+      },
+      ascensionEffects: [
+        'Attack +1.5%',
+        'Attack +3%',
+        'Attack +4.5%',
+        'Attack +6%',
+        'Attack +7.5%',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   spookaboo: [
     {
       name: 'Candleflame Orb',
