@@ -338,6 +338,62 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  limudroid: [
+    {
+      name: 'Energy Ball',
+      effectTemplate:
+        'Throws an energy ball at a single enemy, dealing {damage}% damage.',
+      effectValues: {
+        damage: { 2: 176, 3: 178.45 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Ionic Rays',
+      effectTemplate:
+        'Fires three laser eyebeams, dealing {damage}% damage to all enemies.',
+      effectValues: {
+        damage: { 2: 759, 3: 772.07 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Whiz Kid',
+      effectTemplate:
+        "Limudroid's advanced digibrain grants you +{boost}% tech research speed. When researching a tech, reduces final research time by {reduction} min.",
+      effectValues: {
+        boost: { 2: 21.34, 3: 22.2 },
+        reduction: { 2: 64, 3: 65 },
+      },
+      ascensionEffects: [
+        'Time Reduction +5 min',
+        'Time Reduction +10 min',
+        'Time Reduction +15 min',
+        'Time Reduction +30 min',
+        '— TBD —',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   lucidina: [
     {
       name: 'Phantasm',
@@ -746,6 +802,9 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'ghillant', slot: 0, fromLevel: 2, cost: 100 },
   { species: 'ghillant', slot: 1, fromLevel: 2, cost: 100 },
   { species: 'ghillant', slot: 2, fromLevel: 2, cost: 100 },
+  { species: 'limudroid', slot: 0, fromLevel: 2, cost: 100 },
+  { species: 'limudroid', slot: 1, fromLevel: 2, cost: 100 },
+  { species: 'limudroid', slot: 2, fromLevel: 2, cost: 4700 },
   { species: 'gnashley', slot: 0, fromLevel: 10, cost: 3200 },
   { species: 'gnashley', slot: 1, fromLevel: 10, cost: 3200 },
   { species: 'lucidina', slot: 0, fromLevel: 9, cost: 2000 },

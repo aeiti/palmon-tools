@@ -48,6 +48,7 @@ export const PALMON_SPECIES = [
   { key: 'incineraptor', name: 'Incineraptor', element: 'fire', rarity: 'ssr' },
   { key: 'kilohopp', name: 'Kilohopp', element: 'electric', rarity: 'sr' },
   { key: 'lendanear', name: 'Lendanear', element: 'water', rarity: 'sr' },
+  { key: 'limudroid', name: 'Limudroid', element: 'electric', rarity: 'ur' },
   { key: 'lucidina', name: 'Lucidina', element: 'water', rarity: 'ur' },
   { key: 'magmolin', name: 'Magmolin', element: 'fire', rarity: 'ur' },
   { key: 'mantleray', name: 'Mantleray', element: 'electric', rarity: 'ur' },
