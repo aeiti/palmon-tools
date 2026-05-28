@@ -170,6 +170,58 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  cerverdant: [
+    {
+      name: 'Force of Nature',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 4: 200, 5: 202.06 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Verdant Grace',
+      effectTemplate: 'Allied Earth Palmon gain +{attack}% Attack for 5s.',
+      effectValues: {
+        attack: { 4: 18, 5: 18.35 },
+      },
+      ascensionEffects: [
+        'Earth Palmon Final Damage +2%',
+        'Earth Palmon Final Damage +4%',
+        'Earth Palmon Final Damage +6%',
+        'Earth Palmon Final Damage +8%',
+        'Earth Palmon Final Damage +10%',
+      ],
+    },
+    {
+      name: 'Verdant Bounty',
+      effectTemplate: 'Wood output +{output}% when working a Logging job.',
+      effectValues: {
+        output: { 4: 46.56, 5: 47.25 },
+      },
+      ascensionEffects: [
+        'Output +5%',
+        'Output +10%',
+        'Output +15%',
+        'Output +20%',
+        'Output +30%',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   barkplug: [
     {
       name: 'Maelstrom Bolt',
