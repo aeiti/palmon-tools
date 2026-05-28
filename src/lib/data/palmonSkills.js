@@ -1972,7 +1972,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Fires a toxic spore, dealing {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 104, 3: 105.45 },
+        damage: { 1: 104, 2: 105.45 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1987,7 +1987,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Fires 6 shrooms at the enemy with the highest Attack, dealing {damage}% total damage and reducing their Attack by 35% for 10s.',
       effectValues: {
-        damage: { 2: 720.2, 3: 732.63 },
+        damage: { 1: 720.2, 2: 732.63 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -2001,7 +2001,7 @@ export const PALMON_SKILLS = {
       name: 'Dragonesque',
       effectTemplate: 'Deals +{damage}% damage while in battle.',
       effectValues: {
-        damage: { 2: 12, 3: 12.35 },
+        damage: { 1: 12, 2: 12.35 },
       },
       ascensionEffects: [
         'Final Damage +2%',

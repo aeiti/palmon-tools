@@ -112,7 +112,7 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'thunderclawd', slot: 0, fromLevel: 1, cost: 100 },
   { species: 'thunderclawd', slot: 1, fromLevel: 1, cost: 100 },
   { species: 'thunderclawd', slot: 2, fromLevel: 20, cost: 4700 },
-  { species: 'woozard', slot: 0, fromLevel: 2, cost: 100 },
-  { species: 'woozard', slot: 1, fromLevel: 2, cost: 100 },
-  { species: 'woozard', slot: 2, fromLevel: 2, cost: 100 },
+  { species: 'woozard', slot: 0, fromLevel: 1, cost: 100 },
+  { species: 'woozard', slot: 1, fromLevel: 1, cost: 100 },
+  { species: 'woozard', slot: 2, fromLevel: 1, cost: 100 },
 ];
