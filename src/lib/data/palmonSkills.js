@@ -282,7 +282,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Swings a stick at a single enemy, dealing {damage}% damage.',
       effectValues: {
-        damage: { 6: 115.5, 7: 117.08 },
+        damage: { 2: 115.5, 3: 117.08 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -297,7 +297,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Launches a charged strike, dealing {damage}% damage to an enemy in melee range. Has a 100% chance to stun the enemy for 2s.',
       effectValues: {
-        damage: { 6: 1130.93, 7: 1150.04 },
+        damage: { 2: 1130.93, 3: 1150.04 },
       },
       ascensionEffects: [
         'Damage +30%',
