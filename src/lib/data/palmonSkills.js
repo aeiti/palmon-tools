@@ -1757,7 +1757,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'A long-ranged attack that deals {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 90.1, 3: 91.35 },
+        damage: { 1: 90.1, 2: 91.35 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1772,7 +1772,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Surveilynx teleports to 3 nearby spots, dealing {damage}% damage to all enemies in a fan.',
       effectValues: {
-        damage: { 2: 673.2, 3: 684.82 },
+        damage: { 1: 673.2, 2: 684.82 },
       },
       ascensionEffects: [
         'Damage +30%',
