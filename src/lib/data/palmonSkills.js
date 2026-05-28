@@ -175,7 +175,7 @@ export const PALMON_SKILLS = {
       name: 'Force of Nature',
       effectTemplate: 'Deals {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 4: 200, 5: 202.06 },
+        damage: { 1: 200, 2: 202.06 },
       },
       ascensionEffects: [
         'Damage +20%',
@@ -189,7 +189,7 @@ export const PALMON_SKILLS = {
       name: 'Verdant Grace',
       effectTemplate: 'Allied Earth Palmon gain +{attack}% Attack for 5s.',
       effectValues: {
-        attack: { 4: 18, 5: 18.35 },
+        attack: { 1: 18, 2: 18.35 },
       },
       ascensionEffects: [
         'Earth Palmon Final Damage +2%',
@@ -203,7 +203,7 @@ export const PALMON_SKILLS = {
       name: 'Verdant Bounty',
       effectTemplate: 'Wood output +{output}% when working a Logging job.',
       effectValues: {
-        output: { 4: 46.56, 5: 47.25 },
+        output: { 25: 46.56, 26: 47.25 },
       },
       ascensionEffects: [
         'Output +5%',
