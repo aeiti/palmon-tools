@@ -62,6 +62,7 @@ export const PALMON_SPECIES = [
   { key: 'salamantis', name: 'Salamantis', element: 'earth', rarity: 'ur' },
   { key: 'snowkami', name: 'Snowkami', element: 'water', rarity: 'ssr' },
   { key: 'spinchilla', name: 'Spinchilla', element: 'earth', rarity: 'sr' },
+  { key: 'spookaboo', name: 'Spookaboo', element: 'fire', rarity: 'ur' },
   { key: 'squeezel', name: 'Squeezel', element: 'water', rarity: 'ssr' },
   { key: 'statchew', name: 'Statchew', element: 'earth', rarity: 'ur' },
   { key: 'surveilynx', name: 'Surveilynx', element: 'earth', rarity: 'ur' },

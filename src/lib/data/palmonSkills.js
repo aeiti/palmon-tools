@@ -829,6 +829,62 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  spookaboo: [
+    {
+      name: 'Candleflame Orb',
+      effectTemplate:
+        'Launches a ghostly fireball, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 2: 248.6, 3: 252.04 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: "Jack-o'-Smash",
+      effectTemplate:
+        'Drops a pumpkin lantern from above, dealing {damage}% damage to 3 random enemies.',
+      effectValues: {
+        damage: { 2: 930.6, 3: 946.71 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Ghostly Power',
+      effectTemplate:
+        'Increases the Attack of all Palmon by {attack} (even when undeployed). Increases Armigo Hut capacity by {capacity}.',
+      effectValues: {
+        attack: { 2: 2380, 3: 2442 },
+        capacity: { 2: 4794, 3: 4914 },
+      },
+      ascensionEffects: [
+        'All Palmon Attack +200',
+        'All Palmon Attack +500',
+        'All Palmon Attack +1000',
+        'All Palmon Attack +1800',
+        '— TBD —',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   surveilynx: [
     {
       name: 'Snap Shot',
@@ -939,6 +995,9 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'statchew', slot: 0, fromLevel: 2, cost: 100 },
   { species: 'statchew', slot: 1, fromLevel: 2, cost: 100 },
   { species: 'statchew', slot: 2, fromLevel: 2, cost: 100 },
+  { species: 'spookaboo', slot: 0, fromLevel: 2, cost: 100 },
+  { species: 'spookaboo', slot: 1, fromLevel: 2, cost: 100 },
+  { species: 'spookaboo', slot: 2, fromLevel: 2, cost: 4700 },
   { species: 'surveilynx', slot: 0, fromLevel: 2, cost: 100 },
   { species: 'surveilynx', slot: 1, fromLevel: 2, cost: 100 },
   { species: 'surveilynx', slot: 2, fromLevel: 7, cost: 1000 },
