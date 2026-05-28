@@ -1644,6 +1644,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  thunderclawd: [
+    {
+      name: 'Thunderstrike',
+      effectTemplate:
+        'Deals {damage}% damage to the closest enemy target and all enemies near it.',
+      effectValues: {
+        damage: { 4: 93, 5: 93.96 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Dark Cloud',
+      effectTemplate:
+        'Rises up in the air and unleashes a thunderstorm, striking 4 random enemies for {damage}% damage.',
+      effectValues: {
+        damage: { 4: 712.5, 5: 724.82 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Ionized',
+      effectTemplate: 'Electricity output +{output}% when working a Charging job.',
+      effectValues: {
+        output: { 4: 43.11, 5: 43.8 },
+      },
+      ascensionEffects: [
+        'Output +5%',
+        'Output +10%',
+        'Output +15%',
+        'Output +20%',
+        'Output +30%',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   woozard: [
     {
       name: 'Shroomshot',
