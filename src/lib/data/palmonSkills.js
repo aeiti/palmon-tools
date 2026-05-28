@@ -1919,7 +1919,7 @@ export const PALMON_SKILLS = {
       name: 'Blazing Bite',
       effectTemplate: 'Deals {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 4: 200, 5: 202.06 },
+        damage: { 1: 200, 2: 202.06 },
       },
       ascensionEffects: [
         'Damage +20%',
@@ -1933,7 +1933,7 @@ export const PALMON_SKILLS = {
       name: 'Trial By Fire',
       effectTemplate: 'Deals {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 4: 1416.45, 5: 1440.85 },
+        damage: { 1: 1416.45, 2: 1440.85 },
       },
       ascensionEffects: [
         'Damage +20%',
@@ -1947,7 +1947,7 @@ export const PALMON_SKILLS = {
       name: 'Hot Diggity Dog',
       effectTemplate: 'Steel output +{output}% when working a Smelting job.',
       effectValues: {
-        output: { 4: 46.56, 5: 47.25 },
+        output: { 25: 46.56, 26: 47.25 },
       },
       ascensionEffects: [
         'Output +5%',
