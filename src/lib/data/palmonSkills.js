@@ -555,6 +555,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  statchew: [
+    {
+      name: 'Gnash',
+      effectTemplate: 'Bites a nearby enemy, dealing {damage}% damage.',
+      effectValues: {
+        damage: { 2: 370, 3: 375.11 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Protective Roar',
+      effectTemplate:
+        'Lets out a terrifying roar, dealing {damage}% damage to all enemies and reducing their damage dealt by 30% for 5s.',
+      effectValues: {
+        damage: { 2: 828.8, 3: 842.98 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Sentinel',
+      effectTemplate:
+        'Allied front-row Palmon take {damage}% less damage while in combat.',
+      effectValues: {
+        damage: { 2: 12.5, 3: 12.76 },
+      },
+      ascensionEffects: [
+        'Damage Reduction +1.5%',
+        'Damage Reduction +3%',
+        'Damage Reduction +4.5%',
+        'Damage Reduction +6%',
+        'Damage Reduction +7.5%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
 };
 
 // Raw skillfruit upgrade-cost observations.
@@ -594,4 +648,7 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'salamantis', slot: 2, fromLevel: 2, cost: 100 },
   { species: 'regalion', slot: 0, fromLevel: 10, cost: 800 },
   { species: 'regalion', slot: 1, fromLevel: 10, cost: 2300 },
+  { species: 'statchew', slot: 0, fromLevel: 2, cost: 100 },
+  { species: 'statchew', slot: 1, fromLevel: 2, cost: 100 },
+  { species: 'statchew', slot: 2, fromLevel: 2, cost: 100 },
 ];
