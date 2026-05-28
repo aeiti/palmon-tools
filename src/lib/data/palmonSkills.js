@@ -10,6 +10,60 @@
 // substitutes values at the requested level; missing values render as "TBD".
 
 export const PALMON_SKILLS = {
+  barkplug: [
+    {
+      name: 'Maelstrom Bolt',
+      effectTemplate:
+        'Unleashes a chain of lightning that strikes up to 5 enemy targets, dealing {damage}% damage to each target.',
+      effectValues: {
+        damage: { 3: 47.2, 4: 47.84 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Overcharge',
+      effectTemplate:
+        'Leaps into the air and zaps a single enemy for {damage}% damage.',
+      effectValues: {
+        damage: { 3: 2071.78, 4: 2106.37 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Focused Surge',
+      effectTemplate: 'Gains +{hp}% max HP in combat.',
+      effectValues: {
+        hp: { 2: 14.35, 3: 14.69 },
+      },
+      ascensionEffects: [
+        'HP +2%',
+        'HP +4%',
+        'HP +6%',
+        'HP +8%',
+        'HP +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   baboom: [
     {
       name: 'Stifle',
@@ -680,6 +734,9 @@ export const PALMON_SKILLS = {
 //   - cost: skillfruit amount required for that step
 
 export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
+  { species: 'barkplug', slot: 0, fromLevel: 3, cost: 300 },
+  { species: 'barkplug', slot: 1, fromLevel: 3, cost: 300 },
+  { species: 'barkplug', slot: 2, fromLevel: 2, cost: 200 },
   { species: 'baboom', slot: 0, fromLevel: 6, cost: 200 },
   { species: 'baboom', slot: 1, fromLevel: 6, cost: 200 },
   { species: 'baboom', slot: 2, fromLevel: 6, cost: 800 },
