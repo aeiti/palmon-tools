@@ -1210,7 +1210,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Throws an olive, dealing {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 170, 3: 172.35 },
+        damage: { 1: 170, 2: 172.35 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1225,7 +1225,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Summons an olive wreath overhead. Throws multiple olives at the enemy front row, dealing {damage}% damage to each enemy.',
       effectValues: {
-        damage: { 2: 853.4, 3: 868.13 },
+        damage: { 1: 853.4, 2: 868.13 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -1240,8 +1240,8 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Increases the HP of all Palmon by {hp} (even when undeployed). Increases Hospital capacity by {capacity}.',
       effectValues: {
-        hp: { 2: 377587, 3: 396207 },
-        capacity: { 2: 1259, 3: 1321 },
+        hp: { 10: 377587, 11: 396207 },
+        capacity: { 10: 1259, 11: 1321 },
       },
       ascensionEffects: [
         'All Palmon HP +60000',
