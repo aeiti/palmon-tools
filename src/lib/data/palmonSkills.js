@@ -118,6 +118,61 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  gnashly: [
+    {
+      name: 'Whiplash',
+      effectTemplate:
+        'Swings its mighty tail, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 10: 441.49, 11: 446.56 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Tail Flurry',
+      effectTemplate:
+        'Swings its mighty tail 3 times, dealing a total of {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 10: 4754.76, 11: 4820.88 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: "Ocean's Blessing",
+      effectTemplate:
+        'Allied Water Palmon take {damage}% less damage in combat.',
+      effectValues: {
+        damage: { 30: 20 },
+      },
+      ascensionEffects: [
+        'Allied Water Palmon Damage Taken -1.5%',
+        'Allied Water Palmon Damage Taken -3%',
+        'Allied Water Palmon Damage Taken -4.5%',
+        'Allied Water Palmon Damage Taken -6%',
+        'Allied Water Palmon Damage Taken -7.5%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   lucidina: [
     {
       name: 'Phantasm',
@@ -298,6 +353,8 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'dolphriend', slot: 0, fromLevel: 10, cost: 1700 },
   { species: 'dolphriend', slot: 1, fromLevel: 10, cost: 2000 },
   { species: 'dolphriend', slot: 2, fromLevel: 7, cost: 4700 },
+  { species: 'gnashly', slot: 0, fromLevel: 10, cost: 3200 },
+  { species: 'gnashly', slot: 1, fromLevel: 10, cost: 3200 },
   { species: 'lucidina', slot: 0, fromLevel: 9, cost: 2000 },
   { species: 'lucidina', slot: 1, fromLevel: 8, cost: 2300 },
   { species: 'lucidina', slot: 2, fromLevel: 5, cost: 3200 },
