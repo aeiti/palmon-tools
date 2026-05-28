@@ -11,9 +11,9 @@
 //   - cost: skillfruit amount required for that step
 
 export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
-  { species: 'abuzzinian', slot: 0, fromLevel: 2, cost: 100 },
-  { species: 'abuzzinian', slot: 1, fromLevel: 2, cost: 100 },
-  { species: 'abuzzinian', slot: 2, fromLevel: 2, cost: 100 },
+  { species: 'abuzzinian', slot: 0, fromLevel: 1, cost: 100 },
+  { species: 'abuzzinian', slot: 1, fromLevel: 1, cost: 100 },
+  { species: 'abuzzinian', slot: 2, fromLevel: 1, cost: 100 },
   { species: 'battereina', slot: 0, fromLevel: 2, cost: 100 },
   { species: 'battereina', slot: 1, fromLevel: 2, cost: 100 },
   { species: 'battereina', slot: 2, fromLevel: 2, cost: 100 },

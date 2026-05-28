@@ -15,7 +15,7 @@ export const PALMON_SKILLS = {
       name: 'Electric Surge',
       effectTemplate: 'Deals {damage}% damage to a single enemy.',
       effectValues: {
-        damage: { 2: 147.9, 3: 149.96 },
+        damage: { 1: 147.9, 2: 149.96 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -30,7 +30,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Calls down 2 bolts of lightning, zapping the 2 enemies with the lowest HP for {damage}% damage.',
       effectValues: {
-        damage: { 2: 1489.2, 3: 1514.94 },
+        damage: { 1: 1489.2, 2: 1514.94 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -44,7 +44,7 @@ export const PALMON_SKILLS = {
       name: 'Phantom Step',
       effectTemplate: 'Gains +{evasion}% Evasion in combat.',
       effectValues: {
-        evasion: { 2: 14, 3: 14.35 },
+        evasion: { 1: 14, 2: 14.35 },
       },
       ascensionEffects: [
         'Evasion +2%',
