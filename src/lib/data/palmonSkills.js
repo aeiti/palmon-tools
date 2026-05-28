@@ -1205,6 +1205,61 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  platyputz: [
+    {
+      name: 'I Got Just the Thing',
+      effectTemplate:
+        'Platyputz fishes out an assortment of treasures from its pouch and hucks them at a single enemy, dealing a total of {damage}% damage.',
+      effectValues: {
+        damage: { 5: 208.26, 6: 210.34 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Bubble Shield',
+      effectTemplate:
+        'Grants a shield equal to {shield}% of its max HP to the ally with the lowest HP for 6s.',
+      effectValues: {
+        shield: { 5: 18.54, 6: 18.8 },
+      },
+      ascensionEffects: [
+        'Shield +5%',
+        'Effect Duration → 5s',
+        'Shield +10%',
+        'Effect Duration → 6s',
+        'Shield +15%',
+      ],
+    },
+    {
+      name: 'Blunt Sense',
+      effectTemplate:
+        "Platyputz's dull mind dulls the pain. It takes -{damage}% damage.",
+      effectValues: {
+        damage: { 13: 14.11, 14: 14.37 },
+      },
+      ascensionEffects: [
+        'Damage Reduction +1.5%',
+        'Damage Reduction +3%',
+        'Damage Reduction +4.5%',
+        'Damage Reduction +6%',
+        'Damage Reduction +7.5%',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   plunderjaw: [
     {
       name: 'Hook Slash',
