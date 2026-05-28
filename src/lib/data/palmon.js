@@ -40,6 +40,7 @@ export const PALMON_SPECIES = [
   { key: 'escarffier', name: 'Escarffier', element: 'fire', rarity: 'ur' },
   { key: 'fingenue', name: 'Fingenue', element: 'water', rarity: 'ur' },
   { key: 'flouffant', name: 'Flouffant', element: 'earth', rarity: 'sr' },
+  { key: 'fulgairy', name: 'Fulgairy', element: 'electric', rarity: 'ur' },
   { key: 'ghillant', name: 'Ghillant', element: 'earth', rarity: 'ur' },
   { key: 'glacewing', name: 'Glacewing', element: 'water', rarity: 'ur', mythical: true },
   { key: 'gnashley', name: 'Gnashley', element: 'water', rarity: 'ur' },

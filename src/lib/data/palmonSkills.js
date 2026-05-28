@@ -494,6 +494,61 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  fulgairy: [
+    {
+      name: 'Thundercrack',
+      effectTemplate:
+        'Flings a lightning bolt at a single enemy, dealing {damage}% damage.',
+      effectValues: {
+        damage: { 2: 170, 3: 172.35 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Countervolt',
+      effectTemplate:
+        'Fills its body with electricity, gaining a Counterattack Shield that deals {damage}% damage to attackers. Triggers up to 5 times.',
+      effectValues: {
+        damage: { 2: 469.2, 3: 477.25 },
+      },
+      ascensionEffects: [
+        'Counterattack Damage +30%',
+        'Counterattack Damage +70%',
+        'Counterattack Damage +120%',
+        'Counterattack Damage +185%',
+        'Counterattack Damage +270%',
+      ],
+    },
+    {
+      name: 'Thunderous Boon',
+      effectTemplate:
+        'Allied Electric Palmon take {damage}% less damage in combat.',
+      effectValues: {
+        damage: { 2: 8, 3: 8.26 },
+      },
+      ascensionEffects: [
+        'Damage Reduction +1.5%',
+        'Damage Reduction +3%',
+        'Damage Reduction +4.5%',
+        'Damage Reduction +6%',
+        'Damage Reduction +7.5%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   glacewing: [
     {
       name: 'Icicle Barrage',
