@@ -64,6 +64,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  lucidina: [
+    {
+      name: 'Phantasm',
+      effectTemplate:
+        'Launches an orb of dream power, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 9: 250.36, 10: 253.4 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Torment',
+      effectTemplate:
+        'Pulls an enemy into a dream for 3s. When the dream shatters, deals {damage}% damage to that enemy (ignores Evasion and Invincibility).',
+      effectValues: {
+        damage: { 8: 3590.25, 9: 3642.26 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Dream Shadow',
+      effectTemplate: 'Gains +{rate}% Crit Rate while in combat.',
+      effectValues: {
+        rate: { 5: 20.83, 6: 21.18 },
+      },
+      ascensionEffects: [
+        'Crit Rate +2%',
+        'Crit Rate +4%',
+        'Crit Rate +6%',
+        'Crit Rate +8%',
+        'Crit Rate +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   ninjump: [
     {
       name: 'Flow Like a River',
@@ -187,6 +241,9 @@ export const PALMON_SKILLS = {
 //   - cost: skillfruit amount required for that step
 
 export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
+  { species: 'lucidina', slot: 0, fromLevel: 9, cost: 2000 },
+  { species: 'lucidina', slot: 1, fromLevel: 8, cost: 2300 },
+  { species: 'lucidina', slot: 2, fromLevel: 5, cost: 3200 },
   { species: 'ninjump', slot: 0, fromLevel: 10, cost: 3200 },
   { species: 'ninjump', slot: 1, fromLevel: 6, cost: 5500 },
   { species: 'regalion', slot: 0, fromLevel: 10, cost: 800 },
