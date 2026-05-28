@@ -504,6 +504,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  mantleray: [
+    {
+      name: 'Lightning Bolt',
+      effectTemplate:
+        'Launches lightning bolts from a distance, dealing {damage}% damage to a random back-row enemy.',
+      effectValues: {
+        damage: { 5: 202.66, 6: 205.3 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Electric Burst',
+      effectTemplate:
+        'Fires 3 electric bombs randomly targeting enemies, each dealing {damage}% damage. (The bombs can target the same enemy).',
+      effectValues: {
+        damage: { 5: 915.9, 6: 930.67 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Stinging Spark',
+      effectTemplate: 'Gains +{rate}% Crit Rate while in combat.',
+      effectValues: {
+        rate: { 4: 15.04, 5: 15.38 },
+      },
+      ascensionEffects: [
+        'Crit Rate +2%',
+        'Crit Rate +4%',
+        'Crit Rate +6%',
+        'Crit Rate +8%',
+        'Crit Rate +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   ninjump: [
     {
       name: 'Flow Like a River',
@@ -869,6 +923,9 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'magmolin', slot: 0, fromLevel: 2, cost: 100 },
   { species: 'magmolin', slot: 1, fromLevel: 2, cost: 100 },
   { species: 'magmolin', slot: 2, fromLevel: 2, cost: 2000 },
+  { species: 'mantleray', slot: 0, fromLevel: 5, cost: 600 },
+  { species: 'mantleray', slot: 1, fromLevel: 5, cost: 600 },
+  { species: 'mantleray', slot: 2, fromLevel: 4, cost: 400 },
   { species: 'ninjump', slot: 0, fromLevel: 10, cost: 3200 },
   { species: 'ninjump', slot: 1, fromLevel: 6, cost: 5500 },
   { species: 'plunderjaw', slot: 0, fromLevel: 15, cost: 3200 },
