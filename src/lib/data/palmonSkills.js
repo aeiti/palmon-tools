@@ -718,7 +718,7 @@ export const PALMON_SKILLS = {
       name: 'Fiery Charge',
       effectTemplate: 'Rams a single enemy, dealing {damage}% damage.',
       effectValues: {
-        damage: { 2: 260.1, 3: 263.69 },
+        damage: { 1: 260.1, 2: 263.69 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -733,7 +733,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         "Deals {damage}% damage to all back-row enemies. If a target is already burning, they're also stunned for 2s.",
       effectValues: {
-        damage: { 2: 884, 3: 899.25 },
+        damage: { 1: 884, 2: 899.25 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -747,7 +747,7 @@ export const PALMON_SKILLS = {
       name: 'Blazing Crescendo',
       effectTemplate: 'Gains +{rate}% Crit Rate in combat.',
       effectValues: {
-        rate: { 2: 14, 3: 14.35 },
+        rate: { 1: 14, 2: 14.35 },
       },
       ascensionEffects: [
         'Crit Rate +2%',
