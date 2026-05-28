@@ -1807,6 +1807,59 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  terrastudo: [
+    {
+      name: 'Headbutt',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 4: 200, 5: 202.06 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Tectonic Spin',
+      effectTemplate:
+        'Turns into a rapidly-spinning pinball of death, dealing {damage}% damage to all nearby enemy targets.',
+      effectValues: {
+        damage: { 4: 481.65, 5: 489.92 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Drill Shell',
+      effectTemplate: 'Ore output +{output}% when working a Mining job.',
+      effectValues: {
+        output: { 4: 46.56, 5: 47.25 },
+      },
+      ascensionEffects: [
+        'Output +5%',
+        'Output +10%',
+        'Output +15%',
+        'Output +20%',
+        'Output +30%',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   thunderclawd: [
     {
       name: 'Thunderstrike',

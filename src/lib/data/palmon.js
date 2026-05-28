@@ -72,7 +72,7 @@ export const PALMON_SPECIES = [
   { key: 'squeezel', name: 'Squeezel', element: 'water', rarity: 'ssr' },
   { key: 'statchew', name: 'Statchew', element: 'earth', rarity: 'ur' },
   { key: 'surveilynx', name: 'Surveilynx', element: 'earth', rarity: 'ur' },
-  { key: 'terrastudo', name: 'Terrastudo', element: 'earth', rarity: 'ur' },
+  { key: 'terrastudo', name: 'Terrastudo', element: 'earth', rarity: 'ssr' },
   { key: 'thunderclawd', name: 'Thunderclawd', element: 'electric', rarity: 'ssr' },
   { key: 'vulcanid', name: 'Vulcanid', element: 'fire', rarity: 'sr' },
   { key: 'woozard', name: 'Woozard', element: 'earth', rarity: 'ur' },
