@@ -882,7 +882,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Throws an energy ball at a single enemy, dealing {damage}% damage.',
       effectValues: {
-        damage: { 2: 176, 3: 178.45 },
+        damage: { 1: 176, 2: 178.45 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -897,7 +897,7 @@ export const PALMON_SKILLS = {
       effectTemplate:
         'Fires three laser eyebeams, dealing {damage}% damage to all enemies.',
       effectValues: {
-        damage: { 2: 759, 3: 772.07 },
+        damage: { 1: 759, 2: 772.07 },
       },
       ascensionEffects: [
         'Damage +30%',
@@ -912,8 +912,8 @@ export const PALMON_SKILLS = {
       effectTemplate:
         "Limudroid's advanced digibrain grants you +{boost}% tech research speed. When researching a tech, reduces final research time by {reduction} min.",
       effectValues: {
-        boost: { 2: 21.34, 3: 22.2 },
-        reduction: { 2: 64, 3: 65 },
+        boost: { 20: 21.34, 21: 22.2 },
+        reduction: { 20: 64, 21: 65 },
       },
       ascensionEffects: [
         'Time Reduction +5 min',
