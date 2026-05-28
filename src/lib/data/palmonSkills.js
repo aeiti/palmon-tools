@@ -10,6 +10,60 @@
 // substitutes values at the requested level; missing values render as "TBD".
 
 export const PALMON_SKILLS = {
+  dolphriend: [
+    {
+      name: 'Smash',
+      effectTemplate:
+        'Delivers a powerful strike on an enemy target, dealing {damage}% damage.',
+      effectValues: {
+        damage: { 10: 278.91, 11: 282.39 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Rush Wave',
+      effectTemplate:
+        'Smashes violently into an enemy, dealing {damage}% damage, with a 70% chance to stun the enemy for 3s.',
+      effectValues: {
+        damage: { 10: 3508.79, 11: 3560.33 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Tidal Guard',
+      effectTemplate: 'Gains +{hp}% max HP while in combat.',
+      effectValues: {
+        hp: { 7: 26.56, 8: 26.9 },
+      },
+      ascensionEffects: [
+        'HP +2%',
+        'HP +4%',
+        'HP +6%',
+        'HP +8%',
+        'HP +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   glacewing: [
     {
       name: 'Icicle Barrage',
@@ -241,6 +295,9 @@ export const PALMON_SKILLS = {
 //   - cost: skillfruit amount required for that step
 
 export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
+  { species: 'dolphriend', slot: 0, fromLevel: 10, cost: 1700 },
+  { species: 'dolphriend', slot: 1, fromLevel: 10, cost: 2000 },
+  { species: 'dolphriend', slot: 2, fromLevel: 7, cost: 4700 },
   { species: 'lucidina', slot: 0, fromLevel: 9, cost: 2000 },
   { species: 'lucidina', slot: 1, fromLevel: 8, cost: 2300 },
   { species: 'lucidina', slot: 2, fromLevel: 5, cost: 3200 },
