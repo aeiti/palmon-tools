@@ -281,6 +281,62 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  plunderjaw: [
+    {
+      name: 'Hook Slash',
+      effectTemplate:
+        'Swings the pirate hook, dealing {damage}% damage to a single enemy and applying 2 stacks of Rupture Mark.',
+      effectValues: {
+        damage: { 15: 251.57, 16: 254.46 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Devouring Doom',
+      effectTemplate:
+        'Bursts from underground and bites a single enemy, dealing {damage}% damage and applying 3 stacks of Rupture Mark.',
+      effectValues: {
+        damage: { 15: 5346.31, 16: 5420.52 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: "Predator's Edge",
+      effectTemplate:
+        'Deals 10% more damage for each stack of Rupture Mark on the target (stacks up to 10 times). While in combat, increases Rage build-up by {rage}% and Crit Rate by {crit}%.',
+      effectValues: {
+        rage: { 20: 13.28, 21: 13.45 },
+        crit: { 20: 13.28, 21: 13.45 },
+      },
+      ascensionEffects: [
+        'Crit Rate +2%',
+        'Rage Build-up +5%',
+        'Crit Rate +5%',
+        'Rage Build-up +10%',
+        '— TBD —',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   regalion: [
     {
       name: 'Fury of the Sea',
@@ -360,6 +416,9 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'lucidina', slot: 2, fromLevel: 5, cost: 3200 },
   { species: 'ninjump', slot: 0, fromLevel: 10, cost: 3200 },
   { species: 'ninjump', slot: 1, fromLevel: 6, cost: 5500 },
+  { species: 'plunderjaw', slot: 0, fromLevel: 15, cost: 3200 },
+  { species: 'plunderjaw', slot: 1, fromLevel: 15, cost: 3200 },
+  { species: 'plunderjaw', slot: 2, fromLevel: 20, cost: 4700 },
   { species: 'regalion', slot: 0, fromLevel: 10, cost: 800 },
   { species: 'regalion', slot: 1, fromLevel: 10, cost: 2300 },
 ];
