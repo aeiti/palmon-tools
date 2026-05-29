@@ -1030,6 +1030,62 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  hexkit: [
+    {
+      name: 'Arcane Flame',
+      effectTemplate:
+        'Swings its staff to release blue flames, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 30: 584.6 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Infernal Grip',
+      effectTemplate:
+        'Hexkit summons a flame familiar, forming a massive hand that grabs enemies. Deals {damage}% damage to 4 random targets and applies a Searing Mark for 10s: Burn damage taken +50%, damage dealt -10%.',
+      effectValues: {
+        damage: { 30: 3378.1 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Blazing Surge',
+      effectTemplate:
+        'Gains {speed}% normal attack speed and increases allied Fire Palmon Attack by {attack}% while in combat.',
+      effectValues: {
+        speed: { 30: 20 },
+        attack: { 30: 20 },
+      },
+      ascensionEffects: [
+        'Increases normal attack speed by 2% and allied Fire Palmon Attack by 2%',
+        'Increases normal attack speed by 4% and allied Fire Palmon Attack by 4%',
+        'Increases normal attack speed by 6% and allied Fire Palmon Attack by 6%',
+        'Increases normal attack speed by 8% and allied Fire Palmon Attack by 8%',
+        'Increases normal attack speed by 10% and allied Fire Palmon Attack by 10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   hoofrit: [
     {
       name: 'Fiery Charge',

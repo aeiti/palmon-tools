@@ -47,6 +47,7 @@ export const PALMON_SPECIES = [
   { key: 'gnashley', name: 'Gnashley', element: 'water', rarity: 'ur' },
   { key: 'graffitty', name: 'Graffitty', element: 'earth', rarity: 'sr' },
   { key: 'herculeaf', name: 'Herculeaf', element: 'earth', rarity: 'sr' },
+  { key: 'hexkit', name: 'Hexkit', element: 'fire', rarity: 'ur' },
   { key: 'hoofrit', name: 'Hoofrit', element: 'fire', rarity: 'ur' },
   { key: 'incineraptor', name: 'Incineraptor', element: 'fire', rarity: 'ssr' },
   { key: 'kilohopp', name: 'Kilohopp', element: 'electric', rarity: 'sr' },
