@@ -79,7 +79,7 @@ export const PALMON_SPECIES = [
   { key: 'voltbolt', name: 'Voltbolt', element: 'electric', rarity: 'ssr' },
   { key: 'vulcanid', name: 'Vulcanid', element: 'fire', rarity: 'ssr' },
   { key: 'woozard', name: 'Woozard', element: 'earth', rarity: 'ur' },
-  { key: 'wyvierno', name: 'Wyvierno', element: 'electric', rarity: 'sr' },
+  { key: 'wyvierno', name: 'Wyvierno', element: 'fire', rarity: 'ssr' },
 ];
 
 export const PALMON_SPECIES_BY_KEY = PALMON_SPECIES.reduce((acc, s) => {

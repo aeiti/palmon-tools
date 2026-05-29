@@ -2399,5 +2399,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  wyvierno: [
+    {
+      name: 'Fireball',
+      effectTemplate:
+        'Shoots a fireball at a single enemy, dealing {damage}% damage.',
+      effectValues: {
+        damage: { 1: 170, 2: 171.76 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Scorching Sweep',
+      effectTemplate:
+        'Deals {damage}% damage to all enemies in a fan and burns them, dealing 40% damage per second for 4s.',
+      effectValues: {
+        damage: { 1: 433.5, 2: 441 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Burn Damage +100%',
+        'Damage +50%',
+        'Burned Duration → 7s',
+        '— TBD —',
+      ],
+    },
+    {
+      name: 'Fiery Heart',
+      effectTemplate:
+        'Temperite output speed +{speed}% when working in an Alchemy Lab.',
+      effectValues: {
+        speed: { 14: 33.97, 15: 34.66 },
+      },
+      ascensionEffects: [
+        'Temperite Output Speed +5%',
+        'Temperite Output Speed +10%',
+        'Temperite Output Speed +15%',
+        'Temperite Output Speed +20%',
+        'Temperite Output Speed +30%',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
 };
 
