@@ -10,6 +10,58 @@
 // substitutes values at the requested level; missing values render as "TBD".
 
 export const PALMON_SKILLS = {
+  auktyke: [
+    {
+      name: 'Princely Peck',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 1: 80, 2: 80.82 },
+      },
+      ascensionEffects: [
+        'Damage +15%',
+        'Damage +35%',
+        'Damage +50%',
+        'Damage +75%',
+        'Damage +100%',
+      ],
+    },
+    {
+      name: 'Geyser Jet',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 1: 224, 2: 227.86 },
+      },
+      ascensionEffects: [
+        'Damage +15%',
+        'Damage +35%',
+        'Damage +50%',
+        'Damage +75%',
+        'Damage +100%',
+      ],
+    },
+    {
+      name: 'Frost Resist',
+      effectTemplate: 'Gains +{hp}% max HP while in combat.',
+      effectValues: {
+        hp: { 1: 5, 2: 5.18 },
+      },
+      ascensionEffects: [
+        'HP +1%',
+        'HP +2%',
+        'HP +3%',
+        'HP +4%',
+        'HP +5%',
+      ],
+    },
+    {
+      name: 'Remarkable',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 5 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   axollium: [
     {
       name: 'Lacerating Leek',

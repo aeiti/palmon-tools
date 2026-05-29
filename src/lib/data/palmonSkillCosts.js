@@ -11,6 +11,9 @@
 //   - cost: skillfruit amount required for that step
 
 export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
+  { species: 'auktyke', slot: 0, fromLevel: 1, cost: 100 },
+  { species: 'auktyke', slot: 1, fromLevel: 1, cost: 100 },
+  { species: 'auktyke', slot: 2, fromLevel: 1, cost: 100 },
   { species: 'axollium', slot: 0, fromLevel: 1, cost: 100 },
   { species: 'axollium', slot: 1, fromLevel: 1, cost: 100 },
   { species: 'axollium', slot: 2, fromLevel: 25, cost: 7000 },
