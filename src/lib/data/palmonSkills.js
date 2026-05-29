@@ -2184,6 +2184,23 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  // TODO(star-tier): Thunderclawd has two captured instances whose displayed
+  // damage at the same skill level disagrees — suggesting the in-game effect
+  // panel shows values that scale with the palmon's star tier in addition to
+  // the skill level. Same instance index shown as `(L1)` here below.
+  //
+  // Slot 0 (Thunderstrike) at skill L1:
+  //   • instance A (power 526,180): 93% → 93.96%  ← currently stored
+  //   • instance B (power 372,820): 79.05% → 79.87%
+  // Slot 1 (Dark Cloud) at skill L1:
+  //   • A: 712.5% → 724.82%  ← currently stored
+  //   • B: 550% → 559.51%
+  // Slot 2 (Ionized) at skill L20:
+  //   • A: 43.11% → 43.8%    ← currently stored
+  //   • B: 38.11% → 38.8%
+  //
+  // Once we have a star-tier-aware data model we should keep both readings.
+  // Same caveat likely applies retroactively to other SSR/UR entries.
   thunderclawd: [
     {
       name: 'Thunderstrike',
