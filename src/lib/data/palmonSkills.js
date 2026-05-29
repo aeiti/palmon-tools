@@ -2880,5 +2880,61 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  zapantis: [
+    {
+      name: 'Storm Scythe',
+      effectTemplate:
+        'Swings its claws, dealing {damage}% damage to front-row enemies.',
+      effectValues: {
+        damage: { 30: 466.2 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Lightning Leap',
+      effectTemplate:
+        'Leaps to the enemy back-row, dealing {damage}% damage to all back-row enemies, with a 70% chance to paralyze them for 3s (preventing them from casting Rage Skills).',
+      effectValues: {
+        damage: { 30: 4373.4 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'High-Voltage Speed',
+      effectTemplate:
+        'Increases Evasion by {evasion}% and reduces damage allied Electric Palmon take by {reduction}% while in combat.',
+      effectValues: {
+        evasion: { 30: 20 },
+        reduction: { 30: 20 },
+      },
+      ascensionEffects: [
+        'Evasion +2%, Damage Reduction +2%',
+        'Evasion +4%, Damage Reduction +4%',
+        'Evasion +6%, Damage Reduction +6%',
+        'Evasion +8%, Damage Reduction +8%',
+        'Evasion +10%, Damage Reduction +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
 };
 
