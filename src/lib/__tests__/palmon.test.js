@@ -18,6 +18,7 @@ import {
   SKILL_SLOTS,
   SQUAD_COUNT,
   STAR_LEVELS,
+  SUB_STAR_LEVELS,
   TRAIT_SLOTS,
 } from '../data/palmon.js';
 
@@ -27,7 +28,7 @@ describe('emptyPalmon', () => {
     expect(p.speciesKey).toBe('abuzzinian');
     expect(p.level).toBe(0);
     expect(p.star).toBe(1);
-    expect(p.subStar).toBe(1);
+    expect(p.subStar).toBe(0);
     expect(p.squad).toBeNull();
     expect(p.equipment).toHaveLength(EQUIPMENT_SLOTS);
     expect(p.skills).toHaveLength(SKILL_SLOTS);
@@ -73,14 +74,43 @@ describe('normalizePalmon', () => {
     expect(negative.level).toBe(0);
   });
 
-  it('clamps star and subStar into [1, STAR_LEVELS]', () => {
-    const out = normalizePalmon({
+  it('clamps star into [1, STAR_LEVELS]', () => {
+    const overshoot = normalizePalmon({
       speciesKey: 'abuzzinian',
       star: 99,
-      subStar: 0,
     });
-    expect(out.star).toBe(STAR_LEVELS);
-    expect(out.subStar).toBe(1);
+    expect(overshoot.star).toBe(STAR_LEVELS);
+
+    const undershoot = normalizePalmon({
+      speciesKey: 'abuzzinian',
+      star: 0,
+    });
+    expect(undershoot.star).toBe(1);
+  });
+
+  it('clamps subStar into [0, SUB_STAR_LEVELS] within a non-max star tier', () => {
+    const overshoot = normalizePalmon({
+      speciesKey: 'abuzzinian',
+      star: 3,
+      subStar: 99,
+    });
+    expect(overshoot.subStar).toBe(SUB_STAR_LEVELS);
+
+    const undershoot = normalizePalmon({
+      speciesKey: 'abuzzinian',
+      star: 3,
+      subStar: -1,
+    });
+    expect(undershoot.subStar).toBe(0);
+  });
+
+  it('pins subStar to 0 when star is at max', () => {
+    const out = normalizePalmon({
+      speciesKey: 'abuzzinian',
+      star: STAR_LEVELS,
+      subStar: 4,
+    });
+    expect(out.subStar).toBe(0);
   });
 
   it('coerces invalid squad to null and clamps to SQUAD_COUNT range', () => {

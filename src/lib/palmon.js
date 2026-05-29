@@ -26,7 +26,7 @@ export function emptyPalmon(speciesKey) {
     nickname: '',
     level: 0,
     star: 1,
-    subStar: 1,
+    subStar: 0,
     squad: null,
     equipment: Array.from({ length: EQUIPMENT_SLOTS }, () => ''),
     skills: Array.from({ length: SKILL_SLOTS }, () => ({ level: 0 })),
@@ -45,6 +45,14 @@ function clampOptionalInt(value, min, max) {
   const n = Number(value);
   if (!Number.isFinite(n) || n <= 0) return 0;
   return Math.min(max, Math.max(min, Math.floor(n)));
+}
+
+// Sub-stars are 0–SUB_STAR_LEVELS within a star tier. At star 5 (max) the
+// sub-star is pinned to 0 — there's no progression past 5-0.
+function clampSubStar(rawStar, rawSubStar) {
+  const star = clampInt(rawStar, 1, STAR_LEVELS);
+  if (star >= STAR_LEVELS) return 0;
+  return clampInt(rawSubStar, 0, SUB_STAR_LEVELS);
 }
 
 function clampSquad(value) {
@@ -77,7 +85,7 @@ export function normalizePalmon(palmon) {
       typeof palmon.nickname === 'string' ? palmon.nickname.trim() : '',
     level: clampOptionalInt(palmon.level, 0, MAX_PALMON_LEVEL),
     star: clampInt(palmon.star, 1, STAR_LEVELS),
-    subStar: clampInt(palmon.subStar, 1, SUB_STAR_LEVELS),
+    subStar: clampSubStar(palmon.star, palmon.subStar),
     squad: clampSquad(palmon.squad),
     equipment: padArray(palmon.equipment, EQUIPMENT_SLOTS, (v) =>
       typeof v === 'string' ? v.trim() : '',
