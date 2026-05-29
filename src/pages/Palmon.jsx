@@ -110,10 +110,11 @@ const STAR_OPTIONS = Array.from({ length: STAR_LEVELS }, (_, i) => ({
   value: String(i + 1),
   label: String(i + 1),
 }));
-const SUB_STAR_OPTIONS = Array.from({ length: SUB_STAR_LEVELS }, (_, i) => ({
-  value: String(i + 1),
-  label: String(i + 1),
+const SUB_STAR_OPTIONS = Array.from({ length: SUB_STAR_LEVELS + 1 }, (_, i) => ({
+  value: String(i),
+  label: String(i),
 }));
+const SUB_STAR_OPTIONS_AT_MAX_STAR = [{ value: '0', label: '0' }];
 function buildSquadOptions(palmon, allPalmons) {
   return [
     { value: '', label: 'None' },
@@ -224,7 +225,12 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
             <SelectField
               label="Star"
               value={String(palmon.star)}
-              onChange={(v) => onChange(palmon.id, { star: Number(v) })}
+              onChange={(v) => {
+                const star = Number(v);
+                const patch = { star };
+                if (star >= STAR_LEVELS) patch.subStar = 0;
+                onChange(palmon.id, patch);
+              }}
               options={STAR_OPTIONS}
               ariaLabel={`${displayName} star`}
             />
@@ -232,7 +238,11 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
               label="Sub-star"
               value={String(palmon.subStar)}
               onChange={(v) => onChange(palmon.id, { subStar: Number(v) })}
-              options={SUB_STAR_OPTIONS}
+              options={
+                palmon.star >= STAR_LEVELS
+                  ? SUB_STAR_OPTIONS_AT_MAX_STAR
+                  : SUB_STAR_OPTIONS
+              }
               ariaLabel={`${displayName} sub-star`}
             />
           </div>
