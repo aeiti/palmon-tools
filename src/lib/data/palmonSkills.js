@@ -1857,6 +1857,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  squeezel: [
+    {
+      name: 'Water Spray',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 1: 200, 2: 202.06 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Aqua Cannon',
+      effectTemplate:
+        'Attacks a single enemy 3 times in a row, dealing a total of {damage}% damage.',
+      effectValues: {
+        damage: { 1: 1416.45, 2: 1440.85 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Water Surge',
+      effectTemplate:
+        'Aqua Cannon Boost: Increases damage by {damage}%.',
+      effectValues: {
+        damage: { 1: 20, 2: 21.36 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   statchew: [
     {
       name: 'Gnash',
