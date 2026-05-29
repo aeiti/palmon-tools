@@ -1959,6 +1959,62 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  rootwarden: [
+    {
+      name: 'Energy Surge',
+      effectTemplate:
+        'Swings the Earthroot Staff, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 30: 584.6 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Rootbind',
+      effectTemplate:
+        'Summons up to 3 vines that entangle 3 random enemies, dealing {damage}% damage to each target, with a 70% chance to inflict Entangle for 3s.',
+      effectValues: {
+        damage: { 30: 2937.8 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Primal Sigil',
+      effectTemplate:
+        'Gains {accuracy}% Accuracy and {finalDamage}% Final Damage while in combat.',
+      effectValues: {
+        accuracy: { 30: 20 },
+        finalDamage: { 30: 20 },
+      },
+      ascensionEffects: [
+        'Accuracy +2%, Final Damage +2%',
+        'Accuracy +4%, Final Damage +4%',
+        'Accuracy +6%, Final Damage +6%',
+        'Accuracy +8%, Final Damage +8%',
+        'Accuracy +10%, Final Damage +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   rotorlotor: [
     {
       name: 'Charged Strike',
