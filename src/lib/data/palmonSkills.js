@@ -2720,6 +2720,61 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  thundertooth: [
+    {
+      name: 'Storm Claws',
+      effectTemplate:
+        'Slashes twice with its claws, dealing a total of {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 30: 629 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Phantom Blitz',
+      effectTemplate:
+        'Unleashes a barrage of 12 strikes against random enemies, each dealing {damage}% damage. Thundertooth is Invincible during this time. Each strike has a 50% chance of targeting the enemy with the highest Attack.',
+      effectValues: {
+        damage: { 30: 815.85 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Charged Bolt',
+      effectTemplate:
+        'Increases normal attack speed by {speed}%, and gains +15% HP while in combat.',
+      effectValues: {
+        speed: { 30: 30 },
+      },
+      ascensionEffects: [
+        'Normal Attack Speed +3%',
+        'Normal Attack Speed +6%',
+        'Normal Attack Speed +9%',
+        'Normal Attack Speed +12%',
+        'Normal Attack Speed +15%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   voltbolt: [
     {
       name: 'Quick Kick',
