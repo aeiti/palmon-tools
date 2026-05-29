@@ -977,6 +977,59 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  graffitty: [
+    {
+      name: 'Paintball',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 1: 80, 2: 80.82 },
+      },
+      ascensionEffects: [
+        'Damage +15%',
+        'Damage +35%',
+        'Damage +50%',
+        'Damage +75%',
+        'Damage +100%',
+      ],
+    },
+    {
+      name: 'Splash of Color',
+      effectTemplate:
+        'A long-ranged attack that deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 1: 320, 2: 325.51 },
+      },
+      ascensionEffects: [
+        'Damage +15%',
+        'Damage +35%',
+        'Damage +50%',
+        'Damage +75%',
+        'Damage +100%',
+      ],
+    },
+    {
+      name: 'Deft Paws',
+      effectTemplate: 'Ore output +{output}% when working a Mining job.',
+      effectValues: {
+        output: { 1: 8, 2: 8.41 },
+      },
+      ascensionEffects: [
+        'Output +3%',
+        'Output +6%',
+        'Output +9%',
+        'Output +12%',
+        'Output +15%',
+      ],
+    },
+    {
+      name: 'Remarkable',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 5 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   hoofrit: [
     {
       name: 'Fiery Charge',
