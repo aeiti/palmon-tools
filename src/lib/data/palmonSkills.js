@@ -546,6 +546,62 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  embergeist: [
+    {
+      name: 'Ember Strike',
+      effectTemplate:
+        'Unleashes a charged strike, dealing {damage}% damage to a single enemy target.',
+      effectValues: {
+        damage: { 30: 629 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Inferno Ward',
+      effectTemplate:
+        'Wraps itself in a Flame Shield that absorbs {absorb}% of incoming damage for 5s. When the shield expires, it explodes, dealing {damage}% damage to all enemies.',
+      effectValues: {
+        absorb: { 30: 50 },
+        damage: { 30: 2405 },
+      },
+      ascensionEffects: [
+        'Shield Explosion Damage +30%',
+        'Shield Damage Absorption +10%',
+        'Shield Explosion Damage +120%',
+        'Shield Damage Absorption +20%',
+        'Shield Explosion Damage +270%',
+      ],
+    },
+    {
+      name: 'Roaring Rage',
+      effectTemplate:
+        'Each time this Palmon takes damage in battle, its Attack increases by {attack}% (stack up to 8 times).',
+      effectValues: {
+        attack: { 30: 5 },
+      },
+      ascensionEffects: [
+        'Attack Bonus Stacks +1',
+        'Attack Bonus Stacks +2',
+        'Attack Bonus Stacks +3',
+        'Attack Bonus Stacks +4',
+        'Attack Bonus Stacks +5',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   emboa: [
     {
       name: 'Springboard Spike',

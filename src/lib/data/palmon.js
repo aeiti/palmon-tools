@@ -37,6 +37,7 @@ export const PALMON_SPECIES = [
   { key: 'bruiseberry', name: 'Bruiseberry', element: 'earth', rarity: 'ssr' },
   { key: 'cerverdant', name: 'Cerverdant', element: 'earth', rarity: 'ssr' },
   { key: 'dolphriend', name: 'Dolphriend', element: 'water', rarity: 'ur' },
+  { key: 'embergeist', name: 'Embergeist', element: 'fire', rarity: 'ur' },
   { key: 'emboa', name: 'Emboa', element: 'fire', rarity: 'sr' },
   { key: 'escarffier', name: 'Escarffier', element: 'fire', rarity: 'ur' },
   { key: 'fingenue', name: 'Fingenue', element: 'water', rarity: 'ur' },
