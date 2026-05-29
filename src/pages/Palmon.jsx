@@ -14,8 +14,6 @@ import {
   PALMON_SPECIES_BY_KEY,
   RARITY_BY_KEY,
   SQUAD_COUNT,
-  STAR_LEVELS,
-  SUB_STAR_LEVELS,
   placeholderEquipmentName,
   placeholderSkillName,
   placeholderTraitName,
@@ -27,6 +25,8 @@ import {
   MythicalBadge,
   RarityBadge,
 } from '../components/palmon/Badges.jsx';
+import StarPicker from '../components/palmon/StarPicker.jsx';
+import SelectField from '../components/ui/SelectField.jsx';
 
 function NumberField({ label, value, max, onChange, ariaLabel }) {
   return (
@@ -50,44 +50,6 @@ function NumberField({ label, value, max, onChange, ariaLabel }) {
   );
 }
 
-function SelectField({
-  label,
-  value,
-  onChange,
-  options,
-  groups,
-  ariaLabel,
-}) {
-  return (
-    <label className="flex flex-col gap-1">
-      <span className="text-[10px] font-medium uppercase tracking-wide text-slate-500">
-        {label}
-      </span>
-      <select
-        value={value === null || value === undefined ? '' : value}
-        onChange={(e) => onChange(e.target.value)}
-        aria-label={ariaLabel || label}
-        className="select-compact"
-      >
-        {options?.map((opt) => (
-          <option key={opt.value} value={opt.value} disabled={opt.disabled}>
-            {opt.label}
-          </option>
-        ))}
-        {groups?.map((group) => (
-          <optgroup key={group.label} label={group.label}>
-            {group.options.map((opt) => (
-              <option key={opt.value} value={opt.value} disabled={opt.disabled}>
-                {opt.label}
-              </option>
-            ))}
-          </optgroup>
-        ))}
-      </select>
-    </label>
-  );
-}
-
 function TextField({ label, value, onChange, placeholder, ariaLabel }) {
   return (
     <label className="flex flex-col gap-1">
@@ -106,15 +68,6 @@ function TextField({ label, value, onChange, placeholder, ariaLabel }) {
   );
 }
 
-const STAR_OPTIONS = Array.from({ length: STAR_LEVELS }, (_, i) => ({
-  value: String(i + 1),
-  label: String(i + 1),
-}));
-const SUB_STAR_OPTIONS = Array.from({ length: SUB_STAR_LEVELS + 1 }, (_, i) => ({
-  value: String(i),
-  label: String(i),
-}));
-const SUB_STAR_OPTIONS_AT_MAX_STAR = [{ value: '0', label: '0' }];
 function buildSquadOptions(palmon, allPalmons) {
   return [
     { value: '', label: 'None' },
@@ -222,28 +175,11 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
               options={squadOptions}
               ariaLabel={`${displayName} squad`}
             />
-            <SelectField
-              label="Star"
-              value={String(palmon.star)}
-              onChange={(v) => {
-                const star = Number(v);
-                const patch = { star };
-                if (star >= STAR_LEVELS) patch.subStar = 0;
-                onChange(palmon.id, patch);
-              }}
-              options={STAR_OPTIONS}
-              ariaLabel={`${displayName} star`}
-            />
-            <SelectField
-              label="Sub-star"
-              value={String(palmon.subStar)}
-              onChange={(v) => onChange(palmon.id, { subStar: Number(v) })}
-              options={
-                palmon.star >= STAR_LEVELS
-                  ? SUB_STAR_OPTIONS_AT_MAX_STAR
-                  : SUB_STAR_OPTIONS
-              }
-              ariaLabel={`${displayName} sub-star`}
+            <StarPicker
+              star={palmon.star}
+              subStar={palmon.subStar}
+              onChange={(patch) => onChange(palmon.id, patch)}
+              displayName={displayName}
             />
           </div>
 
