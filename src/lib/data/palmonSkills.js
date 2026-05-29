@@ -1578,6 +1578,61 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  mammolith: [
+    {
+      name: 'Trunk Slam',
+      effectTemplate:
+        'Swings its mighty trunk, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 30: 629 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Avalanche Charge',
+      effectTemplate:
+        'Charges towards the furthest enemy, dealing {damage}% damage to all enemies in its path and stunning them for 2s.',
+      effectValues: {
+        damage: { 30: 2405 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Runic Hide',
+      effectTemplate:
+        'Increases final damage and damage reduction by {buff}%. Each time Avalanche Charge is cast, gains an additional 10% Final Damage and Damage Reduction. This effect stacks up to 3 times.',
+      effectValues: {
+        buff: { 30: 20 },
+      },
+      ascensionEffects: [
+        'Final Damage and Damage Reduction +1%',
+        'Final Damage and Damage Reduction +2%',
+        'Final Damage and Damage Reduction +3%',
+        'Final Damage and Damage Reduction +4%',
+        'Final Damage and Damage Reduction +5%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   mantleray: [
     {
       name: 'Lightning Bolt',

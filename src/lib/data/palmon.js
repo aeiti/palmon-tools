@@ -57,6 +57,7 @@ export const PALMON_SPECIES = [
   { key: 'limudroid', name: 'Limudroid', element: 'electric', rarity: 'ur' },
   { key: 'lucidina', name: 'Lucidina', element: 'water', rarity: 'ur' },
   { key: 'magmolin', name: 'Magmolin', element: 'fire', rarity: 'ur' },
+  { key: 'mammolith', name: 'Mammolith', element: 'earth', rarity: 'ur' },
   { key: 'mantleray', name: 'Mantleray', element: 'electric', rarity: 'ur' },
   { key: 'maximito', name: 'Maximito', element: 'water', rarity: 'ssr' },
   { key: 'meowdame', name: 'Meowdame', element: 'water', rarity: 'ssr' },
