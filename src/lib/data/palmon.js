@@ -6,7 +6,7 @@
 export const MAX_PALMON_LEVEL = 300;
 export const MAX_SKILL_LEVEL = 30;
 export const STAR_LEVELS = 5;
-export const SUB_STAR_LEVELS = 5;
+export const SUB_STAR_LEVELS = 4;
 export const SQUAD_COUNT = 4;
 export const MAX_PALMON_PER_SQUAD = 7;
 export const SKILL_SLOTS = 4;
