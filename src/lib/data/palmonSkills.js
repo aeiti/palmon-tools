@@ -984,6 +984,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  lendanear: [
+    {
+      name: 'Heart Blitz',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 1: 200, 2: 202.06 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Rejuvenate',
+      effectTemplate:
+        'Grants bonus to 1 random allied Palmon, reducing damage taken by {damage}%.',
+      effectValues: {
+        damage: { 1: 11, 2: 11.26 },
+      },
+      ascensionEffects: [
+        'Damage Reduction +1.5%',
+        'Damage Reduction +3%',
+        'Damage Reduction +4.5%',
+        'Damage Reduction +6%',
+        'Damage Reduction +7.5%',
+      ],
+    },
+    {
+      name: 'Tender Care',
+      effectTemplate:
+        'The kind-hearted Lendanear possesses magical healing powers. Healing speed +{speed}% when working in a Hospital.',
+      effectValues: {
+        speed: { 25: 21.28, 26: 21.63 },
+      },
+      ascensionEffects: [
+        'Armigo Healing Speed +2%',
+        'Armigo Healing Speed +4%',
+        'Armigo Healing Speed +6%',
+        'Armigo Healing Speed +8%',
+        '— TBD —',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   limudroid: [
     {
       name: 'Energy Ball',
