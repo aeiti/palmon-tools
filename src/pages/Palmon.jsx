@@ -27,6 +27,9 @@ import {
 } from '../components/palmon/Badges.jsx';
 import StarPicker from '../components/palmon/StarPicker.jsx';
 import SelectField from '../components/ui/SelectField.jsx';
+import { TRAIT_PICKER_GROUPS } from '../lib/palmonTraits.js';
+
+const TRAIT_NONE_OPTIONS = [{ value: '', label: '— None —' }];
 
 function NumberField({ label, value, max, onChange, ariaLabel }) {
   return (
@@ -226,17 +229,18 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
             </h4>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               {palmon.traits.map((trait, i) => (
-                <TextField
+                <SelectField
                   key={i}
                   label={placeholderTraitName(i)}
                   value={trait}
-                  placeholder="—"
                   onChange={(v) => {
                     const traits = palmon.traits.map((t, idx) =>
                       idx === i ? v : t,
                     );
                     onChange(palmon.id, { traits });
                   }}
+                  options={TRAIT_NONE_OPTIONS}
+                  groups={TRAIT_PICKER_GROUPS}
                   ariaLabel={`${displayName} ${placeholderTraitName(i)}`}
                 />
               ))}
