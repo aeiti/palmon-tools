@@ -1138,6 +1138,59 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  kilohopp: [
+    {
+      name: 'Fluff Static',
+      effectTemplate: 'Deals {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 1: 80, 2: 80.82 },
+      },
+      ascensionEffects: [
+        'Damage +15%',
+        'Damage +35%',
+        'Damage +50%',
+        'Damage +75%',
+        'Damage +100%',
+      ],
+    },
+    {
+      name: 'Power Surge',
+      effectTemplate: 'Deals {damage}% damage to all nearby enemies.',
+      effectValues: {
+        damage: { 1: 240, 2: 244.13 },
+      },
+      ascensionEffects: [
+        'Damage +15%',
+        'Damage +35%',
+        'Damage +50%',
+        'Damage +75%',
+        'Damage +100%',
+      ],
+    },
+    {
+      name: 'Static Fluff',
+      effectTemplate:
+        'Electricity output +{output}% when working a Charging job.',
+      effectValues: {
+        output: { 1: 8, 2: 8.41 },
+      },
+      ascensionEffects: [
+        'Output +3%',
+        'Output +6%',
+        'Output +9%',
+        'Output +12%',
+        'Output +15%',
+      ],
+    },
+    {
+      name: 'Remarkable',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 5 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   kungpaw: [
     {
       name: 'Hydro Punch',
