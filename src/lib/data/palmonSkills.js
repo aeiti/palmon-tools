@@ -1641,6 +1641,60 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  rotorlotor: [
+    {
+      name: 'Charged Strike',
+      effectTemplate:
+        'Launches a lightning bolt, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 1: 170, 2: 171.76 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Thunderstorm',
+      effectTemplate:
+        'Calls down a thunderstorm that deals {damage}% damage to 2 random targets. Has a 20% chance to paralyze targets for 2s.',
+      effectValues: {
+        damage: { 1: 803, 2: 816.91 },
+      },
+      ascensionEffects: [
+        'Damage +20%',
+        'Damage +45%',
+        'Damage +70%',
+        'Damage +100%',
+        'Damage +150%',
+      ],
+    },
+    {
+      name: 'Tailwind Riches',
+      effectTemplate: 'Gold output +{output}% when working in a Shop.',
+      effectValues: {
+        output: { 20: 38.11, 21: 38.8 },
+      },
+      ascensionEffects: [
+        'Output +5%',
+        'Output +10%',
+        'Output +15%',
+        'Output +20%',
+        'Output +30%',
+      ],
+    },
+    {
+      name: 'Sturdy',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   salamantis: [
     {
       name: 'Fatal Flier',
