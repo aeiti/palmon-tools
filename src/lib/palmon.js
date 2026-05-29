@@ -14,6 +14,7 @@ import {
   TRAIT_SLOTS,
   palmonSpeciesName,
 } from './data/palmon.js';
+import { isValidTraitKey } from './palmonTraits.js';
 
 function makeId() {
   return `pm_${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -93,9 +94,10 @@ export function normalizePalmon(palmon) {
     skills: padArray(palmon.skills, SKILL_SLOTS, (v) => ({
       level: clampOptionalInt(v?.level, 0, MAX_SKILL_LEVEL),
     })),
-    traits: padArray(palmon.traits, TRAIT_SLOTS, (v) =>
-      typeof v === 'string' ? v.trim() : '',
-    ),
+    traits: padArray(palmon.traits, TRAIT_SLOTS, (v) => {
+      const s = typeof v === 'string' ? v.trim() : '';
+      return isValidTraitKey(s) ? s : '';
+    }),
   };
 }
 

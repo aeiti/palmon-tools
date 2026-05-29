@@ -140,15 +140,16 @@ describe('normalizePalmon', () => {
     expect(out.skills[0].level).toBe(MAX_SKILL_LEVEL);
   });
 
-  it('trims string equipment and traits', () => {
+  it('trims string equipment, keeps known trait keys, clears unknown ones', () => {
     const out = normalizePalmon({
       speciesKey: 'abuzzinian',
       equipment: ['  axe  '],
-      traits: [123, '  fast  '],
+      traits: [123, '  caffeinated:S  ', 'something-unrecognized'],
     });
     expect(out.equipment[0]).toBe('axe');
     expect(out.traits[0]).toBe('');
-    expect(out.traits[1]).toBe('fast');
+    expect(out.traits[1]).toBe('caffeinated:S');
+    expect(out.traits[2]).toBe('');
   });
 
   it('generates a new id if missing', () => {
