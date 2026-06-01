@@ -15,6 +15,7 @@ Everything you enter is saved to your browser's `localStorage`. Nothing is sent 
   - **Other Inventory** — miscellaneous items.
   - **Resource Inventory** — resource chests and on-hand resources.
   - **Speedup Inventory** — speedups by category (Universal, Construction, Research, Training, Healing) with a target-time checker.
+- **Notes** — per-profile free-form journal entries, categorized (player / event / item / palmon / building / other) with an optional link to a Palmon species or building.
 - **Palmon** — roster of your Palmon: level, stars, squad, equipment, skills, traits.
 - **Squads** — see each squad and the Palmon assigned to it.
 
