@@ -70,13 +70,12 @@ function normalizeIso(value, fallback) {
   return fallback;
 }
 
+// Permissive — accepts any object-y input and fills in defaults. Used at
+// runtime so partial edits (e.g. "I picked a link type but haven't typed
+// a title yet") survive without being dropped to null by updateNote's
+// fallback path.
 export function normalizeNote(raw) {
   if (!raw || typeof raw !== 'object') return null;
-  const title = typeof raw.title === 'string' ? raw.title.trim() : '';
-  const body = typeof raw.body === 'string' ? raw.body : '';
-  // Drop entirely-empty notes — no title, no body. These can pile up if
-  // the user clicks Add and then navigates away.
-  if (!title && !body) return null;
   const category =
     typeof raw.category === 'string' && CATEGORY_KEYS.has(raw.category)
       ? raw.category
@@ -85,8 +84,8 @@ export function normalizeNote(raw) {
   const createdAt = normalizeIso(raw.createdAt, fallbackTs);
   return {
     id: typeof raw.id === 'string' && raw.id ? raw.id : makeId(),
-    title,
-    body,
+    title: typeof raw.title === 'string' ? raw.title.trim() : '',
+    body: typeof raw.body === 'string' ? raw.body : '',
     category,
     link: normalizeLink(raw.link),
     createdAt,
@@ -94,6 +93,12 @@ export function normalizeNote(raw) {
   };
 }
 
+function noteIsEmpty(n) {
+  return !n.title && !n.body && !n.link;
+}
+
+// Load-time pass: drops entirely-empty notes (no title, no body, no
+// link) so unfinished drafts don't pile up across sessions.
 export function normalizeNotes(list) {
   if (!Array.isArray(list)) return [];
   const seen = new Set();
@@ -101,6 +106,7 @@ export function normalizeNotes(list) {
   for (const item of list) {
     const norm = normalizeNote(item);
     if (!norm) continue;
+    if (noteIsEmpty(norm)) continue;
     if (seen.has(norm.id)) norm.id = makeId();
     seen.add(norm.id);
     out.push(norm);
