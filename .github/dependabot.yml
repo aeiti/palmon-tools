@@ -1,0 +1,28 @@
+# Dependabot opens weekly auto-PRs for npm dependency updates and for
+# GitHub Actions versions used in our workflows. Each PR runs through
+# the standard pr-checks workflow (lint + test + build) before it can
+# be merged, so a green PR is safe to land.
+#
+# Two ecosystems:
+#   - npm: production + dev dependencies declared in package.json
+#   - github-actions: action versions referenced in .github/workflows/*
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore"
+      include: "scope"
