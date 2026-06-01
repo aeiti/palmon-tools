@@ -1,6 +1,6 @@
 # Contributing
 
-This repo follows **GitHub Flow**: short-lived branches off `main`, one PR per change, squash-merge.
+This repo follows **GitHub Flow**: short-lived branches off `main`, one PR per change, merged with a true merge commit so per-commit history is preserved on `main`.
 
 ## Branching
 
@@ -29,15 +29,15 @@ Use kebab-case after the prefix: `feat/compact-inputs-everywhere`, `fix/inventor
 - One logical change per commit. If you can describe it as "X and Y," it's probably two commits.
 - Commit when each step works — don't wait until the whole branch is done.
 - Imperative mood, present tense: "Switch ChestInventory inputs to CompactInput", not "Switched" or "Switches".
-- WIP commits within a branch are fine; squash-merge hides them on `main`.
+- Every commit survives into `main` after merge, so keep messages clean and self-contained. Avoid `wip`/`fixup`-style commits on a PR branch — squash or rebase them out before merging.
 
 ## Pull requests
 
 - Open a PR as soon as the branch's stated goal is done.
 - Title: same style as a commit message — short, imperative.
 - Body: what changed and why. Link any related issue.
-- **Squash-merge** to keep `main` linear and readable. One PR = one commit on `main`.
-- Delete the branch after merge.
+- **Merge with a true merge commit** so individual commits stay legible in `main`'s history (`gh pr merge <num> --merge --delete-branch`). Do not squash.
+- Delete the branch after merge (the `--delete-branch` flag above handles it).
 
 ### What can skip a PR?
 
