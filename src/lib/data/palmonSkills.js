@@ -546,6 +546,62 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  embergeist: [
+    {
+      name: 'Ember Strike',
+      effectTemplate:
+        'Unleashes a charged strike, dealing {damage}% damage to a single enemy target.',
+      effectValues: {
+        damage: { 30: 629 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Inferno Ward',
+      effectTemplate:
+        'Wraps itself in a Flame Shield that absorbs {absorb}% of incoming damage for 5s. When the shield expires, it explodes, dealing {damage}% damage to all enemies.',
+      effectValues: {
+        absorb: { 30: 50 },
+        damage: { 30: 2405 },
+      },
+      ascensionEffects: [
+        'Shield Explosion Damage +30%',
+        'Shield Damage Absorption +10%',
+        'Shield Explosion Damage +120%',
+        'Shield Damage Absorption +20%',
+        'Shield Explosion Damage +270%',
+      ],
+    },
+    {
+      name: 'Roaring Rage',
+      effectTemplate:
+        'Each time this Palmon takes damage in battle, its Attack increases by {attack}% (stack up to 8 times).',
+      effectValues: {
+        attack: { 30: 5 },
+      },
+      ascensionEffects: [
+        'Attack Bonus Stacks +1',
+        'Attack Bonus Stacks +2',
+        'Attack Bonus Stacks +3',
+        'Attack Bonus Stacks +4',
+        'Attack Bonus Stacks +5',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   emboa: [
     {
       name: 'Springboard Spike',
@@ -1030,6 +1086,62 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  hexkit: [
+    {
+      name: 'Arcane Flame',
+      effectTemplate:
+        'Swings its staff to release blue flames, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 30: 584.6 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Infernal Grip',
+      effectTemplate:
+        'Hexkit summons a flame familiar, forming a massive hand that grabs enemies. Deals {damage}% damage to 4 random targets and applies a Searing Mark for 10s: Burn damage taken +50%, damage dealt -10%.',
+      effectValues: {
+        damage: { 30: 3378.1 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Blazing Surge',
+      effectTemplate:
+        'Gains {speed}% normal attack speed and increases allied Fire Palmon Attack by {attack}% while in combat.',
+      effectValues: {
+        speed: { 30: 20 },
+        attack: { 30: 20 },
+      },
+      ascensionEffects: [
+        'Increases normal attack speed by 2% and allied Fire Palmon Attack by 2%',
+        'Increases normal attack speed by 4% and allied Fire Palmon Attack by 4%',
+        'Increases normal attack speed by 6% and allied Fire Palmon Attack by 6%',
+        'Increases normal attack speed by 8% and allied Fire Palmon Attack by 8%',
+        'Increases normal attack speed by 10% and allied Fire Palmon Attack by 10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   hoofrit: [
     {
       name: 'Fiery Charge',
@@ -1455,6 +1567,61 @@ export const PALMON_SKILLS = {
         'Fire Palmon Damage Taken -4.5%',
         'Fire Palmon Damage Taken -6%',
         'Fire Palmon Damage Taken -7.5%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
+  mammolith: [
+    {
+      name: 'Trunk Slam',
+      effectTemplate:
+        'Swings its mighty trunk, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 30: 629 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Avalanche Charge',
+      effectTemplate:
+        'Charges towards the furthest enemy, dealing {damage}% damage to all enemies in its path and stunning them for 2s.',
+      effectValues: {
+        damage: { 30: 2405 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Runic Hide',
+      effectTemplate:
+        'Increases final damage and damage reduction by {buff}%. Each time Avalanche Charge is cast, gains an additional 10% Final Damage and Damage Reduction. This effect stacks up to 3 times.',
+      effectValues: {
+        buff: { 30: 20 },
+      },
+      ascensionEffects: [
+        'Final Damage and Damage Reduction +1%',
+        'Final Damage and Damage Reduction +2%',
+        'Final Damage and Damage Reduction +3%',
+        'Final Damage and Damage Reduction +4%',
+        'Final Damage and Damage Reduction +5%',
       ],
     },
     {
@@ -1892,6 +2059,62 @@ export const PALMON_SKILLS = {
         'Crit Rate +5%',
         'Rage Build-up +10%',
         'Crit Rate +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
+  rootwarden: [
+    {
+      name: 'Energy Surge',
+      effectTemplate:
+        'Swings the Earthroot Staff, dealing {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 30: 584.6 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Rootbind',
+      effectTemplate:
+        'Summons up to 3 vines that entangle 3 random enemies, dealing {damage}% damage to each target, with a 70% chance to inflict Entangle for 3s.',
+      effectValues: {
+        damage: { 30: 2937.8 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Primal Sigil',
+      effectTemplate:
+        'Gains {accuracy}% Accuracy and {finalDamage}% Final Damage while in combat.',
+      effectValues: {
+        accuracy: { 30: 20 },
+        finalDamage: { 30: 20 },
+      },
+      ascensionEffects: [
+        'Accuracy +2%, Final Damage +2%',
+        'Accuracy +4%, Final Damage +4%',
+        'Accuracy +6%, Final Damage +6%',
+        'Accuracy +8%, Final Damage +8%',
+        'Accuracy +10%, Final Damage +10%',
       ],
     },
     {
@@ -2552,6 +2775,61 @@ export const PALMON_SKILLS = {
       ascensionEffects: [],
     },
   ],
+  thundertooth: [
+    {
+      name: 'Storm Claws',
+      effectTemplate:
+        'Slashes twice with its claws, dealing a total of {damage}% damage to a single enemy.',
+      effectValues: {
+        damage: { 30: 629 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Phantom Blitz',
+      effectTemplate:
+        'Unleashes a barrage of 12 strikes against random enemies, each dealing {damage}% damage. Thundertooth is Invincible during this time. Each strike has a 50% chance of targeting the enemy with the highest Attack.',
+      effectValues: {
+        damage: { 30: 815.85 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Charged Bolt',
+      effectTemplate:
+        'Increases normal attack speed by {speed}%, and gains +15% HP while in combat.',
+      effectValues: {
+        speed: { 30: 30 },
+      },
+      ascensionEffects: [
+        'Normal Attack Speed +3%',
+        'Normal Attack Speed +6%',
+        'Normal Attack Speed +9%',
+        'Normal Attack Speed +12%',
+        'Normal Attack Speed +15%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
+      },
+      ascensionEffects: [],
+    },
+  ],
   voltbolt: [
     {
       name: 'Quick Kick',
@@ -2764,6 +3042,62 @@ export const PALMON_SKILLS = {
       effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
       effectValues: {
         boost: { 30: 10 },
+      },
+      ascensionEffects: [],
+    },
+  ],
+  zapantis: [
+    {
+      name: 'Storm Scythe',
+      effectTemplate:
+        'Swings its claws, dealing {damage}% damage to front-row enemies.',
+      effectValues: {
+        damage: { 30: 466.2 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'Lightning Leap',
+      effectTemplate:
+        'Leaps to the enemy back-row, dealing {damage}% damage to all back-row enemies, with a 70% chance to paralyze them for 3s (preventing them from casting Rage Skills).',
+      effectValues: {
+        damage: { 30: 4373.4 },
+      },
+      ascensionEffects: [
+        'Damage +30%',
+        'Damage +70%',
+        'Damage +120%',
+        'Damage +185%',
+        'Damage +270%',
+      ],
+    },
+    {
+      name: 'High-Voltage Speed',
+      effectTemplate:
+        'Increases Evasion by {evasion}% and reduces damage allied Electric Palmon take by {reduction}% while in combat.',
+      effectValues: {
+        evasion: { 30: 20 },
+        reduction: { 30: 20 },
+      },
+      ascensionEffects: [
+        'Evasion +2%, Damage Reduction +2%',
+        'Evasion +4%, Damage Reduction +4%',
+        'Evasion +6%, Damage Reduction +6%',
+        'Evasion +8%, Damage Reduction +8%',
+        'Evasion +10%, Damage Reduction +10%',
+      ],
+    },
+    {
+      name: 'Promising',
+      effectTemplate: 'Gains +{boost}% Total Attack, Defense, and HP.',
+      effectValues: {
+        boost: { 30: 20 },
       },
       ascensionEffects: [],
     },
