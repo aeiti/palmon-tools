@@ -1,8 +1,19 @@
+import {
+  formatPageTitle,
+  useDocumentMeta,
+} from '../hooks/useDocumentMeta.js';
+
 const REPO_URL = 'https://github.com/aeiti/palmon-tools';
 const ISSUES_URL = `${REPO_URL}/issues`;
 const BMC_URL = 'https://www.buymeacoffee.com/palmontools';
 
 export default function About() {
+  useDocumentMeta({
+    title: formatPageTitle('About'),
+    description:
+      'About Palmon Tools — a free fan-made set of calculators and trackers for Palmon: Survival. No login, no server: everything is stored locally in your browser.',
+  });
+
   return (
     <article className="flex flex-col gap-6 text-slate-300">
       <header>

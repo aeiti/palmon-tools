@@ -11,10 +11,24 @@ import {
   renderSkillEffect,
   skillEffectIsFullyKnown,
 } from '../lib/palmonSkills.js';
+import {
+  formatPageTitle,
+  useDocumentMeta,
+} from '../hooks/useDocumentMeta.js';
 
 export default function PalmonSpecies() {
   const { speciesKey } = useParams();
   const species = PALMON_SPECIES_BY_KEY[speciesKey];
+
+  // Title and description need to be computed before the early-return
+  // so the hook runs unconditionally regardless of which branch renders.
+  const pageTitle = species
+    ? formatPageTitle(species.name)
+    : formatPageTitle('Palmon not found');
+  const pageDescription = species
+    ? `${species.name} — ${capitalize(species.element)} ${species.rarity.toUpperCase()} Palmon${species.mythical ? ' (mythical)' : ''}. Skills, ascension effects, and Lv 30 values.`
+    : undefined;
+  useDocumentMeta({ title: pageTitle, description: pageDescription });
 
   if (!species) {
     return (
@@ -64,6 +78,10 @@ export default function PalmonSpecies() {
       </section>
     </article>
   );
+}
+
+function capitalize(s) {
+  return s ? s[0].toUpperCase() + s.slice(1) : s;
 }
 
 function SkillCard({ skill }) {

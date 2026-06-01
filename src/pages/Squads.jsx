@@ -141,6 +141,7 @@ export default function Squads() {
     <div className="flex flex-col gap-6">
       <ToolPageHeader
         title="Squads"
+        description={`See each squad and the Palmon assigned to it. Each squad holds up to ${MAX_PALMON_PER_SQUAD} Palmon; there are ${SQUAD_COUNT} squads in total.`}
         subtitle={
           <>
             Each squad holds up to {MAX_PALMON_PER_SQUAD} Palmon. Assign squad
