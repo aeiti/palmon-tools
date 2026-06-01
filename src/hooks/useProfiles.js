@@ -19,6 +19,7 @@ import {
 } from '../lib/other.js';
 import { BUILDINGS, MAX_BUILDING_LEVEL } from '../lib/data/buildings.js';
 import { emptyBuildings, normalizeBuildings } from '../lib/buildings.js';
+import { emptyNote, normalizeNote, normalizeNotes } from '../lib/notes.js';
 import { PALMON_SPECIES_BY_KEY } from '../lib/data/palmon.js';
 import {
   emptyPalmon,
@@ -71,6 +72,7 @@ function makeProfile(name) {
     customOther: emptyCustomOther(),
     buildings: emptyBuildings(),
     palmons: [],
+    notes: [],
   };
 }
 
@@ -145,6 +147,7 @@ function normalize(state) {
       other: normalizeOther(p.other, normalizeCustomOther(p.customOther)),
       buildings,
       palmons,
+      notes: normalizeNotes(p.notes),
     });
   });
   const activeProfileId = profiles.find((p) => p.id === state.activeProfileId)
@@ -519,6 +522,59 @@ export function useProfiles() {
     }));
   }, []);
 
+  const addNote = useCallback(() => {
+    const note = emptyNote();
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId ? p : { ...p, notes: [note, ...p.notes] },
+      ),
+    }));
+    return note.id;
+  }, []);
+
+  const updateNote = useCallback((noteId, patch) => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) => {
+        if (p.id !== s.activeProfileId) return p;
+        const notes = p.notes.map((n) => {
+          if (n.id !== noteId) return n;
+          // Preserve id + createdAt; bump updatedAt on any change.
+          const merged = {
+            ...n,
+            ...patch,
+            id: n.id,
+            createdAt: n.createdAt,
+            updatedAt: new Date().toISOString(),
+          };
+          return normalizeNote(merged) || n;
+        });
+        return { ...p, notes };
+      }),
+    }));
+  }, []);
+
+  const deleteNote = useCallback((noteId) => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId
+          ? p
+          : { ...p, notes: p.notes.filter((n) => n.id !== noteId) },
+      ),
+    }));
+  }, []);
+
+  const resetActiveNotes = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId ? p : { ...p, notes: [] },
+      ),
+    }));
+  }, []);
+
   const replaceAllProfiles = useCallback((nextState) => {
     setState(normalize(nextState));
   }, []);
@@ -561,6 +617,10 @@ export function useProfiles() {
     updatePalmon,
     deletePalmon,
     resetActivePalmons,
+    addNote,
+    updateNote,
+    deleteNote,
+    resetActiveNotes,
     replaceAllProfiles,
   };
 }

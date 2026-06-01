@@ -56,6 +56,15 @@ export const TOOLS = [
     page: lazy(() => import('./pages/Inventory.jsx')),
   },
   {
+    key: 'notes',
+    path: ROUTES.notes,
+    label: 'Notes',
+    description:
+      'Jot down anything: other players, events, items, palmon, buildings — categorized and per-profile.',
+    section: SECTIONS.PROFILE,
+    page: lazy(() => import('./pages/Notes.jsx')),
+  },
+  {
     key: 'palmon',
     path: ROUTES.palmon,
     label: 'Palmon',
