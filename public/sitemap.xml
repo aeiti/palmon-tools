@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Static sitemap listing every non-hidden route in src/tools.js. Update by
+  hand when adding a new top-level tool — the list is small enough that a
+  generator isn't worth the complexity yet.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://aeiti.github.io/palmon-tools/</loc></url>
+  <url><loc>https://aeiti.github.io/palmon-tools/about</loc></url>
+  <url><loc>https://aeiti.github.io/palmon-tools/buildings</loc></url>
+  <url><loc>https://aeiti.github.io/palmon-tools/inventory</loc></url>
+  <url><loc>https://aeiti.github.io/palmon-tools/inventory/other</loc></url>
+  <url><loc>https://aeiti.github.io/palmon-tools/inventory/resources</loc></url>
+  <url><loc>https://aeiti.github.io/palmon-tools/inventory/speedups</loc></url>
+  <url><loc>https://aeiti.github.io/palmon-tools/notes</loc></url>
+  <url><loc>https://aeiti.github.io/palmon-tools/palmon</loc></url>
+  <url><loc>https://aeiti.github.io/palmon-tools/squads</loc></url>
+</urlset>

@@ -1,0 +1,5 @@
+# Palmon Tools is a static, fully public fan-site. Crawl freely.
+User-agent: *
+Allow: /
+
+Sitemap: https://aeiti.github.io/palmon-tools/sitemap.xml
