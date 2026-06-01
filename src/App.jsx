@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout.jsx';
-import PageTracker from './components/layout/PageTracker.jsx';
 import { LEGACY_REDIRECTS, ROUTES } from './routes.js';
 import { TOOLS } from './tools.js';
 
@@ -16,7 +15,6 @@ function RouteSuspenseFallback() {
 export default function App() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <PageTracker />
       <Routes>
         <Route element={<Layout />}>
           {TOOLS.map(({ key, path, index, page: Page }) => {
