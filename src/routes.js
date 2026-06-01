@@ -10,6 +10,7 @@ export const ROUTES = {
   inventoryOther: '/inventory/other',
   inventoryResources: '/inventory/resources',
   inventorySpeedups: '/inventory/speedups',
+  notes: '/notes',
   palmon: '/palmon',
   palmonSpecies: '/palmon/species/:speciesKey',
   squads: '/squads',
