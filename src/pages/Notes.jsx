@@ -6,7 +6,6 @@ import SelectField from '../components/ui/SelectField.jsx';
 import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
 import {
   NOTE_CATEGORIES,
-  NOTE_LINK_TYPES,
   noteLinkLabel,
   noteLinkOptionsFor,
 } from '../lib/notes.js';
@@ -26,10 +25,39 @@ const CATEGORY_FILTER_OPTIONS = [
   ...CATEGORY_OPTIONS,
 ];
 
-const LINK_TYPE_OPTIONS = [
-  { value: '', label: 'None' },
-  ...NOTE_LINK_TYPES.map((t) => ({ value: t.key, label: t.label })),
+const LINK_NONE_OPTION = [{ value: '', label: '— No link —' }];
+
+// One combined dropdown listing every linkable entity, grouped by type.
+// Values are encoded as `<type>:<key>` (e.g. `palmon:glacewing`,
+// `building:camp`) so a single SelectField onChange round-trips through
+// encode/decode helpers below.
+const LINK_GROUPS = [
+  {
+    label: 'Palmon',
+    options: noteLinkOptionsFor('palmon').map((o) => ({
+      value: `palmon:${o.value}`,
+      label: o.label,
+    })),
+  },
+  {
+    label: 'Building',
+    options: noteLinkOptionsFor('building').map((o) => ({
+      value: `building:${o.value}`,
+      label: o.label,
+    })),
+  },
 ];
+
+function encodeLink(link) {
+  return link ? `${link.type}:${link.key}` : '';
+}
+
+function decodeLink(value) {
+  if (!value) return null;
+  const sep = value.indexOf(':');
+  if (sep < 0) return null;
+  return { type: value.slice(0, sep), key: value.slice(sep + 1) };
+}
 
 function formatTimestamp(iso) {
   if (!iso) return '';
@@ -61,32 +89,6 @@ function LinkChip({ link }) {
 }
 
 function NoteCard({ note, expanded, onToggle, onChange, onDelete }) {
-  const linkType = note.link?.type || '';
-  const linkKey = note.link?.key || '';
-  const linkOptions = useMemo(
-    () => noteLinkOptionsFor(linkType),
-    [linkType],
-  );
-
-  function handleLinkTypeChange(nextType) {
-    if (!nextType) {
-      onChange(note.id, { link: null });
-      return;
-    }
-    // Reset target when switching type — old key won't match new domain.
-    const opts = noteLinkOptionsFor(nextType);
-    onChange(note.id, {
-      link: { type: nextType, key: opts[0]?.value || '' },
-    });
-  }
-
-  function handleLinkKeyChange(nextKey) {
-    if (!linkType) return;
-    onChange(note.id, {
-      link: nextKey ? { type: linkType, key: nextKey } : null,
-    });
-  }
-
   const headerTitle = note.title || 'Untitled note';
   const snippet = note.body.split('\n')[0].slice(0, 140);
 
@@ -130,7 +132,7 @@ function NoteCard({ note, expanded, onToggle, onChange, onDelete }) {
             />
           </label>
 
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <SelectField
               label="Category"
               value={note.category}
@@ -138,19 +140,12 @@ function NoteCard({ note, expanded, onToggle, onChange, onDelete }) {
               options={CATEGORY_OPTIONS}
             />
             <SelectField
-              label="Link to"
-              value={linkType}
-              onChange={handleLinkTypeChange}
-              options={LINK_TYPE_OPTIONS}
+              label="Link"
+              value={encodeLink(note.link)}
+              onChange={(v) => onChange(note.id, { link: decodeLink(v) })}
+              options={LINK_NONE_OPTION}
+              groups={LINK_GROUPS}
             />
-            {linkType && (
-              <SelectField
-                label={linkType === 'palmon' ? 'Palmon' : 'Building'}
-                value={linkKey}
-                onChange={handleLinkKeyChange}
-                options={linkOptions}
-              />
-            )}
           </div>
 
           <label className="flex flex-col gap-1">
