@@ -15,7 +15,7 @@ export default function OnHandResources({ onHand, onChange }) {
           <StepperInput
             value={onHand?.[r.key] ?? 0}
             onChange={(value) => onChange(r.key, value)}
-            className="h-8 w-32"
+            className="h-8 w-full min-w-[6rem]"
             ariaLabel={`On-hand ${r.label}`}
           />
         </label>
