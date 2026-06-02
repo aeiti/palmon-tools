@@ -78,9 +78,13 @@ Every push to `main` triggers `.github/workflows/release.yml`, which:
 
 Each merge to `main` is therefore a release — bundle changes accordingly. There is no separate "deploy" workflow; everything happens in `release.yml`.
 
+## Changelog
+
+User-facing changes are summarized in [`CHANGELOG.md`](CHANGELOG.md). Full per-release notes (auto-generated on every push to `main`) are on the [GitHub Releases page](https://github.com/aeiti/palmon-tools/releases).
+
 ## Contributing
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for branching, commit, and PR conventions. Short version: short-lived `feat/` / `fix/` / `refactor/` / `chore/` / `docs/` branches off `main`, one PR per change, squash-merge.
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for branching, commit, and PR conventions. Short version: short-lived `feat/` / `fix/` / `refactor/` / `chore/` / `docs/` branches off `main`, one PR per change, merged with a true merge commit so per-commit history is preserved.
 
 Bug reports and feature ideas: open an issue at <https://github.com/aeiti/palmon-tools/issues>.
 
