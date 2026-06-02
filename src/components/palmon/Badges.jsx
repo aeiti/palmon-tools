@@ -16,6 +16,9 @@ const RARITY_BADGE_CLASS = {
 const MYTHICAL_BADGE_CLASS =
   'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-500/30';
 
+const EVOLVED_BADGE_CLASS =
+  'bg-rose-500/15 text-rose-300 ring-rose-500/30';
+
 export function ElementBadge({ element }) {
   const meta = ELEMENT_BY_KEY[element];
   if (!meta) return null;
@@ -32,4 +35,9 @@ export function RarityBadge({ rarity }) {
 
 export function MythicalBadge() {
   return <span className={`badge ${MYTHICAL_BADGE_CLASS}`}>Mythical</span>;
+}
+
+export function EvolvedBadge({ name }) {
+  if (!name) return null;
+  return <span className={`badge ${EVOLVED_BADGE_CLASS}`}>→ {name}</span>;
 }

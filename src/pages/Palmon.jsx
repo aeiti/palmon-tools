@@ -8,6 +8,7 @@ import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
 import { ROUTES, palmonSpeciesUrl } from '../routes.js';
 import { findPalmonBuildingAssignment } from '../lib/buildings.js';
 import {
+  MAX_EVOLUTION_STAGE,
   MAX_PALMON_LEVEL,
   MAX_SKILL_LEVEL,
   PALMON_SPECIES,
@@ -19,9 +20,15 @@ import {
   placeholderTraitName,
 } from '../lib/data/palmon.js';
 import { PALMON_SKILLS } from '../lib/data/palmonSkills.js';
-import { palmonDisplayName, squadIsFull } from '../lib/palmon.js';
+import {
+  palmonDisplayName,
+  speciesEvolvedName,
+  speciesHasEvolution,
+  squadIsFull,
+} from '../lib/palmon.js';
 import {
   ElementBadge,
+  EvolvedBadge,
   MythicalBadge,
   RarityBadge,
 } from '../components/palmon/Badges.jsx';
@@ -97,6 +104,11 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
   const displayName = palmonDisplayName(palmon, allPalmons);
   const squadOptions = buildSquadOptions(palmon, allPalmons);
   const buildingAssignment = findPalmonBuildingAssignment(palmon.id, buildings);
+  const canEvolve = speciesHasEvolution(palmon.speciesKey);
+  const evolvedName =
+    canEvolve && palmon.evolutionStage === MAX_EVOLUTION_STAGE
+      ? speciesEvolvedName(palmon.speciesKey)
+      : '';
 
   useEffect(() => {
     if (hash === `#${anchorId}`) {
@@ -120,6 +132,7 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
             {species && <ElementBadge element={species.element} />}
             {species?.rarity && <RarityBadge rarity={species.rarity} />}
             {species?.mythical && <MythicalBadge />}
+            {evolvedName && <EvolvedBadge name={evolvedName} />}
           </div>
           <div className="flex shrink-0 items-center gap-3 text-xs text-slate-400 tabular-nums">
             <span>
@@ -184,6 +197,17 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
               onChange={(patch) => onChange(palmon.id, patch)}
               displayName={displayName}
             />
+            {canEvolve && (
+              <NumberField
+                label={`Evolution stage (max ${MAX_EVOLUTION_STAGE})`}
+                value={palmon.evolutionStage}
+                max={MAX_EVOLUTION_STAGE}
+                onChange={(v) =>
+                  onChange(palmon.id, { evolutionStage: v })
+                }
+                ariaLabel={`${displayName} evolution stage`}
+              />
+            )}
           </div>
 
           <div>
