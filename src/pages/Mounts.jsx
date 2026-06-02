@@ -44,7 +44,7 @@ export default function Mounts() {
           />
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="grid items-start gap-4 sm:grid-cols-2">
           {MOUNTS.map((mount) => (
             <MountCard
               key={mount.key}
