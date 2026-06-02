@@ -98,7 +98,7 @@ function LeveledChestValueOverrides({
                         <StepperInput
                           value={Number(tierOverrides[field]) || 0}
                           onChange={(v) => onChange(tierKey, field, v)}
-                          className="h-8 w-full min-w-[6rem]"
+                          className="h-8 w-32"
                           ariaLabel={`${tier.label} ${OVERRIDE_FIELD_LABELS[field]} per-chest value override`}
                           title={
                             overridden
