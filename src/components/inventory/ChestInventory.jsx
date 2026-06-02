@@ -137,7 +137,7 @@ export default function ChestInventory({
       {CHEST_TYPES.map((type) => (
         <div
           key={type.key}
-          className="panel overflow-x-auto"
+          className="panel overflow-x-auto pr-2"
         >
           <table className="w-full text-sm">
             <caption className="bg-slate-800/80 px-3 py-2 text-left text-sm font-semibold text-slate-100">
