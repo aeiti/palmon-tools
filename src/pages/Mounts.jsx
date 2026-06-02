@@ -153,9 +153,6 @@ function SkillCard({ skill, currentSkillLevel }) {
               <span className="shrink-0 text-xs font-semibold uppercase tracking-wide tabular-nums">
                 Lv {level}
               </span>
-              <span className="shrink-0 text-[10px] uppercase tabular-nums text-slate-500">
-                ≥ mount {MOUNT_SKILL_LEVEL_THRESHOLDS[level - 1]}
-              </span>
               <span>
                 {renderSkillEffect(skill, level)}
                 {!skillEffectIsFullyKnown(skill, level) && (
