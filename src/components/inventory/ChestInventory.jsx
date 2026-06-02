@@ -11,7 +11,7 @@ import {
   leveledValuesWithOverrides,
 } from '../../lib/resourceTotals.js';
 import { formatCompactFull } from '../../lib/format.js';
-import CompactInput from '../ui/CompactInput.jsx';
+import StepperInput from '../ui/StepperInput.jsx';
 import ResetButton from '../ui/ResetButton.jsx';
 
 // Labels for the override columns. "ore" covers Gold/Lumber/Steel because the
@@ -59,10 +59,14 @@ function LeveledChestValueOverrides({
         )}
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        {/* `table-fixed` makes the 3 override columns share the remaining
+            width equally — without it, the wider "Gold / Lumber / Steel"
+            header would force its column to be much wider than the
+            single-word XP and Electricity columns. */}
+        <table className="w-full table-fixed text-sm">
           <thead className="bg-slate-800/40 text-slate-300">
             <tr>
-              <th className="px-3 py-2 text-left font-medium">Tier</th>
+              <th className="w-20 px-3 py-2 text-left font-medium">Tier</th>
               {LEVELED_OVERRIDE_FIELDS.map((field) => (
                 <th
                   key={field}
@@ -95,10 +99,10 @@ function LeveledChestValueOverrides({
                       (Number(tierOverrides[field]) || 0) > 0;
                     return (
                       <td key={field} className="px-1 py-1.5">
-                        <CompactInput
+                        <StepperInput
                           value={Number(tierOverrides[field]) || 0}
                           onChange={(v) => onChange(tierKey, field, v)}
-                          className="input-cell"
+                          className="h-8 w-full"
                           ariaLabel={`${tier.label} ${OVERRIDE_FIELD_LABELS[field]} per-chest value override`}
                           title={
                             overridden
@@ -137,7 +141,7 @@ export default function ChestInventory({
       {CHEST_TYPES.map((type) => (
         <div
           key={type.key}
-          className="panel overflow-x-auto"
+          className="panel overflow-x-auto pr-2"
         >
           <table className="w-full text-sm">
             <caption className="bg-slate-800/80 px-3 py-2 text-left text-sm font-semibold text-slate-100">
@@ -166,12 +170,12 @@ export default function ChestInventory({
                   </td>
                   {CHEST_RESOURCES.map((resource) => (
                     <td key={resource.key} className="px-1 py-1.5">
-                      <CompactInput
+                      <StepperInput
                         value={chests[type.key][tier.key][resource.key]}
                         onChange={(value) =>
                           onChange(type.key, tier.key, resource.key, value)
                         }
-                        className="input-cell"
+                        className="h-8 w-full"
                         ariaLabel={`${type.label} ${tier.label} ${resource.label} chests`}
                       />
                     </td>

@@ -49,6 +49,13 @@ export default function CompactInput({
   return (
     <input
       type="text"
+      // `size="1"` overrides the browser default of 20 characters, so the
+      // input's intrinsic min-content width is 1 character instead of ~20.
+      // Combined with `min-w-0 flex-1` from the StepperInput wrapper, this
+      // lets the input collapse to any width the parent flex/table cell
+      // allows — without it, the input pushes its cell out to ~20ch and
+      // breaks any auto-sizing layout.
+      size="1"
       inputMode="decimal"
       value={display}
       onChange={(e) => setDraft(e.target.value)}
