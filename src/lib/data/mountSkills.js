@@ -59,11 +59,8 @@ export const MOUNT_SKILLS = {
       name: 'Guardian Hound',
       effectTemplate:
         'At the start of battle, locks onto the allied Palmon with the highest Attack. When that Palmon takes fatal damage, activates Unyielding for {duration}s. That Palmon will not die during the time and immediately recover {rage} Rage. It dies once the effect ends.',
-      // L2 duration isn't visible in the source screenshots — the scroll
-      // skips from L1 (4s) to L3, then continues. Renders as "TBD" until a
-      // fresh screenshot captures it.
       effectValues: {
-        duration: { 1: 4, 3: 5.4, 4: 6, 5: 6.6 },
+        duration: { 1: 4, 2: 4.6, 3: 5.4, 4: 6, 5: 6.6 },
         rage: { 1: 30, 2: 40, 3: 50, 4: 60, 5: 70 },
       },
     },
