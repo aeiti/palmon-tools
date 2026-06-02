@@ -6,6 +6,15 @@ import { OTHER_GROUPS, OTHER_ITEMS } from './data/other.js';
 const OTHER_ITEM_KEYS = new Set(OTHER_ITEMS.map((i) => i.key));
 const OTHER_GROUP_KEYS = new Set(OTHER_GROUPS.map((g) => g.key));
 
+// Used by normalizeCustomOther when a custom item references a group key
+// that no longer exists (e.g. the legacy `skill-evolution` group, which
+// got split into `skillfruit` and `evolution-items` during a catalog
+// restructure). Pinning to `utility` is more useful than falling through
+// to OTHER_GROUPS[0] — orphan custom items end up in the visible
+// catch-all group rather than the first user-facing group, and the user
+// can re-pick a group from the UI.
+const CUSTOM_FALLBACK_GROUP = 'utility';
+
 const CUSTOM_PREFIX = 'custom:';
 
 export function customItemKey(id) {
@@ -35,7 +44,7 @@ export function normalizeCustomOther(list) {
       typeof raw.label === 'string' ? raw.label.trim().slice(0, 80) : '';
     const group = OTHER_GROUP_KEYS.has(raw.group)
       ? raw.group
-      : OTHER_GROUPS[0].key;
+      : CUSTOM_FALLBACK_GROUP;
     if (!id || !label || seenIds.has(id)) continue;
     seenIds.add(id);
     out.push({ id, label, group });
