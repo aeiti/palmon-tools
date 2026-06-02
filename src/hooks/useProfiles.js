@@ -19,6 +19,12 @@ import {
 } from '../lib/other.js';
 import { BUILDINGS, MAX_BUILDING_LEVEL } from '../lib/data/buildings.js';
 import { emptyBuildings, normalizeBuildings } from '../lib/buildings.js';
+import {
+  emptyMounts,
+  normalizeMountEntry,
+  normalizeMounts,
+} from '../lib/mounts.js';
+import { MOUNTS_BY_KEY } from '../lib/data/mounts.js';
 import { emptyNote, normalizeNote, normalizeNotes } from '../lib/notes.js';
 import { PALMON_SPECIES_BY_KEY } from '../lib/data/palmon.js';
 import {
@@ -71,6 +77,7 @@ function makeProfile(name) {
     other: emptyOther(),
     customOther: emptyCustomOther(),
     buildings: emptyBuildings(),
+    mounts: emptyMounts(),
     palmons: [],
     notes: [],
   };
@@ -146,6 +153,7 @@ function normalize(state) {
       customOther: normalizeCustomOther(p.customOther),
       other: normalizeOther(p.other, normalizeCustomOther(p.customOther)),
       buildings,
+      mounts: normalizeMounts(p.mounts),
       palmons,
       notes: normalizeNotes(p.notes),
     });
@@ -522,6 +530,29 @@ export function useProfiles() {
     }));
   }, []);
 
+  const updateMount = useCallback((mountKey, patch) => {
+    if (!MOUNTS_BY_KEY[mountKey]) return;
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) => {
+        if (p.id !== s.activeProfileId) return p;
+        const current = p.mounts?.[mountKey] || { level: 0, power: 0 };
+        const merged = { ...current, ...patch };
+        const next = normalizeMountEntry(merged) || current;
+        return { ...p, mounts: { ...p.mounts, [mountKey]: next } };
+      }),
+    }));
+  }, []);
+
+  const resetActiveMounts = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId ? p : { ...p, mounts: emptyMounts() },
+      ),
+    }));
+  }, []);
+
   const addNote = useCallback(() => {
     const note = emptyNote();
     setState((s) => ({
@@ -617,6 +648,8 @@ export function useProfiles() {
     updatePalmon,
     deletePalmon,
     resetActivePalmons,
+    updateMount,
+    resetActiveMounts,
     addNote,
     updateNote,
     deleteNote,
