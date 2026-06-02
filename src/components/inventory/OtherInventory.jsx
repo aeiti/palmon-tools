@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { OTHER_GROUPS } from '../../lib/data/other.js';
 import { itemsByGroup } from '../../lib/other.js';
 import CardColumns from '../ui/CardColumns.jsx';
-import CompactInput from '../ui/CompactInput.jsx';
 import ConfirmDialog from '../ui/ConfirmDialog.jsx';
+import StepperInput from '../ui/StepperInput.jsx';
 import CustomItemDialog from './CustomItemDialog.jsx';
 
 function ItemRow({ item, count, onChange, onEdit, onDelete }) {
@@ -50,12 +50,12 @@ function ItemRow({ item, count, onChange, onEdit, onDelete }) {
           </button>
         </div>
       )}
-      <CompactInput
+      <StepperInput
         id={`other-${item.key}`}
         value={count ?? 0}
         onChange={(value) => onChange(item.key, value)}
-        className="h-7 w-20 rounded-md bg-slate-800 px-1.5 text-center tabular-nums text-sm leading-none text-slate-100 ring-1 ring-slate-700 transition-shadow focus:outline-none focus:ring-2 focus:ring-indigo-400"
         ariaLabel={item.label}
+        className="w-28 shrink-0"
       />
     </div>
   );
