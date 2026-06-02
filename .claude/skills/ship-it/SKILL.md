@@ -175,6 +175,25 @@ per-commit history on `main` — that's the whole reason commit messages
 need to be clean. `--delete-branch` deletes the remote branch after
 merge.
 
+**Stacked PRs — watch the auto-close trap.** If PR B's base is PR A's
+head branch (e.g. you opened B off `feat/foo` while A was still open
+against `main`), merging A with `--delete-branch` deletes the branch B
+is targeting, and GitHub then *auto-closes* B rather than retargeting
+it to `main`. The head commits survive but the PR is dead; you can't
+reopen a closed-by-base-deletion PR (`gh pr reopen` fails with a
+GraphQL error), so you have to open a fresh replacement PR from the
+same head branch. Two ways to avoid this:
+
+- **Preferred:** don't stack PRs in this repo. Merge each PR to main
+  first, then rebase the next branch on the new main before opening
+  its PR. Cleaner per-commit history on main, no surprises.
+- **If you must stack:** merge the bottom PR with `--merge` *without*
+  `--delete-branch`, then `gh pr edit <next> --base main` to retarget
+  the dependent PR before merging it. Clean up the leftover branches
+  at the end with `git push origin --delete <branch>`. `gh pr edit
+  --base` only works on *open* PRs — once a dependent PR is auto-closed,
+  it cannot be reopened.
+
 Do **not** push to `main` directly, even for "small" changes. CONTRIBUTING.md
 calls out a few exceptions (typo fixes in docs/comments, version bumps,
 lockfile updates, reverting a known-bad commit), but the default answer
