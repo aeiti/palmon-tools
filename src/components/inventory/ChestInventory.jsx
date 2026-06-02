@@ -59,10 +59,14 @@ function LeveledChestValueOverrides({
         )}
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        {/* `table-fixed` makes the 3 override columns share the remaining
+            width equally — without it, the wider "Gold / Lumber / Steel"
+            header would force its column to be much wider than the
+            single-word XP and Electricity columns. */}
+        <table className="w-full table-fixed text-sm">
           <thead className="bg-slate-800/40 text-slate-300">
             <tr>
-              <th className="px-3 py-2 text-left font-medium">Tier</th>
+              <th className="w-20 px-3 py-2 text-left font-medium">Tier</th>
               {LEVELED_OVERRIDE_FIELDS.map((field) => (
                 <th
                   key={field}
