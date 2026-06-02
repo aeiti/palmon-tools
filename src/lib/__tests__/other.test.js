@@ -10,7 +10,7 @@ import {
   normalizeCustomOther,
   normalizeOther,
 } from '../other.js';
-import { OTHER_GROUPS, OTHER_ITEMS } from '../data/other.js';
+import { OTHER_ITEMS } from '../data/other.js';
 
 describe('customItemKey / isCustomItemKey / customIdFromKey', () => {
   it('round-trips a custom id through the key helpers', () => {
@@ -43,7 +43,10 @@ describe('normalizeCustomOther', () => {
       { id: 'c', label: 'Charlie' }, // missing group
     ]);
     expect(out.map((c) => c.id)).toEqual(['a', 'c']);
-    expect(out[1].group).toBe(OTHER_GROUPS[0].key);
+    // Missing group falls back to the utility catch-all rather than the
+    // first user-facing group, so orphan custom items don't surprise the
+    // user by appearing in "Action Points".
+    expect(out[1].group).toBe('utility');
   });
 
   it('drops duplicates by id (keeps first)', () => {
@@ -65,11 +68,11 @@ describe('normalizeCustomOther', () => {
     expect(out[1].label).toHaveLength(80);
   });
 
-  it('falls back to the first group when group is unknown', () => {
+  it('falls back to the utility group when group is unknown', () => {
     const out = normalizeCustomOther([
       { id: 'a', label: 'X', group: 'bogus' },
     ]);
-    expect(out[0].group).toBe(OTHER_GROUPS[0].key);
+    expect(out[0].group).toBe('utility');
   });
 });
 
@@ -132,7 +135,7 @@ describe('groupTotal', () => {
     const customs = [{ id: 'a', label: 'A', group: 'premium' }];
     const other = emptyOther(customs);
     other['dreamium-3'] = 2;
-    other['opus-pearl'] = 3;
+    other['dreamium-4'] = 3;
     other['custom:a'] = 5;
     expect(groupTotal(other, 'premium', customs)).toBe(10);
   });
