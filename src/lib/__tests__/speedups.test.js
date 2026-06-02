@@ -6,6 +6,10 @@ import {
   emptyInventory,
   hasAnySpeedups,
 } from '../speedups.js';
+import {
+  categorySupportsDenomination,
+  denominationsForCategory,
+} from '../data/speedups.js';
 
 describe('emptyCategoryCounts', () => {
   it('returns an object with every denomination at 0', () => {
@@ -61,6 +65,34 @@ describe('categoryTotalWithUniversal', () => {
   it('does not double-count when asking for universal', () => {
     const inv = { universal: { '1h': 1 } };
     expect(categoryTotalWithUniversal(inv, 'universal')).toBe(60);
+  });
+});
+
+describe('denominationsForCategory', () => {
+  it('returns all denominations for an unrestricted category', () => {
+    expect(denominationsForCategory('construction').map((d) => d.key)).toEqual([
+      '8h',
+      '3h',
+      '1h',
+      '5m',
+      '1m',
+    ]);
+  });
+
+  it('restricts breeding to 1h and 5m', () => {
+    expect(denominationsForCategory('breeding').map((d) => d.key)).toEqual([
+      '1h',
+      '5m',
+    ]);
+  });
+});
+
+describe('categorySupportsDenomination', () => {
+  it('accepts 1h and 5m for breeding and rejects others', () => {
+    expect(categorySupportsDenomination('breeding', '1h')).toBe(true);
+    expect(categorySupportsDenomination('breeding', '5m')).toBe(true);
+    expect(categorySupportsDenomination('breeding', '8h')).toBe(false);
+    expect(categorySupportsDenomination('breeding', '1m')).toBe(false);
   });
 });
 
