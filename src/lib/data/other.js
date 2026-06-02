@@ -112,6 +112,11 @@ export const OTHER_ITEMS = [
   { key: 'camp-shield-8h', label: '8hr Shield', group: 'camp-shields' },
 
   // Equipment
+  { key: 'dreamium-1', label: 'Dreamium I', group: 'equipment' },
+  { key: 'dreamium-2', label: 'Dreamium II', group: 'equipment' },
+  { key: 'dreamium-3', label: 'Dreamium III', group: 'equipment' },
+  { key: 'dreamium-4', label: 'Dreamium IV', group: 'equipment' },
+  { key: 'dreamium-5', label: 'Dreamium V', group: 'equipment' },
   { key: 'temperite-large', label: 'Large Temperite', group: 'equipment' },
   { key: 'temperite-medium', label: 'Medium Temperite', group: 'equipment' },
   { key: 'opus-pearl', label: 'Opus Pearl', group: 'equipment' },
@@ -187,9 +192,6 @@ export const OTHER_ITEMS = [
   },
 
   // Premium
-  { key: 'dreamium-3', label: 'Dreamium III', group: 'premium' },
-  { key: 'dreamium-4', label: 'Dreamium IV', group: 'premium' },
-  { key: 'dreamium-5', label: 'Dreamium V', group: 'premium' },
   {
     key: 'ur-palmon-omni-token',
     label: 'UR Palmon Omni Token',

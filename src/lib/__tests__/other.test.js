@@ -134,8 +134,8 @@ describe('groupTotal', () => {
   it('sums all items (built-in + custom) for a group', () => {
     const customs = [{ id: 'a', label: 'A', group: 'premium' }];
     const other = emptyOther(customs);
-    other['dreamium-3'] = 2;
-    other['dreamium-4'] = 3;
+    other['ur-palmon-omni-token'] = 2;
+    other['ur-palmon-token'] = 3;
     other['custom:a'] = 5;
     expect(groupTotal(other, 'premium', customs)).toBe(10);
   });
