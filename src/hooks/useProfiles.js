@@ -26,6 +26,10 @@ import {
 } from '../lib/mounts.js';
 import { MOUNTS_BY_KEY } from '../lib/data/mounts.js';
 import { emptyNote, normalizeNote, normalizeNotes } from '../lib/notes.js';
+import {
+  emptySandstormSpeedups,
+  normalizeSandstormSpeedups,
+} from '../lib/sandstormSpeedups.js';
 import { PALMON_SPECIES_BY_KEY } from '../lib/data/palmon.js';
 import {
   emptyPalmon,
@@ -71,6 +75,7 @@ function makeProfile(name) {
     name,
     ...emptyDetails(),
     inventory: emptyInventory(),
+    sandstormSpeedups: emptySandstormSpeedups(),
     chests: emptyChests(),
     leveledChestOverrides: emptyLeveledOverrides(),
     onHand: emptyOnHand(),
@@ -147,6 +152,7 @@ function normalize(state) {
       power: parseNonNegativeInt(p.power),
       kills: parseNonNegativeInt(p.kills),
       inventory: { ...emptyInventory(), ...(p.inventory || {}) },
+      sandstormSpeedups: normalizeSandstormSpeedups(p.sandstormSpeedups),
       chests: normalizeChests(p.chests),
       leveledChestOverrides: normalizeLeveledOverrides(p.leveledChestOverrides),
       onHand: normalizeOnHand(p.onHand),
@@ -257,6 +263,35 @@ export function useProfiles() {
       ...s,
       profiles: s.profiles.map((p) =>
         p.id !== s.activeProfileId ? p : { ...p, inventory: emptyInventory() },
+      ),
+    }));
+  }, []);
+
+  const updateSandstormSpeedup = useCallback((itemKey, value) => {
+    const v = Math.max(0, Math.floor(Number(value) || 0));
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId
+          ? p
+          : {
+              ...p,
+              sandstormSpeedups: {
+                ...(p.sandstormSpeedups || emptySandstormSpeedups()),
+                [itemKey]: v,
+              },
+            },
+      ),
+    }));
+  }, []);
+
+  const resetActiveSandstormSpeedups = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId
+          ? p
+          : { ...p, sandstormSpeedups: emptySandstormSpeedups() },
       ),
     }));
   }, []);
@@ -631,6 +666,8 @@ export function useProfiles() {
     deleteProfile,
     updateCount,
     resetActiveInventory,
+    updateSandstormSpeedup,
+    resetActiveSandstormSpeedups,
     updateChestCount,
     resetActiveChests,
     updateLeveledChestOverride,
