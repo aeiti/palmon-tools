@@ -130,11 +130,17 @@ function LabeledInput({ id, label, children }) {
 
 function SkillCard({ skill, currentSkillLevel }) {
   return (
-    <div className="rounded-md bg-slate-800/60 px-3 py-2 ring-1 ring-slate-700">
-      <h4 className="mb-2 text-sm font-semibold text-slate-100">
-        {skill.name}
-      </h4>
-      <ul className="flex flex-col gap-1.5 text-sm">
+    <details className="group rounded-md bg-slate-800/60 px-3 py-2 ring-1 ring-slate-700">
+      <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-slate-100 marker:hidden">
+        <span>{skill.name}</span>
+        <span
+          aria-hidden="true"
+          className="text-xs text-slate-500 transition-transform group-open:rotate-90"
+        >
+          ▶
+        </span>
+      </summary>
+      <ul className="mt-2 flex flex-col gap-1.5 text-sm">
         {SKILL_LEVELS.map((level) => {
           const isCurrent = level === currentSkillLevel;
           const isLocked = currentSkillLevel < level;
@@ -165,6 +171,6 @@ function SkillCard({ skill, currentSkillLevel }) {
           );
         })}
       </ul>
-    </div>
+    </details>
   );
 }
