@@ -1,11 +1,12 @@
 # Dependabot opens weekly auto-PRs for npm dependency updates and for
 # GitHub Actions versions used in our workflows. Each PR runs through
 # the standard pr-checks workflow (lint + test + build) before it can
-# be merged, so a green PR is safe to land.
+# be merged. Patch and minor bumps auto-merge once checks pass (see
+# .github/workflows/dependabot-auto-merge.yml); major bumps stay open
+# for manual review.
 #
-# Two ecosystems:
-#   - npm: production + dev dependencies declared in package.json
-#   - github-actions: action versions referenced in .github/workflows/*
+# Grouping reduces PR-noise: related updates land in a single PR per
+# week per group, instead of one PR per package.
 
 version: 2
 updates:
@@ -17,6 +18,15 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    groups:
+      # Production deps grouped by minor/patch; majors stay separate.
+      production-minor-patch:
+        dependency-type: "production"
+        update-types: ["minor", "patch"]
+      # Dev deps grouped by minor/patch; majors stay separate.
+      development-minor-patch:
+        dependency-type: "development"
+        update-types: ["minor", "patch"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -26,3 +36,9 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    groups:
+      # Actions are usually backward-compatible at the YAML interface
+      # level, and we just had a clean batch upgrade (PRs #101-#104,
+      # #110). Group all bump types so the weekly noise is one PR.
+      actions:
+        update-types: ["minor", "patch", "major"]

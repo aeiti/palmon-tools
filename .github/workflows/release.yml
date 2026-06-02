@@ -10,9 +10,15 @@ permissions:
   pages: write
   id-token: write
 
+# When a push to main lands while a release run is in progress (or
+# queued), cancel the older runs and start fresh. The newer commit's
+# build includes everything from the older ones, so no content is
+# lost — we just skip intermediate tags for in-flight runs. This
+# avoids the cascade-of-cancelled-runs noise we saw during the first
+# Dependabot batch.
 concurrency:
   group: release
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
