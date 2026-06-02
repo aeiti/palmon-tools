@@ -55,7 +55,7 @@ function ItemRow({ item, count, onChange, onEdit, onDelete }) {
         value={count ?? 0}
         onChange={(value) => onChange(item.key, value)}
         ariaLabel={item.label}
-        className="w-28 shrink-0"
+        className="h-7 w-28 shrink-0"
       />
     </div>
   );

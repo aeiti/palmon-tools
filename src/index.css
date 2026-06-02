@@ -77,9 +77,6 @@ body {
 @utility select-inline {
   @apply rounded-md bg-slate-800 px-2 py-1.5 text-sm text-slate-100 ring-1 ring-slate-700 transition-shadow focus:outline-none focus:ring-2 focus:ring-indigo-400;
 }
-@utility input-cell {
-  @apply w-full min-w-[3.5rem] rounded-md bg-slate-800 px-2 py-1 text-center tabular-nums text-slate-100 ring-1 ring-slate-700 transition-shadow focus:outline-none focus:ring-2 focus:ring-indigo-400;
-}
 @utility input-compact {
   @apply h-8 w-full rounded-md bg-slate-800 px-2 text-center tabular-nums text-sm text-slate-100 ring-1 ring-slate-700 transition-shadow focus:outline-none focus:ring-2 focus:ring-indigo-400;
 }

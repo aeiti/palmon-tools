@@ -3,7 +3,7 @@ import {
   DENOMINATIONS,
   categorySupportsDenomination,
 } from '../../lib/data/speedups.js';
-import CompactInput from '../ui/CompactInput.jsx';
+import StepperInput from '../ui/StepperInput.jsx';
 
 export default function InventoryGrid({ inventory, onChange }) {
   return (
@@ -33,10 +33,10 @@ export default function InventoryGrid({ inventory, onChange }) {
                 return (
                   <td key={d.key} className="px-1 py-1.5">
                     {supported ? (
-                      <CompactInput
+                      <StepperInput
                         value={inventory[c.key][d.key]}
                         onChange={(value) => onChange(c.key, d.key, value)}
-                        className="input-cell"
+                        className="h-8 w-full min-w-[6rem]"
                         ariaLabel={`${c.label} ${d.label} speedups`}
                       />
                     ) : (

@@ -11,7 +11,7 @@ import {
   leveledValuesWithOverrides,
 } from '../../lib/resourceTotals.js';
 import { formatCompactFull } from '../../lib/format.js';
-import CompactInput from '../ui/CompactInput.jsx';
+import StepperInput from '../ui/StepperInput.jsx';
 import ResetButton from '../ui/ResetButton.jsx';
 
 // Labels for the override columns. "ore" covers Gold/Lumber/Steel because the
@@ -95,10 +95,10 @@ function LeveledChestValueOverrides({
                       (Number(tierOverrides[field]) || 0) > 0;
                     return (
                       <td key={field} className="px-1 py-1.5">
-                        <CompactInput
+                        <StepperInput
                           value={Number(tierOverrides[field]) || 0}
                           onChange={(v) => onChange(tierKey, field, v)}
-                          className="input-cell"
+                          className="h-8 w-full min-w-[6rem]"
                           ariaLabel={`${tier.label} ${OVERRIDE_FIELD_LABELS[field]} per-chest value override`}
                           title={
                             overridden
@@ -166,12 +166,12 @@ export default function ChestInventory({
                   </td>
                   {CHEST_RESOURCES.map((resource) => (
                     <td key={resource.key} className="px-1 py-1.5">
-                      <CompactInput
+                      <StepperInput
                         value={chests[type.key][tier.key][resource.key]}
                         onChange={(value) =>
                           onChange(type.key, tier.key, resource.key, value)
                         }
-                        className="input-cell"
+                        className="h-8 w-full min-w-[6rem]"
                         ariaLabel={`${type.label} ${tier.label} ${resource.label} chests`}
                       />
                     </td>

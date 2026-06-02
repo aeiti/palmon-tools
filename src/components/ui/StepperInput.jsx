@@ -35,7 +35,10 @@ export default function StepperInput({
   return (
     <div
       className={[
-        'flex h-7 items-stretch overflow-hidden rounded-md bg-slate-800 ring-1 ring-slate-700 transition-shadow focus-within:ring-2 focus-within:ring-indigo-400',
+        // Height is the caller's choice (h-7 / h-8 / etc.) so the stepper
+        // can fit snugly into different row layouts without per-call
+        // overrides fighting a default. Everything else stays put.
+        'flex items-stretch overflow-hidden rounded-md bg-slate-800 ring-1 ring-slate-700 transition-shadow focus-within:ring-2 focus-within:ring-indigo-400',
         className || '',
       ]
         .filter(Boolean)
