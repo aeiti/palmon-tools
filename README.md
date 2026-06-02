@@ -1,5 +1,8 @@
 # Palmon Tools
 
+[![Release and Deploy](https://github.com/aeiti/palmon-tools/actions/workflows/release.yml/badge.svg)](https://github.com/aeiti/palmon-tools/actions/workflows/release.yml)
+[![Latest release](https://img.shields.io/github/v/release/aeiti/palmon-tools?label=release)](https://github.com/aeiti/palmon-tools/releases)
+
 Calculators and trackers for [Palmon: Survival](https://palmonsurvival.com/) players.
 
 Live at **<https://aeiti.github.io/palmon-tools/>**.
