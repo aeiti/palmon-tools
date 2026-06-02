@@ -1,0 +1,33 @@
+name: Bundle size
+
+# Comments on every PR with a size diff of dist/assets/* (gzipped and
+# uncompressed) between base and head. The action builds both versions,
+# measures them, and posts/updates a single comment. No size budget is
+# enforced — this is signal, not a gate.
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+# Cancel an in-flight run if a newer push lands on the same PR — we
+# only need the latest diff.
+concurrency:
+  group: size-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: "./dist/assets/*.{js,css}"
+          build-script: "build"
