@@ -41,6 +41,9 @@ gotchas worth honoring.
 **State & storage**
 - `extend-profile-schema` — add a new per-profile field to
   `useProfiles.js` with CRUD ops.
+- `add-event-inventory` — add an event-scoped inventory whose
+  entries don't fit the time-based speedup model (mixed units,
+  per-type totals).
 
 **UI organization**
 - `extract-shared-component` — when/where to extract a primitive
@@ -136,6 +139,7 @@ If the user asks to … → invoke …
 - "add a new tool / page" → `add-tool` (and `extend-profile-schema`
   if profile-scoped)
 - "track X per profile" → `extend-profile-schema`
+- "track event speedups / Sandstorm-style items" → `add-event-inventory`
 - "add a new Palmon" → `add-palmon-species` (then
   `transcribe-palmon-skill` for the skill data)
 - "this value is wrong" → `correct-palmon-data`
