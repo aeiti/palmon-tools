@@ -74,7 +74,7 @@ function MountCard({ mount, entry, onChange }) {
         </span>
       </header>
       <div className="panel-body flex flex-col gap-3 px-3 py-3">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-3">
           <LabeledInput id={`${mount.key}-level`} label="Mount level">
             <StepperInput
               value={entry.level}
@@ -85,7 +85,7 @@ function MountCard({ mount, entry, onChange }) {
               }
               id={`${mount.key}-level`}
               ariaLabel={`${mount.name} level`}
-              className="h-8 w-28"
+              className="h-8 w-full"
             />
           </LabeledInput>
           <LabeledInput id={`${mount.key}-power`} label="Power">
@@ -94,7 +94,7 @@ function MountCard({ mount, entry, onChange }) {
               onChange={(v) => onChange({ power: Math.max(0, v) })}
               id={`${mount.key}-power`}
               ariaLabel={`${mount.name} power`}
-              className="h-8 w-32 rounded-md bg-slate-800 px-2 text-right tabular-nums text-sm text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="h-8 w-full rounded-md bg-slate-800 px-2 text-right tabular-nums text-sm text-slate-100 ring-1 ring-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
           </LabeledInput>
         </div>
@@ -119,8 +119,8 @@ function MountCard({ mount, entry, onChange }) {
 
 function LabeledInput({ id, label, children }) {
   return (
-    <label htmlFor={id} className="flex items-center gap-2 text-sm">
-      <span className="shrink-0 text-xs uppercase tracking-wide text-slate-500">
+    <label htmlFor={id} className="flex flex-col gap-1 text-sm">
+      <span className="text-xs uppercase tracking-wide text-slate-500">
         {label}
       </span>
       {children}
