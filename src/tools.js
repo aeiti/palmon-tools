@@ -56,6 +56,15 @@ export const TOOLS = [
     page: lazy(() => import('./pages/Inventory.jsx')),
   },
   {
+    key: 'mounts',
+    path: ROUTES.mounts,
+    label: 'Mounts',
+    description:
+      'Track each mount’s level and see its skill effects at every tier.',
+    section: SECTIONS.PROFILE,
+    page: lazy(() => import('./pages/Mounts.jsx')),
+  },
+  {
     key: 'notes',
     path: ROUTES.notes,
     label: 'Notes',
