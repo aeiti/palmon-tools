@@ -1,6 +1,7 @@
 import { useProfiles } from '../hooks/useProfiles.js';
 import InventoryGrid from '../components/inventory/InventoryGrid.jsx';
 import Totals from '../components/speedups/Totals.jsx';
+import SandstormSpeedups from '../components/speedups/SandstormSpeedups.jsx';
 import TargetChecker from '../components/speedups/TargetChecker.jsx';
 import ProfilePicker from '../components/ui/ProfilePicker.jsx';
 import ResetButton from '../components/ui/ResetButton.jsx';
@@ -8,7 +9,13 @@ import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
 import { ROUTES } from '../routes.js';
 
 export default function Speedups() {
-  const { activeProfile, updateCount, resetActiveInventory } = useProfiles();
+  const {
+    activeProfile,
+    updateCount,
+    resetActiveInventory,
+    updateSandstormSpeedup,
+    resetActiveSandstormSpeedups,
+  } = useProfiles();
 
   const subtitle = activeProfile.ign ? (
     <>
@@ -48,6 +55,21 @@ export default function Speedups() {
       <section className="flex flex-col gap-2">
         <h2 className="h-section">Totals</h2>
         <Totals inventory={activeProfile.inventory} />
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <h2 className="h-section">Sandstorm</h2>
+          <ResetButton
+            onReset={resetActiveSandstormSpeedups}
+            confirmTitle="Reset Sandstorm speedups?"
+            confirmMessage={`Set all Sandstorm speedup counts for "${activeProfile.name}" back to 0.`}
+          />
+        </div>
+        <SandstormSpeedups
+          state={activeProfile.sandstormSpeedups}
+          onChange={updateSandstormSpeedup}
+        />
       </section>
 
       <TargetChecker inventory={activeProfile.inventory} />
