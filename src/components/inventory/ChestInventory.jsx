@@ -98,7 +98,7 @@ function LeveledChestValueOverrides({
                         <StepperInput
                           value={Number(tierOverrides[field]) || 0}
                           onChange={(v) => onChange(tierKey, field, v)}
-                          className="mx-auto h-8 w-20"
+                          className="h-8 w-full"
                           ariaLabel={`${tier.label} ${OVERRIDE_FIELD_LABELS[field]} per-chest value override`}
                           title={
                             overridden
@@ -171,7 +171,7 @@ export default function ChestInventory({
                         onChange={(value) =>
                           onChange(type.key, tier.key, resource.key, value)
                         }
-                        className="mx-auto h-8 w-20"
+                        className="h-8 w-full"
                         ariaLabel={`${type.label} ${tier.label} ${resource.label} chests`}
                       />
                     </td>
