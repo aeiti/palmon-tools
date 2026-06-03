@@ -90,6 +90,15 @@ export const TOOLS = [
     section: SECTIONS.PROFILE,
     page: lazy(() => import('./pages/Squads.jsx')),
   },
+  {
+    key: 'traits',
+    path: ROUTES.traits,
+    label: 'Traits',
+    description:
+      'Browse every breeding trait: Combat and Work, grouped by grade with effects.',
+    section: SECTIONS.PROFILE,
+    page: lazy(() => import('./pages/Traits.jsx')),
+  },
 
   // Inventory sub-pages
   {

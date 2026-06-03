@@ -39,6 +39,26 @@ export function isValidTraitKey(key) {
   return decodeTraitKey(key) !== null;
 }
 
+// All traits in a category, bucketed by grade and sorted alphabetically
+// within each bucket. Drives the info page's Combat/Work sections.
+// Returns { S: [...], A: [...], B: [...], C: [...] }, with empty buckets
+// for grades the category never uses.
+export function traitsByGradeFor(category) {
+  const buckets = Object.fromEntries(TRAIT_GRADES.map((g) => [g, []]));
+  for (const [slug, family] of Object.entries(PALMON_TRAITS)) {
+    if (family.category !== category) continue;
+    for (const grade of TRAIT_GRADES) {
+      const effect = family.grades[grade];
+      if (!effect) continue;
+      buckets[grade].push({ slug, name: family.name, effect });
+    }
+  }
+  for (const grade of TRAIT_GRADES) {
+    buckets[grade].sort((a, b) => a.name.localeCompare(b.name));
+  }
+  return buckets;
+}
+
 // One <optgroup> per category, sorted by trait name then grade (S→A→B→C).
 // Suitable to feed straight into SelectField's `groups` prop.
 export const TRAIT_PICKER_GROUPS = (() => {

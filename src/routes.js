@@ -15,6 +15,7 @@ export const ROUTES = {
   palmon: '/palmon',
   palmonSpecies: '/palmon/species/:speciesKey',
   squads: '/squads',
+  traits: '/traits',
 };
 
 export function palmonSpeciesUrl(speciesKey) {
