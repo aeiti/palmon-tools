@@ -3,6 +3,7 @@
 
 import {
   EQUIPMENT_SLOTS,
+  MAX_EVOLUTION_STAGE,
   MAX_PALMON_LEVEL,
   MAX_PALMON_PER_SQUAD,
   MAX_SKILL_LEVEL,
@@ -14,6 +15,7 @@ import {
   TRAIT_SLOTS,
   palmonSpeciesName,
 } from './data/palmon.js';
+import { PALMON_EVOLUTIONS } from './data/palmonEvolutions.js';
 import { isValidTraitKey } from './palmonTraits.js';
 
 function makeId() {
@@ -28,6 +30,7 @@ export function emptyPalmon(speciesKey) {
     level: 0,
     star: 1,
     subStar: 0,
+    evolutionStage: 1,
     squad: null,
     equipment: Array.from({ length: EQUIPMENT_SLOTS }, () => ''),
     skills: Array.from({ length: SKILL_SLOTS }, () => ({ level: 0 })),
@@ -87,6 +90,7 @@ export function normalizePalmon(palmon) {
     level: clampOptionalInt(palmon.level, 0, MAX_PALMON_LEVEL),
     star: clampInt(palmon.star, 1, STAR_LEVELS),
     subStar: clampSubStar(palmon.star, palmon.subStar),
+    evolutionStage: clampInt(palmon.evolutionStage, 1, MAX_EVOLUTION_STAGE),
     squad: clampSquad(palmon.squad),
     equipment: padArray(palmon.equipment, EQUIPMENT_SLOTS, (v) =>
       typeof v === 'string' ? v.trim() : '',
@@ -118,6 +122,14 @@ export function normalizePalmonList(list) {
 export function formatStarLevel(palmon) {
   if (!palmon) return '';
   return `${palmon.star}-${palmon.subStar}`;
+}
+
+export function speciesEvolvedName(speciesKey) {
+  return PALMON_EVOLUTIONS[speciesKey]?.name || '';
+}
+
+export function speciesHasEvolution(speciesKey) {
+  return Boolean(PALMON_EVOLUTIONS[speciesKey]);
 }
 
 export function palmonDisplayName(palmon, allPalmons) {

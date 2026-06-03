@@ -1,12 +1,14 @@
 import { Link, useParams } from 'react-router-dom';
 import {
   ElementBadge,
+  EvolvedBadge,
   MythicalBadge,
   RarityBadge,
 } from '../components/palmon/Badges.jsx';
 import { ROUTES } from '../routes.js';
 import { PALMON_SPECIES_BY_KEY } from '../lib/data/palmon.js';
 import { PALMON_SKILLS } from '../lib/data/palmonSkills.js';
+import { speciesEvolvedName } from '../lib/palmon.js';
 import {
   renderSkillEffect,
   skillEffectIsFullyKnown,
@@ -47,6 +49,7 @@ export default function PalmonSpecies() {
   }
 
   const skills = PALMON_SKILLS[species.key] || [];
+  const evolvedName = speciesEvolvedName(species.key);
 
   return (
     <article className="flex flex-col gap-6 text-slate-300">
@@ -59,6 +62,7 @@ export default function PalmonSpecies() {
           <ElementBadge element={species.element} />
           <RarityBadge rarity={species.rarity} />
           {species.mythical && <MythicalBadge />}
+          {evolvedName && <EvolvedBadge name={evolvedName} />}
         </div>
       </header>
 

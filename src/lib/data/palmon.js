@@ -12,6 +12,7 @@ export const MAX_PALMON_PER_SQUAD = 7;
 export const SKILL_SLOTS = 4;
 export const TRAIT_SLOTS = 4;
 export const EQUIPMENT_SLOTS = 4;
+export const MAX_EVOLUTION_STAGE = 4;
 
 export const ELEMENTS = [
   { key: 'fire', label: 'Fire' },

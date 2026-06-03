@@ -8,10 +8,13 @@ import {
   palmonDisplayName,
   palmonOptions,
   palmonsInSquad,
+  speciesEvolvedName,
+  speciesHasEvolution,
   squadIsFull,
 } from '../palmon.js';
 import {
   EQUIPMENT_SLOTS,
+  MAX_EVOLUTION_STAGE,
   MAX_PALMON_LEVEL,
   MAX_PALMON_PER_SQUAD,
   MAX_SKILL_LEVEL,
@@ -34,6 +37,7 @@ describe('emptyPalmon', () => {
     expect(p.skills).toHaveLength(SKILL_SLOTS);
     expect(p.traits).toHaveLength(TRAIT_SLOTS);
     expect(p.skills.every((s) => s.level === 0)).toBe(true);
+    expect(p.evolutionStage).toBe(1);
   });
 
   it('assigns a unique-looking id', () => {
@@ -102,6 +106,23 @@ describe('normalizePalmon', () => {
       subStar: -1,
     });
     expect(undershoot.subStar).toBe(0);
+  });
+
+  it('defaults evolutionStage to 1 when missing and clamps into [1, MAX_EVOLUTION_STAGE]', () => {
+    const missing = normalizePalmon({ speciesKey: 'abuzzinian' });
+    expect(missing.evolutionStage).toBe(1);
+
+    const overshoot = normalizePalmon({
+      speciesKey: 'abuzzinian',
+      evolutionStage: MAX_EVOLUTION_STAGE + 5,
+    });
+    expect(overshoot.evolutionStage).toBe(MAX_EVOLUTION_STAGE);
+
+    const undershoot = normalizePalmon({
+      speciesKey: 'abuzzinian',
+      evolutionStage: 0,
+    });
+    expect(undershoot.evolutionStage).toBe(1);
   });
 
   it('pins subStar to 0 when star is at max', () => {
@@ -229,6 +250,25 @@ describe('palmonOptions', () => {
       { id: '1', label: 'Buzz' },
       { id: '2', label: 'Baboom' },
     ]);
+  });
+});
+
+describe('speciesEvolvedName / speciesHasEvolution', () => {
+  it('returns the evolved name for a species with an evolution', () => {
+    expect(speciesEvolvedName('glacewing')).toBe('Cryovern');
+    expect(speciesHasEvolution('glacewing')).toBe(true);
+  });
+
+  it('returns empty / false for species without an evolution', () => {
+    expect(speciesEvolvedName('oleana')).toBe('');
+    expect(speciesHasEvolution('oleana')).toBe(false);
+    expect(speciesEvolvedName('spookaboo')).toBe('');
+    expect(speciesHasEvolution('spookaboo')).toBe(false);
+  });
+
+  it('returns empty / false for unknown species keys', () => {
+    expect(speciesEvolvedName('not-real')).toBe('');
+    expect(speciesHasEvolution('not-real')).toBe(false);
   });
 });
 
