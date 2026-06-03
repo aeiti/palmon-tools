@@ -3,12 +3,13 @@
 // (S/A/B/C) with progressively weaker effects.
 //
 // Notes from the source screenshots:
-//   * Combat traits don't reuse names across grades — each (combat, grade)
-//     slot has a unique name (Heartless A, Mean B, Softie C, etc.).
+//   * Combat traits don't reuse names across grades — each trait name maps
+//     to exactly one grade (Heartless S, Mean B, Softie C, etc.).
 //   * Work traits *do* reuse names across S/A/B for the common families
 //     (Caffeinated, Light Eater, Sweet Dreams, Comfy, Alchemist, etc.).
-//   * Within a single (work, grade) bucket there can also be multiple
-//     traits hitting the same stat at different magnitudes — e.g. B-grade
+//   * Within a single (category, grade) bucket there can also be multiple
+//     traits hitting the same stat at different magnitudes — e.g. S-grade
+//     Crit Damage: Ruthless +8% alongside Heartless +15%, or B-grade
 //     Charging output: E-Conductor +3% alongside Battery Pack +5%.
 //   * `grades` only contains the grades that exist for that trait.
 
@@ -57,7 +58,7 @@ export const PALMON_TRAITS = {
     name: 'Blessed',
     category: 'combat',
     grades: {
-      A: 'Crit Rate +8%',
+      S: 'Crit Rate +8%',
     },
   },
   brutal: {
@@ -119,14 +120,14 @@ export const PALMON_TRAITS = {
     name: 'Deadeye',
     category: 'combat',
     grades: {
-      A: 'Accuracy +8%',
+      S: 'Accuracy +8%',
     },
   },
   diamondSkull: {
     name: 'Diamond Skull',
     category: 'combat',
     grades: {
-      A: 'Crit Damage Reduction +15%',
+      S: 'Crit Damage Reduction +15%',
     },
   },
   dreamiumHunter: {
@@ -263,7 +264,7 @@ export const PALMON_TRAITS = {
     name: 'Heartless',
     category: 'combat',
     grades: {
-      A: 'Crit Damage +15%',
+      S: 'Crit Damage +15%',
     },
   },
   hostile: {
@@ -284,7 +285,7 @@ export const PALMON_TRAITS = {
     name: 'Iron Will',
     category: 'combat',
     grades: {
-      A: 'Tenacity +8%',
+      S: 'Tenacity +8%',
     },
   },
   jinxed: {
@@ -525,7 +526,7 @@ export const PALMON_TRAITS = {
     name: 'Unshakeable',
     category: 'combat',
     grades: {
-      A: 'Defense +10%',
+      S: 'Defense +10%',
     },
   },
   unyielding: {
@@ -539,14 +540,14 @@ export const PALMON_TRAITS = {
     name: 'Vigorous',
     category: 'combat',
     grades: {
-      A: 'HP +10%',
+      S: 'HP +10%',
     },
   },
   warlike: {
     name: 'Warlike',
     category: 'combat',
     grades: {
-      A: 'Attack +10%',
+      S: 'Attack +10%',
     },
   },
   woodWhiz: {
