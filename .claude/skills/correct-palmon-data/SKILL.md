@@ -44,6 +44,27 @@ source material, **don't change it**. Ask. A wrong correction is
 worse than the original (the existing value at least came from a
 deliberate capture; a wrong correction destroys that signal).
 
+### Partially-verified data files
+
+Some data files contain a mix of verified and assumed entries
+and say so in their header comment — e.g. `palmonEvolutions.js`
+once read "Per Glacewing → Cryovern, the evolved form is..."
+which meant *only* the Glacewing entry was confirmed; the rest
+(ninjump → Shadowkaeru and friends) were speculative.
+
+When extending a file like that:
+
+- **Re-verify every existing entry**, not just the one you're
+  touching. The unverified entries can be wrong (the historical
+  Shadowkaeru entry turned out to be a different evolution
+  entirely — the real one was Bufonobi).
+- **Correct as part of the extension PR**, not later. Once
+  fresh evidence is in hand, fixing wrong entries alongside the
+  new ones keeps the data consistent in one go.
+- **Update the file's header comment** to reflect the new
+  verification state (e.g. drop the "only X is verified"
+  hedge once everything has been re-checked).
+
 ## Decide the kind of change
 
 Three shapes, each with a different commit style:
