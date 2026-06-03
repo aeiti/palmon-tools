@@ -154,11 +154,6 @@ export const OTHER_ITEMS = [
     group: 'evolution-items',
   },
   {
-    key: 'evolution-stone',
-    label: 'Evolution Stone',
-    group: 'evolution-items',
-  },
-  {
     key: 'element-energy-fire',
     label: 'Fire Energy',
     group: 'evolution-items',

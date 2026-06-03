@@ -94,10 +94,10 @@ describe('normalizeOther', () => {
   it('floors fractional counts and clamps negatives to 0', () => {
     const out = normalizeOther({
       'aurora-essence': 7.9,
-      'evolution-stone': -3,
+      'evolution-essence': -3,
     });
     expect(out['aurora-essence']).toBe(7);
-    expect(out['evolution-stone']).toBe(0);
+    expect(out['evolution-essence']).toBe(0);
   });
 
   it('drops unknown keys', () => {
