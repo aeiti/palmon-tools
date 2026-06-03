@@ -36,6 +36,8 @@ gotchas worth honoring.
   `src/pages/`.
 - `convert-to-hub` — convert an existing top-level tool into a
   hub-with-children (the Inventory pattern).
+- `rename-tool` — rename an existing tool's label + URL + page file
+  in one coordinated sweep (the Palmon → Roster pattern).
 - `add-legacy-redirect` — URL renames via `LEGACY_REDIRECTS`.
 
 **State & storage**
@@ -154,6 +156,7 @@ If the user asks to … → invoke …
 - "split this page into sub-pages" → `convert-to-hub`
 - "extract this into a reusable component" → `extract-shared-component`
 - "rename this URL" → `add-legacy-redirect`
+- "rename this tool" / "call it X instead" → `rename-tool`
 - "add tests for X" → `add-lib-tests`
 - "review this diff" / "is this ready to merge" → `review-changes`
 - "design this feature" / "what would it take" → `plan-feature`
