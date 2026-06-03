@@ -19,7 +19,7 @@ export default function Other() {
     <div className="flex flex-col gap-6">
       <ToolPageHeader
         title="Other Inventory"
-        subtitle="Track miscellaneous items like Skillfruit, Evolution Stones, Opus Pearls, and more."
+        subtitle="Track miscellaneous items like Skillfruit, Evolution Essence, Opus Pearls, and more."
         backTo={ROUTES.inventory}
       />
 
