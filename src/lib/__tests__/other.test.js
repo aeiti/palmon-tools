@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  baseKeyForRefund,
   customIdFromKey,
   customItemKey,
   emptyOther,
@@ -9,6 +10,8 @@ import {
   itemsByGroup,
   normalizeCustomOther,
   normalizeOther,
+  pairTotal,
+  refundKeyForBase,
 } from '../other.js';
 import { OTHER_ITEMS } from '../data/other.js';
 
@@ -142,6 +145,47 @@ describe('groupTotal', () => {
 
   it('returns 0 for null other', () => {
     expect(groupTotal(null, 'premium')).toBe(0);
+  });
+});
+
+describe('baseKeyForRefund / refundKeyForBase', () => {
+  it('maps a refund key to its base when both exist in the catalog', () => {
+    expect(baseKeyForRefund('skillfruit-epic-refund')).toBe('skillfruit-epic');
+    expect(baseKeyForRefund('mount-feed-refund')).toBe('mount-feed');
+  });
+
+  it('returns null for non-refund keys and unmatched bases', () => {
+    expect(baseKeyForRefund('skillfruit-epic')).toBeNull();
+    expect(baseKeyForRefund('not-a-key-refund')).toBeNull();
+    expect(baseKeyForRefund(null)).toBeNull();
+  });
+
+  it('maps a base key to its refund when one exists', () => {
+    expect(refundKeyForBase('skillfruit-epic')).toBe('skillfruit-epic-refund');
+    expect(refundKeyForBase('element-energy-fire')).toBe(
+      'element-energy-fire-refund',
+    );
+    expect(refundKeyForBase('aurora-essence')).toBeNull();
+    expect(refundKeyForBase(null)).toBeNull();
+  });
+});
+
+describe('pairTotal', () => {
+  it('sums base and refund counts for a paired key', () => {
+    const other = emptyOther();
+    other['skillfruit-epic'] = 5;
+    other['skillfruit-epic-refund'] = 3;
+    expect(pairTotal(other, 'skillfruit-epic')).toBe(8);
+  });
+
+  it('returns 0 when the base key has no refund counterpart', () => {
+    const other = emptyOther();
+    other['aurora-essence'] = 9;
+    expect(pairTotal(other, 'aurora-essence')).toBe(0);
+  });
+
+  it('returns 0 for null other', () => {
+    expect(pairTotal(null, 'skillfruit-epic')).toBe(0);
   });
 });
 

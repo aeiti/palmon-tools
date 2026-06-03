@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { OTHER_GROUPS } from '../../lib/data/other.js';
-import { itemsByGroup } from '../../lib/other.js';
+import { baseKeyForRefund, itemsByGroup, pairTotal } from '../../lib/other.js';
+import { formatCompact, formatCompactFull } from '../../lib/format.js';
 import CardColumns from '../ui/CardColumns.jsx';
 import ConfirmDialog from '../ui/ConfirmDialog.jsx';
 import StepperInput from '../ui/StepperInput.jsx';
@@ -80,18 +81,38 @@ export default function OtherInventory({
       weight: groupItems.length,
       content: (
         <div className="flex flex-col">
-          {groupItems.map((item) => (
-            <ItemRow
-              key={item.key}
-              item={item}
-              count={other[item.key]}
-              onChange={onChange}
-              onEdit={(it) =>
-                setDialogState({ id: it.id, label: it.label, group: it.group })
-              }
-              onDelete={(it) => setPendingDelete(it)}
-            />
-          ))}
+          {groupItems.map((item) => {
+            const baseKey = baseKeyForRefund(item.key);
+            const total = baseKey ? pairTotal(other, baseKey) : null;
+            return (
+              <div key={item.key}>
+                <ItemRow
+                  item={item}
+                  count={other[item.key]}
+                  onChange={onChange}
+                  onEdit={(it) =>
+                    setDialogState({
+                      id: it.id,
+                      label: it.label,
+                      group: it.group,
+                    })
+                  }
+                  onDelete={(it) => setPendingDelete(it)}
+                />
+                {total !== null && total > 0 && (
+                  <div className="flex items-baseline justify-between gap-2 px-3 pb-1 pt-0.5 text-xs text-slate-400">
+                    <span>Total with base</span>
+                    <span
+                      className="tabular-nums"
+                      title={formatCompactFull(total)}
+                    >
+                      {formatCompact(total)}
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       ),
     };
