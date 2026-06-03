@@ -57,6 +57,12 @@ gotchas worth honoring.
 - `transcribe-palmon-skill` — screenshot → `PALMON_SKILLS` entry.
 - `correct-palmon-data` — fix existing data (typo / wrong capture /
   game patch).
+- `correct-palmon-trait` — fix breeding traits in `palmonTraits.js`
+  (wrong grade / wrong effect text / category flip). Captures the
+  trait-schema rules.
+- `audit-data-against-screenshots` — systematic cross-check of a
+  whole dataset against a batch of screenshots, with structured
+  review and one corrective commit (the PR #153 pattern).
 
 ## Always
 
@@ -143,6 +149,8 @@ If the user asks to … → invoke …
 - "add a new Palmon" → `add-palmon-species` (then
   `transcribe-palmon-skill` for the skill data)
 - "this value is wrong" → `correct-palmon-data`
+- "this trait is wrong" / "X should be S not A" → `correct-palmon-trait`
+- "audit X against screenshots" / "cross-check the whole file" → `audit-data-against-screenshots`
 - "split this page into sub-pages" → `convert-to-hub`
 - "extract this into a reusable component" → `extract-shared-component`
 - "rename this URL" → `add-legacy-redirect`
