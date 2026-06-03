@@ -107,8 +107,8 @@ function SquadCard({ squadNumber, palmons, hashTarget }) {
         {members.length === 0 ? (
           <p className="text-center text-sm text-slate-500">
             No Palmon assigned. Open{' '}
-            <Link to={ROUTES.palmon} className="link-inline">
-              Palmon
+            <Link to={ROUTES.roster} className="link-inline">
+              Roster
             </Link>{' '}
             and set a squad on one of your Palmon.
           </p>
@@ -146,8 +146,8 @@ export default function Squads() {
           <>
             Each squad holds up to {MAX_PALMON_PER_SQUAD} Palmon. Assign squad
             on the{' '}
-            <Link to={ROUTES.palmon} className="link-inline">
-              Palmon page
+            <Link to={ROUTES.roster} className="link-inline">
+              Roster page
             </Link>
             .
           </>

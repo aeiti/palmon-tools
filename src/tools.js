@@ -74,13 +74,13 @@ export const TOOLS = [
     page: lazy(() => import('./pages/Notes.jsx')),
   },
   {
-    key: 'palmon',
-    path: ROUTES.palmon,
-    label: 'Palmon',
+    key: 'roster',
+    path: ROUTES.roster,
+    label: 'Roster',
     description:
       'Track your Palmon roster: level, stars, squad, equipment, skills, and traits.',
     section: SECTIONS.PROFILE,
-    page: lazy(() => import('./pages/Palmon.jsx')),
+    page: lazy(() => import('./pages/Roster.jsx')),
   },
   {
     key: 'squads',
