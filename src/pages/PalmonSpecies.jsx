@@ -39,8 +39,8 @@ export default function PalmonSpecies() {
         <p>
           No species matches <code className="text-slate-200">{speciesKey}</code>
           .{' '}
-          <Link to={ROUTES.palmon} className="link-inline">
-            Back to Palmon
+          <Link to={ROUTES.roster} className="link-inline">
+            Back to Roster
           </Link>
           .
         </p>
@@ -54,8 +54,8 @@ export default function PalmonSpecies() {
   return (
     <article className="flex flex-col gap-6 text-slate-300">
       <header className="flex flex-col gap-2">
-        <Link to={ROUTES.palmon} className="link-inline text-sm">
-          ← Palmon
+        <Link to={ROUTES.roster} className="link-inline text-sm">
+          ← Roster
         </Link>
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="h-page">{species.name}</h1>

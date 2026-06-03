@@ -324,7 +324,7 @@ const SPECIES_GROUPS = TIER_ORDER.map((tier) => {
   };
 }).filter((g) => g.options.length > 0);
 
-export default function Palmon() {
+export default function Roster() {
   const {
     activeProfile,
     createPalmon,
@@ -347,7 +347,7 @@ export default function Palmon() {
   return (
     <div className="flex flex-col gap-6">
       <ToolPageHeader
-        title="Palmon"
+        title="Roster"
         subtitle={`Track your Palmon roster: level (max ${MAX_PALMON_LEVEL}), star tier, squad, equipment, skills, and traits.`}
       />
 

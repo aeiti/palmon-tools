@@ -12,8 +12,8 @@ export const ROUTES = {
   inventorySpeedups: '/inventory/speedups',
   mounts: '/mounts',
   notes: '/notes',
-  palmon: '/palmon',
   palmonSpecies: '/palmon/species/:speciesKey',
+  roster: '/roster',
   squads: '/squads',
   traits: '/traits',
 };
@@ -25,6 +25,7 @@ export function palmonSpeciesUrl(speciesKey) {
 // Old top-level URLs we keep redirecting from. Add new aliases here as the
 // site grows so bookmarks don't break.
 export const LEGACY_REDIRECTS = [
+  { from: '/palmon', to: ROUTES.roster },
   { from: '/resources', to: ROUTES.inventoryResources },
   { from: '/speedups', to: ROUTES.inventorySpeedups },
 ];
