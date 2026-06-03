@@ -104,6 +104,37 @@ export function groupTotal(other, groupKey, customItems = []) {
   );
 }
 
+const REFUND_SUFFIX = '-refund';
+
+// A handful of built-in items come in a base + refund pair (e.g. Epic
+// Skillfruit + Epic Skillfruit (Refund), Earth Energy + Earth Energy
+// (Refund), Mount Feed + Mount Feed (Refund)). The refund variant is the
+// same resource returned from a refund — players plan against the
+// combined count. Pairing is convention-based: a refund item's key is
+// `<base>-refund` and the base key exists in OTHER_ITEMS.
+export function baseKeyForRefund(refundKey) {
+  if (typeof refundKey !== 'string' || !refundKey.endsWith(REFUND_SUFFIX)) {
+    return null;
+  }
+  const baseKey = refundKey.slice(0, -REFUND_SUFFIX.length);
+  return OTHER_ITEM_KEYS.has(baseKey) ? baseKey : null;
+}
+
+export function refundKeyForBase(baseKey) {
+  if (typeof baseKey !== 'string') return null;
+  const refundKey = `${baseKey}${REFUND_SUFFIX}`;
+  return OTHER_ITEM_KEYS.has(refundKey) ? refundKey : null;
+}
+
+export function pairTotal(other, baseKey) {
+  if (!other) return 0;
+  const refundKey = refundKeyForBase(baseKey);
+  if (!refundKey) return 0;
+  const base = Number(other[baseKey]) || 0;
+  const refund = Number(other[refundKey]) || 0;
+  return base + refund;
+}
+
 export function hasAnyOther(other, customItems = []) {
   if (!other) return false;
   if (OTHER_ITEMS.some((item) => (Number(other[item.key]) || 0) > 0)) {
