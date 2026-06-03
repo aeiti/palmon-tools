@@ -156,6 +156,42 @@ If a screenshot only shows the L30 value for the passive, capturing
 just `{ 30: <value> }` is correct — don't backfill earlier levels with
 extrapolated math.
 
+## Evolution skills are a different schema in a different file
+
+When a screenshot shows a Palmon at evolution stage 4, the 5th
+skill (the "evolution skill" — e.g. Cinder Feast, Forest
+Awakening, Absolute Zero) is **not** part of `palmonSkills.js`.
+It belongs in `src/lib/data/palmonEvolutionSkills.js` with a
+flat shape, distinct from the base 4-skill schema above:
+
+```js
+export const PALMON_EVOLUTION_SKILLS = {
+  glacewing: {
+    name: 'Absolute Zero',
+    effect: 'Enemies take 500% damage when Deep Freeze ends.',
+  },
+  // ...
+};
+```
+
+Key differences from the base-skill schema:
+
+- **No `effectTemplate` + `effectValues`** — the effect text is
+  flat. Evolution skills have only a Lv 10 / max value; there's
+  no level curve to capture, so the template-with-substitution
+  shape would be over-engineered.
+- **No `ascensionEffects`** — evolution skills don't ascend in
+  the same way base skills do. Don't add a placeholder array.
+- **No level pill, no skillfruit cost** — capture the effect
+  text verbatim and move on.
+
+Evolution skills are keyed by the **base species** key (not the
+evolved name) — Cryovern's skill lives under `glacewing`, since
+`PALMON_EVOLUTIONS[glacewing] = { name: 'Cryovern' }`.
+
+Species without an evolution (currently `oleana`, `spookaboo`)
+have no entry in `palmonEvolutionSkills.js`.
+
 ## Schema gap: skillfruit upgrade cost
 
 The skill panel shows the skillfruit cost for the next upgrade
