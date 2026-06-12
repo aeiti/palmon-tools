@@ -330,14 +330,14 @@ function PalmonCard({
   );
 }
 
-const TIER_ORDER = ['ur', 'ssr', 'sr'];
+const TIER_ORDER = ['UR', 'SSR', 'SR'];
 
 const SPECIES_PLACEHOLDER = [{ value: '', label: 'Select species…' }];
 
 const SPECIES_GROUPS = TIER_ORDER.map((tier) => {
   const meta = RARITY_BY_KEY[tier];
   return {
-    label: meta?.label || tier.toUpperCase(),
+    label: meta?.label || tier,
     options: PALMON_SPECIES.filter((s) => s.rarity === tier)
       .slice()
       .sort((a, b) => a.name.localeCompare(b.name))

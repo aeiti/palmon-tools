@@ -6,6 +6,7 @@ import {
   slotLabel,
 } from '../../lib/data/equipment.js';
 import { palmonDisplayName } from '../../lib/palmon.js';
+import { rarityBadgeClass } from '../../lib/data/rarity.js';
 import CardColumns from '../ui/CardColumns.jsx';
 import ConfirmDialog from '../ui/ConfirmDialog.jsx';
 import EquipmentDialog from './EquipmentDialog.jsx';
@@ -14,21 +15,6 @@ const TIER_ORDER = new Map(EQUIPMENT_TIERS.map((t, i) => [t, i]));
 const SLOTS = Array.from(
   new Set(EQUIPMENT_CATALOG.map((e) => e.slot)),
 ).sort();
-
-function tierClass(tier) {
-  switch (tier) {
-    case 'UR':
-      return 'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-500/30';
-    case 'SSR':
-      return 'bg-amber-500/15 text-amber-300 ring-amber-500/30';
-    case 'SR':
-      return 'bg-violet-500/15 text-violet-300 ring-violet-500/30';
-    case 'R':
-      return 'bg-sky-500/15 text-sky-300 ring-sky-500/30';
-    default:
-      return 'bg-slate-500/15 text-slate-300 ring-slate-500/30';
-  }
-}
 
 function InstanceRow({ instance, palmonsById, onEdit, onDelete }) {
   const catalog = equipmentByKey(instance.itemKey);
@@ -42,7 +28,7 @@ function InstanceRow({ instance, palmonsById, onEdit, onDelete }) {
         <span
           className={[
             'rounded-md px-1.5 py-0.5 text-[10px] font-semibold ring-1 tabular-nums',
-            tierClass(catalog.tier),
+            rarityBadgeClass(catalog.tier),
           ].join(' ')}
         >
           {catalog.tier}

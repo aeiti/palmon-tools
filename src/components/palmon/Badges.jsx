@@ -1,16 +1,11 @@
 import { ELEMENT_BY_KEY, RARITY_BY_KEY } from '../../lib/data/palmon.js';
+import { rarityBadgeClass } from '../../lib/data/rarity.js';
 
 const ELEMENT_BADGE_CLASS = {
   fire: 'bg-red-500/15 text-red-300 ring-red-500/30',
   water: 'bg-sky-500/15 text-sky-300 ring-sky-500/30',
   earth: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/30',
   electric: 'bg-amber-500/15 text-amber-300 ring-amber-500/30',
-};
-
-const RARITY_BADGE_CLASS = {
-  sr: 'bg-blue-500/15 text-blue-300 ring-blue-500/30',
-  ssr: 'bg-purple-500/15 text-purple-300 ring-purple-500/30',
-  ur: 'bg-yellow-500/15 text-yellow-300 ring-yellow-500/30',
 };
 
 const MYTHICAL_BADGE_CLASS =
@@ -29,8 +24,7 @@ export function ElementBadge({ element }) {
 export function RarityBadge({ rarity }) {
   const meta = RARITY_BY_KEY[rarity];
   if (!meta) return null;
-  const cls = RARITY_BADGE_CLASS[rarity] || 'bg-slate-700 text-slate-300';
-  return <span className={`badge ${cls}`}>{meta.label}</span>;
+  return <span className={`badge ${rarityBadgeClass(rarity)}`}>{meta.label}</span>;
 }
 
 export function MythicalBadge() {

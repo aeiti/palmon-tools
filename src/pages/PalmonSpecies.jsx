@@ -28,7 +28,7 @@ export default function PalmonSpecies() {
     ? formatPageTitle(species.name)
     : formatPageTitle('Palmon not found');
   const pageDescription = species
-    ? `${species.name} — ${capitalize(species.element)} ${species.rarity.toUpperCase()} Palmon${species.mythical ? ' (mythical)' : ''}. Skills, ascension effects, and Lv 30 values.`
+    ? `${species.name} — ${capitalize(species.element)} ${species.rarity} Palmon${species.mythical ? ' (mythical)' : ''}. Skills, ascension effects, and Lv 30 values.`
     : undefined;
   useDocumentMeta({ title: pageTitle, description: pageDescription });
 
