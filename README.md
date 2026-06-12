@@ -15,6 +15,7 @@ Everything you enter is saved to your browser's `localStorage`. Nothing is sent 
 - **About** — what this is, disclaimer, feedback link.
 - **Buildings** — track the level and assigned Palmon for each building in your camp.
 - **Inventory** — hub page for everything in your bag:
+  - **Equipment Inventory** — each piece of equipment as its own instance: ascend and enhance levels plus assignment to a Palmon.
   - **Other Inventory** — miscellaneous items.
   - **Resource Inventory** — resource chests and on-hand resources.
   - **Speedup Inventory** — speedups by category (Universal, Construction, Research, Training, Healing) with a target-time checker.

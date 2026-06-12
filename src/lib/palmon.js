@@ -16,6 +16,7 @@ import {
   palmonSpeciesName,
 } from './data/palmon.js';
 import { PALMON_EVOLUTIONS } from './data/palmonEvolutions.js';
+import { isEquipmentInstanceId } from './equipment.js';
 import { isValidTraitKey } from './palmonTraits.js';
 
 function makeId() {
@@ -92,8 +93,12 @@ export function normalizePalmon(palmon) {
     subStar: clampSubStar(palmon.star, palmon.subStar),
     evolutionStage: clampInt(palmon.evolutionStage, 1, MAX_EVOLUTION_STAGE),
     squad: clampSquad(palmon.squad),
+    // Slot entries are equipment-instance ids (eq_…); legacy free-text
+    // values from earlier versions are discarded. The bidirectional sync
+    // pass in useProfiles.normalize rewrites this from the equipment-side
+    // claims, so this just gates out garbage.
     equipment: padArray(palmon.equipment, EQUIPMENT_SLOTS, (v) =>
-      typeof v === 'string' ? v.trim() : '',
+      isEquipmentInstanceId(v) ? v : '',
     ),
     skills: padArray(palmon.skills, SKILL_SLOTS, (v) => ({
       level: clampOptionalInt(v?.level, 0, MAX_SKILL_LEVEL),

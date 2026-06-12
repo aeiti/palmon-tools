@@ -116,7 +116,3 @@ export function placeholderSkillName(slotIndex) {
 export function placeholderTraitName(slotIndex) {
   return `Trait ${slotIndex + 1}`;
 }
-
-export function placeholderEquipmentName(slotIndex) {
-  return `Equipment ${slotIndex + 1}`;
-}

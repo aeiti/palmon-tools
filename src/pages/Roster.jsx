@@ -8,6 +8,9 @@ import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
 import { ROUTES, palmonSpeciesUrl } from '../routes.js';
 import { findPalmonBuildingAssignment } from '../lib/buildings.js';
 import {
+  EQUIPMENT_SLOTS,
+} from '../lib/data/equipment.js';
+import {
   MAX_EVOLUTION_STAGE,
   MAX_PALMON_LEVEL,
   MAX_SKILL_LEVEL,
@@ -15,7 +18,6 @@ import {
   PALMON_SPECIES_BY_KEY,
   RARITY_BY_KEY,
   SQUAD_COUNT,
-  placeholderEquipmentName,
   placeholderSkillName,
   placeholderTraitName,
 } from '../lib/data/palmon.js';
@@ -32,6 +34,7 @@ import {
   MythicalBadge,
   RarityBadge,
 } from '../components/palmon/Badges.jsx';
+import EquipmentSlotPicker from '../components/palmon/EquipmentSlotPicker.jsx';
 import StarPicker from '../components/palmon/StarPicker.jsx';
 import SelectField from '../components/ui/SelectField.jsx';
 import { TRAIT_PICKER_GROUPS } from '../lib/palmonTraits.js';
@@ -93,7 +96,15 @@ function buildSquadOptions(palmon, allPalmons) {
   ];
 }
 
-function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
+function PalmonCard({
+  palmon,
+  allPalmons,
+  buildings,
+  equipment,
+  onChange,
+  onDelete,
+  onAssignEquipment,
+}) {
   const species = PALMON_SPECIES_BY_KEY[palmon.speciesKey];
   const cardRef = useRef(null);
   const { hash } = useLocation();
@@ -276,21 +287,31 @@ function PalmonCard({ palmon, allPalmons, buildings, onChange, onDelete }) {
               Equipment
             </h4>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {palmon.equipment.map((item, i) => (
-                <TextField
-                  key={i}
-                  label={placeholderEquipmentName(i)}
-                  value={item}
-                  placeholder="—"
-                  onChange={(v) => {
-                    const equipment = palmon.equipment.map((e, idx) =>
-                      idx === i ? v : e,
-                    );
-                    onChange(palmon.id, { equipment });
-                  }}
-                  ariaLabel={`${displayName} ${placeholderEquipmentName(i)}`}
-                />
-              ))}
+              {Array.from({ length: EQUIPMENT_SLOTS }, (_, i) => {
+                const slot = i + 1;
+                const currentEquipmentId = palmon.equipment[i] || '';
+                return (
+                  <EquipmentSlotPicker
+                    key={slot}
+                    slot={slot}
+                    palmonId={palmon.id}
+                    currentEquipmentId={currentEquipmentId}
+                    allEquipment={equipment}
+                    onAssign={(newId) => {
+                      // newId is the picked equipment-instance id, or
+                      // null when "— None —". Unassign → clear the
+                      // current occupant; assign → assignEquipment
+                      // auto-swaps any prior occupant of this slot.
+                      if (newId) {
+                        onAssignEquipment(newId, palmon.id);
+                      } else if (currentEquipmentId) {
+                        onAssignEquipment(currentEquipmentId, null);
+                      }
+                    }}
+                    ariaLabel={`${displayName} equipment slot ${slot}`}
+                  />
+                );
+              })}
             </div>
           </div>
 
@@ -331,6 +352,7 @@ export default function Roster() {
     updatePalmon,
     deletePalmon,
     resetActivePalmons,
+    assignEquipment,
   } = useProfiles();
 
   const [pendingSpecies, setPendingSpecies] = useState('');
@@ -397,8 +419,10 @@ export default function Roster() {
               palmon={pm}
               allPalmons={palmons}
               buildings={activeProfile.buildings}
+              equipment={activeProfile.equipment || []}
               onChange={updatePalmon}
               onDelete={setPendingDelete}
+              onAssignEquipment={assignEquipment}
             />
           ))}
         </div>

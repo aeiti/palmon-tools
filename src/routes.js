@@ -7,6 +7,7 @@ export const ROUTES = {
   about: '/about',
   buildings: '/buildings',
   inventory: '/inventory',
+  inventoryEquipment: '/inventory/equipment',
   inventoryOther: '/inventory/other',
   inventoryResources: '/inventory/resources',
   inventorySpeedups: '/inventory/speedups',

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
 import ChestInventory from '../components/inventory/ChestInventory.jsx';
+import EquipmentInventory from '../components/inventory/EquipmentInventory.jsx';
 import InventoryGrid from '../components/inventory/InventoryGrid.jsx';
 import OtherInventory from '../components/inventory/OtherInventory.jsx';
 import ProfilePicker from '../components/ui/ProfilePicker.jsx';
@@ -20,9 +21,32 @@ export default function Inventory() {
     addCustomOther,
     updateCustomOther,
     removeCustomOther,
+    addEquipment,
+    updateEquipment,
+    deleteEquipment,
+    resetActiveEquipment,
   } = useProfiles();
 
   const sections = [
+    {
+      key: 'equipment',
+      title: 'Equipment Inventory',
+      to: ROUTES.inventoryEquipment,
+      reset: {
+        run: resetActiveEquipment,
+        title: 'Reset equipment?',
+        message: `Delete every equipment instance for "${activeProfile.name}" and clear all assignments.`,
+      },
+      editor: (
+        <EquipmentInventory
+          equipment={activeProfile.equipment || []}
+          palmons={activeProfile.palmons}
+          onAdd={addEquipment}
+          onUpdate={updateEquipment}
+          onDelete={deleteEquipment}
+        />
+      ),
+    },
     {
       key: 'other',
       title: 'Other Inventory',
