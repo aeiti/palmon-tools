@@ -665,21 +665,40 @@ export function useProfiles() {
     }));
   }, []);
 
-  const addEquipment = useCallback((itemKey) => {
+  const addEquipment = useCallback((itemKey, initial = {}) => {
     if (!EQUIPMENT_CATALOG_BY_KEY[itemKey]) return null;
-    const item = emptyEquipmentItem(itemKey);
+    // Build the instance via the permissive normalizer so the initial
+    // levels are clamped just like any other write. assignedPalmonId
+    // is applied separately to get the auto-swap behavior.
+    const candidate = normalizeEquipmentItem({
+      ...emptyEquipmentItem(itemKey),
+      itemKey,
+      ascendLevel: initial.ascendLevel,
+      enhanceLevel: initial.enhanceLevel,
+      assignedPalmonId: null,
+    });
+    if (!candidate) return null;
+    const initialPalmonId =
+      typeof initial.assignedPalmonId === 'string' && initial.assignedPalmonId
+        ? initial.assignedPalmonId
+        : null;
     setState((s) => ({
       ...s,
-      profiles: s.profiles.map((p) =>
-        p.id !== s.activeProfileId
-          ? p
-          : applyEquipmentSync({
-              ...p,
-              equipment: [...(p.equipment || []), item],
-            }),
-      ),
+      profiles: s.profiles.map((p) => {
+        if (p.id !== s.activeProfileId) return p;
+        const palmonIds = new Set(p.palmons.map((pm) => pm.id));
+        let equipment = [...(p.equipment || []), candidate];
+        if (initialPalmonId && palmonIds.has(initialPalmonId)) {
+          equipment = applyEquipmentAssignment(
+            equipment,
+            candidate.id,
+            initialPalmonId,
+          );
+        }
+        return applyEquipmentSync({ ...p, equipment });
+      }),
     }));
-    return item.id;
+    return candidate.id;
   }, []);
 
   const updateEquipment = useCallback((equipmentId, patch) => {
@@ -687,11 +706,23 @@ export function useProfiles() {
       ...s,
       profiles: s.profiles.map((p) => {
         if (p.id !== s.activeProfileId) return p;
-        const equipment = (p.equipment || []).map((e) => {
+        // Patch everything except assignedPalmonId directly; route the
+        // assignment change through applyEquipmentAssignment so it
+        // auto-swaps any prior occupant of the same (palmon, slot).
+        const { assignedPalmonId: _ignored, ...rest } = patch;
+        let equipment = (p.equipment || []).map((e) => {
           if (e.id !== equipmentId) return e;
-          const merged = { ...e, ...patch, id: e.id };
+          const merged = { ...e, ...rest, id: e.id };
           return normalizeEquipmentItem(merged) || e;
         });
+        if ('assignedPalmonId' in patch) {
+          const palmonIds = new Set(p.palmons.map((pm) => pm.id));
+          const target =
+            patch.assignedPalmonId && palmonIds.has(patch.assignedPalmonId)
+              ? patch.assignedPalmonId
+              : null;
+          equipment = applyEquipmentAssignment(equipment, equipmentId, target);
+        }
         return applyEquipmentSync({ ...p, equipment });
       }),
     }));

@@ -102,6 +102,13 @@ export const TOOLS = [
 
   // Inventory sub-pages
   {
+    key: 'inventoryEquipment',
+    path: ROUTES.inventoryEquipment,
+    label: 'Equipment Inventory',
+    section: SECTIONS.INVENTORY,
+    page: lazy(() => import('./pages/Equipment.jsx')),
+  },
+  {
     key: 'inventoryOther',
     path: ROUTES.inventoryOther,
     label: 'Other Inventory',
