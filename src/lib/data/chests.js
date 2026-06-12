@@ -2,11 +2,13 @@
 // edit this file when in-game catalog changes. State helpers (empty/normalize/
 // totals) live in src/lib/chests.js.
 
+import { rarityTextClass } from './rarity.js';
+
 export const CHEST_TIERS = [
-  { key: 'gold', label: 'UR', accent: 'text-amber-300' },
-  { key: 'purple', label: 'SSR', accent: 'text-purple-300' },
-  { key: 'blue', label: 'SR', accent: 'text-sky-300' },
-  { key: 'green', label: 'R', accent: 'text-emerald-300' },
+  { key: 'gold', label: 'UR', accent: rarityTextClass('UR') },
+  { key: 'purple', label: 'SSR', accent: rarityTextClass('SSR') },
+  { key: 'blue', label: 'SR', accent: rarityTextClass('SR') },
+  { key: 'green', label: 'R', accent: rarityTextClass('R') },
 ];
 
 export const TIER_ORDER = CHEST_TIERS.map((t) => t.key);
