@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   EQUIPMENT_CATALOG,
   EQUIPMENT_TIERS,
@@ -7,6 +8,7 @@ import {
 } from '../../lib/data/equipment.js';
 import { palmonDisplayName } from '../../lib/palmon.js';
 import { rarityBadgeClass } from '../../lib/data/rarity.js';
+import { ROUTES } from '../../routes.js';
 import CardColumns from '../ui/CardColumns.jsx';
 import ConfirmDialog from '../ui/ConfirmDialog.jsx';
 import EquipmentDialog from './EquipmentDialog.jsx';
@@ -42,17 +44,23 @@ function InstanceRow({ instance, palmonsById, onEdit, onDelete }) {
         <span>
           <span className="text-slate-500">E</span> {instance.enhanceLevel}
         </span>
-        <span
-          className={[
-            'max-w-[8rem] truncate rounded-md px-1.5 py-0.5 ring-1',
-            assigned
-              ? 'bg-indigo-500/15 text-indigo-300 ring-indigo-500/30'
-              : 'bg-slate-700/40 text-slate-500 ring-slate-700/60',
-          ].join(' ')}
-          title={assigned?.name || 'Unassigned'}
-        >
-          {assigned ? assigned.name : '—'}
-        </span>
+        {assigned ? (
+          <Link
+            to={`${ROUTES.roster}#palmon-${assigned.id}`}
+            className="max-w-[8rem] truncate rounded-md bg-indigo-500/15 px-1.5 py-0.5 text-indigo-300 ring-1 ring-indigo-500/30 transition-colors hover:bg-indigo-500/25"
+            title={assigned.name}
+            aria-label={`Go to ${assigned.name} on Roster`}
+          >
+            {assigned.name}
+          </Link>
+        ) : (
+          <span
+            className="max-w-[8rem] truncate rounded-md bg-slate-700/40 px-1.5 py-0.5 text-slate-500 ring-1 ring-slate-700/60"
+            title="Unassigned"
+          >
+            —
+          </span>
+        )}
       </div>
       <div className="flex shrink-0 items-center gap-1">
         <button
