@@ -161,13 +161,13 @@ describe('normalizePalmon', () => {
     expect(out.skills[0].level).toBe(MAX_SKILL_LEVEL);
   });
 
-  it('trims string equipment, keeps known trait keys, clears unknown ones', () => {
+  it('keeps eq_-shaped equipment refs, discards legacy strings, keeps known traits', () => {
     const out = normalizePalmon({
       speciesKey: 'abuzzinian',
-      equipment: ['  axe  '],
+      equipment: ['eq_abc', 'legacy free text', '', null],
       traits: [123, '  caffeinated:S  ', 'something-unrecognized'],
     });
-    expect(out.equipment[0]).toBe('axe');
+    expect(out.equipment).toEqual(['eq_abc', '', '', '']);
     expect(out.traits[0]).toBe('');
     expect(out.traits[1]).toBe('caffeinated:S');
     expect(out.traits[2]).toBe('');

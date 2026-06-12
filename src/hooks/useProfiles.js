@@ -25,6 +25,14 @@ import {
   normalizeMounts,
 } from '../lib/mounts.js';
 import { MOUNTS_BY_KEY } from '../lib/data/mounts.js';
+import {
+  applyEquipmentAssignment,
+  emptyEquipmentItem,
+  normalizeEquipmentItem,
+  normalizeEquipmentList,
+  syncEquipmentAssignments,
+} from '../lib/equipment.js';
+import { EQUIPMENT_CATALOG_BY_KEY } from '../lib/data/equipment.js';
 import { emptyNote, normalizeNote, normalizeNotes } from '../lib/notes.js';
 import {
   emptySandstormSpeedups,
@@ -84,8 +92,19 @@ function makeProfile(name) {
     buildings: emptyBuildings(),
     mounts: emptyMounts(),
     palmons: [],
+    equipment: [],
     notes: [],
   };
+}
+
+// Rebuild the bidirectional palmon-side / equipment-side link from the
+// equipment list. Call this from any mutation that touches either side.
+function applyEquipmentSync(profile) {
+  const { equipment, palmons } = syncEquipmentAssignments(
+    profile.equipment,
+    profile.palmons,
+  );
+  return { ...profile, equipment, palmons };
 }
 
 function scrubBuildingPalmonRefs(buildings, validIds) {
@@ -135,11 +154,15 @@ function normalize(state) {
     return defaultState();
   }
   const profiles = state.profiles.map((p) => {
-    const palmons = normalizePalmonList(p.palmons);
-    const palmonIds = new Set(palmons.map((pm) => pm.id));
+    const palmons0 = normalizePalmonList(p.palmons);
+    const palmonIds = new Set(palmons0.map((pm) => pm.id));
     const buildings = scrubBuildingPalmonRefs(
       normalizeBuildings(p.buildings),
       palmonIds,
+    );
+    const { equipment, palmons } = syncEquipmentAssignments(
+      normalizeEquipmentList(p.equipment),
+      palmons0,
     );
     return syncProfileCampLevel({
       id: p.id || makeId(),
@@ -161,6 +184,7 @@ function normalize(state) {
       buildings,
       mounts: normalizeMounts(p.mounts),
       palmons,
+      equipment,
       notes: normalizeNotes(p.notes),
     });
   });
@@ -560,7 +584,7 @@ export function useProfiles() {
         const palmons = p.palmons.filter((pm) => pm.id !== palmonId);
         const validIds = new Set(palmons.map((pm) => pm.id));
         const buildings = scrubBuildingPalmonRefs(p.buildings, validIds);
-        return { ...p, palmons, buildings };
+        return applyEquipmentSync({ ...p, palmons, buildings });
       }),
     }));
   }, []);
@@ -641,6 +665,79 @@ export function useProfiles() {
     }));
   }, []);
 
+  const addEquipment = useCallback((itemKey) => {
+    if (!EQUIPMENT_CATALOG_BY_KEY[itemKey]) return null;
+    const item = emptyEquipmentItem(itemKey);
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId
+          ? p
+          : applyEquipmentSync({
+              ...p,
+              equipment: [...(p.equipment || []), item],
+            }),
+      ),
+    }));
+    return item.id;
+  }, []);
+
+  const updateEquipment = useCallback((equipmentId, patch) => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) => {
+        if (p.id !== s.activeProfileId) return p;
+        const equipment = (p.equipment || []).map((e) => {
+          if (e.id !== equipmentId) return e;
+          const merged = { ...e, ...patch, id: e.id };
+          return normalizeEquipmentItem(merged) || e;
+        });
+        return applyEquipmentSync({ ...p, equipment });
+      }),
+    }));
+  }, []);
+
+  const deleteEquipment = useCallback((equipmentId) => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) => {
+        if (p.id !== s.activeProfileId) return p;
+        const equipment = (p.equipment || []).filter(
+          (e) => e.id !== equipmentId,
+        );
+        return applyEquipmentSync({ ...p, equipment });
+      }),
+    }));
+  }, []);
+
+  const assignEquipment = useCallback((equipmentId, palmonId) => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) => {
+        if (p.id !== s.activeProfileId) return p;
+        const palmonIds = new Set(p.palmons.map((pm) => pm.id));
+        const target = palmonId && palmonIds.has(palmonId) ? palmonId : null;
+        const equipment = applyEquipmentAssignment(
+          p.equipment || [],
+          equipmentId,
+          target,
+        );
+        return applyEquipmentSync({ ...p, equipment });
+      }),
+    }));
+  }, []);
+
+  const resetActiveEquipment = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      profiles: s.profiles.map((p) =>
+        p.id !== s.activeProfileId
+          ? p
+          : applyEquipmentSync({ ...p, equipment: [] }),
+      ),
+    }));
+  }, []);
+
   const replaceAllProfiles = useCallback((nextState) => {
     setState(normalize(nextState));
   }, []);
@@ -651,7 +748,7 @@ export function useProfiles() {
       profiles: s.profiles.map((p) => {
         if (p.id !== s.activeProfileId) return p;
         const buildings = scrubBuildingPalmonRefs(p.buildings, new Set());
-        return { ...p, palmons: [], buildings };
+        return applyEquipmentSync({ ...p, palmons: [], buildings });
       }),
     }));
   }, []);
@@ -687,6 +784,11 @@ export function useProfiles() {
     resetActivePalmons,
     updateMount,
     resetActiveMounts,
+    addEquipment,
+    updateEquipment,
+    deleteEquipment,
+    assignEquipment,
+    resetActiveEquipment,
     addNote,
     updateNote,
     deleteNote,
