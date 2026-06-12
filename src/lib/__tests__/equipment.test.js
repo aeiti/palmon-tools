@@ -145,6 +145,11 @@ describe('normalizeEquipmentItem', () => {
     });
     expect(out.ascendLevel).toBe(MAX_ASCEND_LEVEL);
     expect(out.enhanceLevel).toBe(0);
+    const out2 = normalizeEquipmentItem({
+      itemKey: 'weapon_ur',
+      enhanceLevel: MAX_ENHANCE_LEVEL + 50,
+    });
+    expect(out2.enhanceLevel).toBe(MAX_ENHANCE_LEVEL);
   });
 
   it('treats nullish / empty / NaN levels as 0', () => {

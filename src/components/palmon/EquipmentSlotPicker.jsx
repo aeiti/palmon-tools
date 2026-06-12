@@ -5,8 +5,6 @@ import {
   slotLabel,
 } from '../../lib/data/equipment.js';
 
-const TIER_ORDER = new Map(EQUIPMENT_TIERS.map((t, i) => [t, i]));
-
 // Per-slot picker for the Roster expanded card. Lists every equipment
 // instance in the profile whose catalog slot matches this slot index,
 // grouped by tier, plus an "Unassigned" entry. Choosing an instance
