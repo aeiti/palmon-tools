@@ -109,8 +109,19 @@ function EstimatedBadge() {
 export default function Planner() {
   const now = useNow();
   const { status, schedule, error } = useSchedule();
-  const { activeProfile, resetActivePlanner, updatePlannerWeighting } =
-    useProfiles();
+  // A single useProfiles() instance for the whole page. useProfiles is a
+  // per-instance useState hook (no shared store), so calling it in child
+  // panels would create independent state copies whose saveState effects
+  // clobber each other — all reads/writes must go through this one instance.
+  const {
+    activeProfile,
+    resetActivePlanner,
+    updatePlannerQueue,
+    clearPlannerQueueSlot,
+    updatePlannerCooldown,
+    updatePlannerHospital,
+    updatePlannerWeighting,
+  } = useProfiles();
   const planner = activeProfile.planner;
   const budget = useMemo(
     () =>
@@ -160,9 +171,24 @@ export default function Planner() {
             onWeighting={updatePlannerWeighting}
           />
           <NowStrip schedule={schedule} now={now} />
-          <QueuesPanel schedule={schedule} now={now} />
-          <CooldownsPanel schedule={schedule} planner={planner} now={now} />
-          <HospitalPanel schedule={schedule} planner={planner} />
+          <QueuesPanel
+            schedule={schedule}
+            now={now}
+            planner={planner}
+            updatePlannerQueue={updatePlannerQueue}
+            clearPlannerQueueSlot={clearPlannerQueueSlot}
+          />
+          <CooldownsPanel
+            schedule={schedule}
+            planner={planner}
+            now={now}
+            updatePlannerCooldown={updatePlannerCooldown}
+          />
+          <HospitalPanel
+            schedule={schedule}
+            planner={planner}
+            updatePlannerHospital={updatePlannerHospital}
+          />
           <BudgetPanel budget={budget} />
           <DoubleDipCalendar schedule={schedule} now={now} />
         </>
@@ -325,10 +351,13 @@ function NowStrip({ schedule, now }) {
   );
 }
 
-function QueuesPanel({ schedule, now }) {
-  const { activeProfile, updatePlannerQueue, clearPlannerQueueSlot } =
-    useProfiles();
-  const planner = activeProfile.planner;
+function QueuesPanel({
+  schedule,
+  now,
+  planner,
+  updatePlannerQueue,
+  clearPlannerQueueSlot,
+}) {
   const queues = planner.queues;
   const landings = useMemo(() => {
     const byKey = {};
@@ -481,8 +510,7 @@ function DhmInput({ value, onChange, unit, label }) {
   );
 }
 
-function CooldownsPanel({ schedule, planner, now }) {
-  const { updatePlannerCooldown } = useProfiles();
+function CooldownsPanel({ schedule, planner, now, updatePlannerCooldown }) {
   const rows = cooldownSchedule(schedule, planner, now);
 
   return (
@@ -561,8 +589,7 @@ function CooldownStatus({ cd, now }) {
   return <span className="text-emerald-300">Ready now — pop it</span>;
 }
 
-function HospitalPanel({ schedule, planner }) {
-  const { updatePlannerHospital } = useProfiles();
+function HospitalPanel({ schedule, planner, updatePlannerHospital }) {
   const cap = schedule.queues?.hospital?.capacity ?? HOSPITAL_CAP;
   const fill = planner.hospitalFill ?? 0;
   const pct = Math.min(100, Math.round((fill / cap) * 100));
