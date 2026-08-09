@@ -1,20 +1,27 @@
 import { describe, expect, it } from 'vitest';
 import {
   anchorExpired,
+  burnWindows,
   cooldownSchedule,
   doubleDipWindows,
   duelThemeAt,
   fotpSlotAt,
   fotpSlotIndexAt,
   fotpSlots,
+  nextDuelScoringDay,
   nextServerWeekdayAtHour,
   nowStrip,
   plannerWarnings,
+  queueDepthMinutes,
+  queueLandings,
   queueRemainingMinutes,
+  recommendationStream,
+  remainingMinutesAsOf,
+  serverDayStart,
   serverParts,
   speedupBudget,
 } from '../planner.js';
-import { SPEEDUP_TYPE_TO_CATEGORY } from '../plannerState.js';
+import { emptyPlanner, SPEEDUP_TYPE_TO_CATEGORY } from '../plannerState.js';
 import realSchedule from '../../../public/schedule.json';
 
 // Self-contained fixture so these tests don't move when the real schedule.json
@@ -287,6 +294,127 @@ describe('plannerWarnings', () => {
     const late = new Date('2026-08-22T00:00:00-02:00');
     const keys = plannerWarnings(S, { hospitalFill: 0 }, late).map((w) => w.key);
     expect(keys).toContain('anchor');
+  });
+});
+
+// Planner state with specific queue timers set (relative to the anchor).
+function plannerWith(overrides) {
+  const p = emptyPlanner();
+  for (const [slotKey, offsetMin] of Object.entries(overrides)) {
+    p.queues[slotKey] = {
+      name: slotKey,
+      completesAt: new Date(ANCHOR.getTime() + offsetMin * 60000).toISOString(),
+    };
+  }
+  return p;
+}
+
+describe('serverDayStart / remainingMinutesAsOf', () => {
+  it('snaps to server-local midnight of the containing day', () => {
+    const midday = new Date(ANCHOR.getTime() + 12 * HOUR);
+    expect(serverDayStart(S, midday).getTime()).toBe(ANCHOR.getTime());
+    expect(serverParts(S, serverDayStart(S, midday))).toMatchObject({ hour: 0 });
+  });
+
+  it('measures remaining timer minutes from an arbitrary reference', () => {
+    const item = { completesAt: new Date(ANCHOR.getTime() + 180 * 60000).toISOString() };
+    expect(remainingMinutesAsOf(item, ANCHOR.getTime())).toBe(180);
+    expect(remainingMinutesAsOf(item, ANCHOR.getTime() + 200 * 60000)).toBe(0);
+  });
+});
+
+describe('queueDepthMinutes', () => {
+  it('sums remaining minutes across a type’s queues', () => {
+    const planner = plannerWith({ B1: 120, B2: 60, R1: 240 });
+    expect(queueDepthMinutes(planner, 'building', ANCHOR.getTime())).toBe(180);
+    expect(queueDepthMinutes(planner, 'tech', ANCHOR.getTime())).toBe(240);
+    expect(queueDepthMinutes(planner, 'training', ANCHOR.getTime())).toBe(0);
+  });
+});
+
+describe('queueLandings', () => {
+  it('flags a building queue completing on a building Duel day as scoring', () => {
+    const planner = plannerWith({ B1: 120 }); // completes Fri (Prepare for Battle)
+    const [landing] = queueLandings(S, planner, ANCHOR);
+    expect(landing.slotKey).toBe('B1');
+    expect(landing.duelScores).toBe(true);
+    expect(landing.scores).toBe(true);
+  });
+
+  it('flags a training queue landing on a dead Duel day as not scoring', () => {
+    const monday = 3 * 24 * 60 + 3 * 60; // Fri + 3d 3h = Mon 03:00
+    const planner = plannerWith({ T1: monday });
+    const [landing] = queueLandings(S, planner, ANCHOR);
+    expect(landing.duelScores).toBe(false);
+  });
+
+  it('skips empty and already-completed queues', () => {
+    const planner = plannerWith({ B1: -60 }); // completed an hour ago
+    expect(queueLandings(S, planner, ANCHOR)).toEqual([]);
+  });
+});
+
+describe('nextDuelScoringDay', () => {
+  it('returns the same Friday when it already scores the type', () => {
+    const next = nextDuelScoringDay(S, ANCHOR, 'building');
+    expect(next.duelTheme).toBe('Prepare for Battle');
+  });
+
+  it('finds the next Tuesday for building from a Sunday', () => {
+    const sunday = new Date(ANCHOR.getTime() + 2 * 24 * HOUR);
+    const next = nextDuelScoringDay(S, sunday, 'building');
+    expect(serverParts(S, next.at).weekday).toBe(2); // Tue
+  });
+});
+
+describe('burnWindows', () => {
+  const budget = {
+    building: { specific: 100, withGeneral: 100 },
+    tech: { specific: 0, withGeneral: 0 },
+    training: { specific: 0, withGeneral: 0 },
+    healing: { specific: 0, withGeneral: 0 },
+    general: 0,
+  };
+
+  it('recommends min(depth, budget) per scoring type on a scoring day', () => {
+    const planner = plannerWith({ B1: 120, B2: 60 }); // 180 min building depth
+    const windows = burnWindows(S, planner, budget, ANCHOR, 1); // today = Fri
+    const building = windows.find((w) => w.type === 'building');
+    expect(building).toMatchObject({
+      depthMinutes: 180,
+      budgetMinutes: 100,
+      recommendedBurn: 100,
+    });
+  });
+
+  it('produces no windows on a rest day', () => {
+    const sunday = new Date(ANCHOR.getTime() + 2 * 24 * HOUR);
+    expect(burnWindows(S, emptyPlanner(), budget, sunday, 1)).toEqual([]);
+  });
+});
+
+describe('recommendationStream', () => {
+  const budget = {
+    building: { specific: 100, withGeneral: 100 },
+    tech: { specific: 0, withGeneral: 0 },
+    training: { specific: 0, withGeneral: 0 },
+    healing: { specific: 0, withGeneral: 0 },
+    general: 0,
+  };
+
+  it('merges cooldown and burn items, sorted by time', () => {
+    const planner = plannerWith({ B1: 180 });
+    const items = recommendationStream(S, planner, budget, ANCHOR, {
+      horizonDays: 3,
+    });
+    expect(items.length).toBeGreaterThan(0);
+    expect(items.some((i) => i.kind === 'burn')).toBe(true);
+    expect(items.some((i) => i.kind === 'cooldown')).toBe(true);
+    for (let i = 1; i < items.length; i += 1) {
+      expect(items[i].at.getTime()).toBeGreaterThanOrEqual(
+        items[i - 1].at.getTime(),
+      );
+    }
   });
 });
 
