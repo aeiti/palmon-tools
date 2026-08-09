@@ -47,6 +47,14 @@ import {
 } from '../lib/palmon.js';
 import { loadState, saveState } from '../lib/storage.js';
 import { parseCompact } from '../lib/format.js';
+import {
+  emptyPlanner,
+  HOSPITAL_CAP,
+  isCooldownKey,
+  isQueueSlotKey,
+  normalizePlanner,
+  normalizeQueueItem,
+} from '../lib/plannerState.js';
 
 function makeId() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -94,6 +102,7 @@ function makeProfile(name) {
     palmons: [],
     equipment: [],
     notes: [],
+    planner: emptyPlanner(),
   };
 }
 
@@ -122,6 +131,20 @@ function scrubBuildingPalmonRefs(buildings, validIds) {
 function defaultState() {
   const p = makeProfile('Main');
   return { activeProfileId: p.id, profiles: [p] };
+}
+
+// Mutate the active profile's planner field via `mutate(planner)`, always
+// through the empty-planner fallback so a profile saved before the field
+// existed is safe. Module-scoped so the CRUD callbacks can keep empty deps.
+function mutatePlanner(s, mutate) {
+  return {
+    ...s,
+    profiles: s.profiles.map((p) =>
+      p.id !== s.activeProfileId
+        ? p
+        : { ...p, planner: mutate(p.planner || emptyPlanner()) },
+    ),
+  };
 }
 
 function clampCampLevel(n) {
@@ -186,6 +209,7 @@ function normalize(state) {
       palmons,
       equipment,
       notes: normalizeNotes(p.notes),
+      planner: normalizePlanner(p.planner),
     });
   });
   const activeProfileId = profiles.find((p) => p.id === state.activeProfileId)
@@ -769,6 +793,72 @@ export function useProfiles() {
     }));
   }, []);
 
+  // --- Planner ---------------------------------------------------------
+
+  const updatePlannerQueue = useCallback((slotKey, patch) => {
+    if (!isQueueSlotKey(slotKey)) return;
+    setState((s) =>
+      mutatePlanner(s, (planner) => {
+        const current = planner.queues[slotKey] || {
+          name: '',
+          completesAt: null,
+        };
+        return {
+          ...planner,
+          queues: {
+            ...planner.queues,
+            [slotKey]: normalizeQueueItem({ ...current, ...patch }),
+          },
+        };
+      }),
+    );
+  }, []);
+
+  const clearPlannerQueueSlot = useCallback((slotKey) => {
+    if (!isQueueSlotKey(slotKey)) return;
+    setState((s) =>
+      mutatePlanner(s, (planner) => ({
+        ...planner,
+        queues: {
+          ...planner.queues,
+          [slotKey]: { name: '', completesAt: null },
+        },
+      })),
+    );
+  }, []);
+
+  // iso: an ISO string (e.g. "fire now" -> new Date().toISOString()) or null
+  // to clear the last-fired timestamp.
+  const updatePlannerCooldown = useCallback((key, iso) => {
+    if (!isCooldownKey(key)) return;
+    const ts =
+      typeof iso === 'string' && !Number.isNaN(Date.parse(iso)) ? iso : null;
+    setState((s) =>
+      mutatePlanner(s, (planner) => ({
+        ...planner,
+        cooldowns: { ...planner.cooldowns, [key]: ts },
+      })),
+    );
+  }, []);
+
+  const updatePlannerHospital = useCallback((value) => {
+    const v = Math.min(HOSPITAL_CAP, Math.max(0, Math.floor(Number(value) || 0)));
+    setState((s) =>
+      mutatePlanner(s, (planner) => ({ ...planner, hospitalFill: v })),
+    );
+  }, []);
+
+  const updatePlannerWeighting = useCallback((value) => {
+    const v = Math.min(100, Math.max(0, Math.floor(Number(value) || 0)));
+    setState((s) =>
+      mutatePlanner(s, (planner) => ({ ...planner, weighting: v })),
+    );
+  }, []);
+
+  const resetActivePlanner = useCallback(() => {
+    setState((s) => mutatePlanner(s, () => emptyPlanner()));
+  }, []);
+
   const replaceAllProfiles = useCallback((nextState) => {
     setState(normalize(nextState));
   }, []);
@@ -824,6 +914,12 @@ export function useProfiles() {
     updateNote,
     deleteNote,
     resetActiveNotes,
+    updatePlannerQueue,
+    clearPlannerQueueSlot,
+    updatePlannerCooldown,
+    updatePlannerHospital,
+    updatePlannerWeighting,
+    resetActivePlanner,
     replaceAllProfiles,
   };
 }
