@@ -74,6 +74,15 @@ export const TOOLS = [
     page: lazy(() => import('./pages/Notes.jsx')),
   },
   {
+    key: 'planner',
+    path: ROUTES.planner,
+    label: 'Planner',
+    description:
+      'Plan queue starts, speedup burns, and cooldown pops around the Guild Duel week and Front of the Pack rotation.',
+    section: SECTIONS.PROFILE,
+    page: lazy(() => import('./pages/Planner.jsx')),
+  },
+  {
     key: 'roster',
     path: ROUTES.roster,
     label: 'Roster',
