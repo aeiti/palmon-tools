@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "description": "Shared source of truth for the Palmon Queue Planner. Read by the planner page (client fetch) and, later, the reminder pipeline (GitHub Actions, json.load). Edited by hand: re-anchor FotP per event, overwrite a stage block when a screenshot verifies its rates.",
+    "updated": "2026-08-09",
+    "docs": "docs/palmon-planner-plan.md"
+  },
+  "gameClock": {
+    "timezone": "Atlantic/South_Georgia",
+    "utcOffsetHours": -2,
+    "note": "Fixed UTC-2, no DST. All internal projection math runs on this offset; display in the visitor's local time."
+  },
+  "duel": {
+    "note": "Guild Duel: 6 scoring days Mon-Sat, Sunday off. Week boundary Sun 23:00 -> Sat 24:00 server time; per-day themes are modelled on the server calendar weekday (the 23:00 early-start of the boundary is not yet modelled).",
+    "personalChestThresholds": [700000, 1000000, 2200000],
+    "days": [
+      {
+        "weekday": 0,
+        "key": "sun",
+        "theme": "Rest day",
+        "off": true,
+        "tags": [],
+        "scoring": []
+      },
+      {
+        "weekday": 1,
+        "key": "mon",
+        "theme": "Complete Intel Quests",
+        "tags": ["intel"],
+        "scoring": []
+      },
+      {
+        "weekday": 2,
+        "key": "tue",
+        "theme": "Build Up Your Camp",
+        "tags": ["building"],
+        "scoring": [
+          { "label": "Building speedup", "points": 125, "per": "minute" },
+          { "label": "Building power", "points": 10, "per": "power" }
+        ]
+      },
+      {
+        "weekday": 3,
+        "key": "wed",
+        "theme": "Research Techs",
+        "tags": ["tech"],
+        "scoring": [
+          { "label": "Tech speedup", "points": 125, "per": "minute" },
+          { "label": "Tech power", "points": 10, "per": "power" }
+        ]
+      },
+      {
+        "weekday": 4,
+        "key": "thu",
+        "theme": "Upgrade Palmon",
+        "tags": ["palmon"],
+        "scoring": []
+      },
+      {
+        "weekday": 5,
+        "key": "fri",
+        "theme": "Prepare for Battle",
+        "tags": ["building", "tech", "training", "healing"],
+        "scoring": [
+          { "label": "All speedups", "points": 125, "per": "minute" },
+          { "label": "Building power", "points": 10, "per": "power" },
+          { "label": "Tech power", "points": 10, "per": "power" },
+          { "label": "Training speedup", "points": 125, "per": "minute" }
+        ],
+        "note": "Universal dump day: every speedup type scores. Generals sink here."
+      },
+      {
+        "weekday": 6,
+        "key": "sat",
+        "theme": "Defeat Enemies",
+        "tags": ["building", "tech", "training", "healing", "combat"],
+        "scoring": [
+          { "label": "All speedups", "points": 125, "per": "minute" },
+          { "label": "Kills / losses (by Armigo level)", "points": null, "per": "unit", "note": "12->48 by Armigo level; awards points for losses too." }
+        ],
+        "note": "Speedups only (no power points); completions should already have landed."
+      }
+    ]
+  },
+  "fotp": {
+    "note": "Front of the Pack: 5 stages of 4h slots, 6 slots/day, each day starting one stage later -> 5-day super-cycle. Re-anchors per event: the opening stage is not stable across events.",
+    "rotation": {
+      "order": [
+        "upgrade-palmon",
+        "upgrade-buildings",
+        "train-armigo",
+        "research-techs",
+        "spend-ap"
+      ],
+      "slotHours": 4,
+      "slotsPerDay": 6
+    },
+    "anchor": {
+      "eventName": "August 2026",
+      "day1DateTime": "2026-08-07T00:00:00-02:00",
+      "day1StartStage": "spend-ap",
+      "expires": "2026-08-21T00:00:00-02:00",
+      "expiresSource": "estimated",
+      "note": "Day 1 = Fri Aug 7 00:00 UTC-2. Event duration unverified; past `expires`, reminders flip to a verify-new-event warning instead of announcing a stale rotation."
+    },
+    "stages": {
+      "upgrade-palmon": {
+        "label": "Upgrade Palmon",
+        "tags": ["palmon"],
+        "source": "verified",
+        "chestThresholds": [3000, 7500, 15000],
+        "scoring": [
+          { "label": "Palmon XP", "points": 1, "per": "2000 XP" },
+          { "label": "Hatch", "points": 500, "per": "hatch" },
+          { "label": "Magic Bean", "points": 300, "per": "item" }
+        ]
+      },
+      "upgrade-buildings": {
+        "label": "Upgrade Buildings",
+        "tags": ["building"],
+        "source": "verified",
+        "chestThresholds": [6000, 12000, 30000],
+        "scoring": [
+          { "label": "Building speedup", "points": 10, "per": "minute" },
+          { "label": "Building power", "points": 4, "per": "10 power" },
+          { "label": "Magic Bean", "points": 300, "per": "item" }
+        ]
+      },
+      "train-armigo": {
+        "label": "Train Armigo",
+        "tags": ["training"],
+        "source": "estimated",
+        "chestThresholds": [6000, 12000, 30000],
+        "scoring": [
+          { "label": "Train Armigo (per level)", "points": null, "per": "Armigo", "note": "Per-level curve, placeholder; Duel Day-5 list scales 75->338 for Lv1->10." },
+          { "label": "Training speedup", "points": 10, "per": "minute", "note": "Magnitude mirrors the Upgrade Buildings shape; awaiting screenshot." }
+        ]
+      },
+      "research-techs": {
+        "label": "Research Techs",
+        "tags": ["tech"],
+        "source": "estimated",
+        "chestThresholds": [6000, 12000, 30000],
+        "scoring": [
+          { "label": "Tech speedup", "points": 10, "per": "minute", "note": "Magnitude mirrors the Upgrade Buildings shape; awaiting screenshot." },
+          { "label": "Tech power", "points": 4, "per": "10 power", "note": "Placeholder." },
+          { "label": "Magic Bean", "points": 300, "per": "item", "note": "Placeholder." }
+        ]
+      },
+      "spend-ap": {
+        "label": "Spend AP",
+        "tags": ["ap"],
+        "source": "verified",
+        "chestThresholds": [6000, 12000, 30000],
+        "scoring": [
+          { "label": "Spend AP", "points": 100, "per": "AP" },
+          { "label": "Mount Feed", "points": 1, "per": "item" },
+          { "label": "Magic Bean", "points": 300, "per": "item" }
+        ]
+      }
+    }
+  },
+  "cooldowns": [
+    {
+      "key": "instabuild",
+      "label": "Instabuild",
+      "source": "Camp order",
+      "effect": "-8h on all active build queues",
+      "cooldownHours": 48,
+      "scores": true,
+      "note": "Counts toward Duel + FotP like speedup minutes, per queue touched (working assumption: up to 8h x 4 queues on a scoring day; verify counter jump on next scoring-day pop). Target phase: Tue -> Thu -> Sat."
+    },
+    {
+      "key": "instant-build",
+      "label": "Instant Build",
+      "source": "Class skill",
+      "effect": "-600 min on all active build queues",
+      "cooldownHours": 47.5,
+      "scores": false,
+      "note": "Shaves real time for free but destroys burnable minutes. Pop on dead days (Sun/Mon). Do not confuse with Instabuild (camp order)."
+    },
+    {
+      "key": "instant-research",
+      "label": "Instant Research",
+      "source": "Class skill",
+      "effect": "-600 min on all active research queues",
+      "cooldownHours": 47.5,
+      "scores": false,
+      "note": "Same trade-off as Instant Build, for research queues. Pop on dead days."
+    }
+  ],
+  "speedups": {
+    "types": ["building", "tech", "training", "healing", "general"],
+    "denominationMinutes": [1, 5, 60, 180, 480],
+    "generalNote": "General speedups count as the type they are spent on for Duel scoring: the flexible reserve, spent last, steered to Friday."
+  },
+  "queues": {
+    "building": 4,
+    "research": 2,
+    "training": 4,
+    "hospital": { "queues": 1, "capacity": 18000, "overflow": "permanent deaths" }
+  }
+}

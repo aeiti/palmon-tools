@@ -21,6 +21,7 @@ Everything you enter is saved to your browser's `localStorage`. Nothing is sent 
   - **Speedup Inventory** — speedups by category (Universal, Construction, Research, Training, Healing) with a target-time checker.
 - **Mounts** — reference for the seven mounts in the Stable: skill effects at every tier (1–5), with thresholds at mount levels 10 / 30 / 50 / 70 / 100.
 - **Notes** — per-profile free-form journal entries, categorized (player / event / item / palmon / building / other) with an optional link to a Palmon species or building.
+- **Planner** — schedule queue starts, speedup burns, and cooldown pops around the Guild Duel week and the Front of the Pack rotation, surfacing double-dip windows where both systems score at once.
 - **Roster** — your Palmon roster: level, stars, squad, equipment, skills, traits.
 - **Squads** — see each squad and the Palmon assigned to it.
 - **Traits** — reference for every breeding trait, grouped by Combat / Work and grade (S / A / B / C).

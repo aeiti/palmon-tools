@@ -14,6 +14,7 @@ export const ROUTES = {
   mounts: '/mounts',
   notes: '/notes',
   palmonSpecies: '/palmon/species/:speciesKey',
+  planner: '/planner',
   roster: '/roster',
   squads: '/squads',
   traits: '/traits',
