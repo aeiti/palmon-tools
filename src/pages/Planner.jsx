@@ -16,9 +16,12 @@ import {
   cooldownSchedule,
   doubleDipWindows,
   fotpSlotAt,
+  nextDuelScoringDay,
   nowStrip,
   plannerWarnings,
+  queueLandings,
   queueRemainingMinutes,
+  recommendationStream,
   speedupBudget,
 } from '../lib/planner.js';
 
@@ -106,8 +109,18 @@ function EstimatedBadge() {
 export default function Planner() {
   const now = useNow();
   const { status, schedule, error } = useSchedule();
-  const { activeProfile, resetActivePlanner } = useProfiles();
+  const { activeProfile, resetActivePlanner, updatePlannerWeighting } =
+    useProfiles();
   const planner = activeProfile.planner;
+  const budget = useMemo(
+    () =>
+      speedupBudget(
+        activeProfile.inventory,
+        SPEEDUP_TYPE_TO_CATEGORY,
+        categoryTotalMinutes,
+      ),
+    [activeProfile.inventory],
+  );
 
   return (
     <div className="flex flex-col gap-6">
@@ -139,11 +152,18 @@ export default function Planner() {
       {status === 'ready' && (
         <>
           <WarningsPanel schedule={schedule} planner={planner} now={now} />
+          <RecommendationsPanel
+            schedule={schedule}
+            planner={planner}
+            budget={budget}
+            now={now}
+            onWeighting={updatePlannerWeighting}
+          />
           <NowStrip schedule={schedule} now={now} />
-          <QueuesPanel />
+          <QueuesPanel schedule={schedule} now={now} />
           <CooldownsPanel schedule={schedule} planner={planner} now={now} />
           <HospitalPanel schedule={schedule} planner={planner} />
-          <BudgetPanel inventory={activeProfile.inventory} />
+          <BudgetPanel budget={budget} />
           <DoubleDipCalendar schedule={schedule} now={now} />
         </>
       )}
@@ -168,6 +188,86 @@ function WarningsPanel({ schedule, planner, now }) {
         </div>
       ))}
     </div>
+  );
+}
+
+const REC_BADGE = {
+  cooldown: 'bg-violet-500/15 text-violet-300 ring-violet-500/40',
+  burn: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/40',
+};
+
+function priorityLabel(weighting) {
+  if (weighting <= 40) return 'Duel-priority';
+  if (weighting >= 60) return 'FotP-priority';
+  return 'Balanced';
+}
+
+function RecommendationsPanel({ schedule, planner, budget, now, onWeighting }) {
+  const items = recommendationStream(schedule, planner, budget, now, {
+    horizonDays: 7,
+  });
+  const weighting = planner.weighting ?? 50;
+
+  return (
+    <section className="flex flex-col gap-3">
+      <div>
+        <h2 className="h-section">Recommendations</h2>
+        <p className="text-subtle">
+          Next 7 days — when to pop cooldowns and burn speedups, in your local
+          time. Add queue timers and speedups to sharpen the burn amounts.
+        </p>
+      </div>
+
+      <div className="card flex flex-wrap items-center gap-3">
+        <label htmlFor="weighting" className="text-sm text-slate-300">
+          Priority
+        </label>
+        <span className="text-xs text-slate-400">Duel</span>
+        <input
+          id="weighting"
+          type="range"
+          min="0"
+          max="100"
+          step="10"
+          value={weighting}
+          onChange={(e) => onWeighting(e.target.value)}
+          className="min-w-0 flex-1 accent-indigo-500"
+        />
+        <span className="text-xs text-slate-400">FotP</span>
+        <span className="w-24 text-right text-sm font-semibold text-slate-200">
+          {priorityLabel(weighting)}
+        </span>
+      </div>
+
+      {items.length === 0 ? (
+        <p className="text-subtle">
+          Nothing to recommend yet — enter your active queue timers and speedup
+          inventory, and pops/burns will appear here.
+        </p>
+      ) : (
+        <ol className="panel divide-y divide-slate-800/80">
+          {items.map((item, i) => (
+            <li
+              key={i}
+              className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-3 py-2"
+            >
+              <span className="w-40 shrink-0 text-sm font-semibold text-slate-100 tabular-nums">
+                {dateTimeFmt.format(item.at)}
+              </span>
+              <span
+                className={`badge ${REC_BADGE[item.kind] ?? ''}`}
+                aria-label={item.kind}
+              >
+                {item.kind}
+              </span>
+              <span className="min-w-0 flex-1 text-sm text-slate-300">
+                {item.text}
+              </span>
+            </li>
+          ))}
+        </ol>
+      )}
+    </section>
   );
 }
 
@@ -225,11 +325,16 @@ function NowStrip({ schedule, now }) {
   );
 }
 
-function QueuesPanel() {
-  const now = useNow();
+function QueuesPanel({ schedule, now }) {
   const { activeProfile, updatePlannerQueue, clearPlannerQueueSlot } =
     useProfiles();
-  const queues = activeProfile.planner.queues;
+  const planner = activeProfile.planner;
+  const queues = planner.queues;
+  const landings = useMemo(() => {
+    const byKey = {};
+    for (const l of queueLandings(schedule, planner, now)) byKey[l.slotKey] = l;
+    return byKey;
+  }, [schedule, planner, now]);
 
   return (
     <section className="flex flex-col gap-3">
@@ -237,7 +342,7 @@ function QueuesPanel() {
         <h2 className="h-section">Queues</h2>
         <p className="text-subtle">
           Enter each active queue’s item and remaining time (read off the game
-          UI). Timers count down live and feed the double-dip and burn planning.
+          UI). Timers count down live and feed the recommendations above.
         </p>
       </div>
 
@@ -254,6 +359,8 @@ function QueuesPanel() {
                     slot={slot}
                     item={queues[key]}
                     now={now}
+                    landing={landings[key]}
+                    schedule={schedule}
                     onUpdate={updatePlannerQueue}
                     onClear={clearPlannerQueueSlot}
                   />
@@ -267,7 +374,27 @@ function QueuesPanel() {
   );
 }
 
-function QueueSlotRow({ slot, item, now, onUpdate, onClear }) {
+function LandingHint({ landing, schedule, now }) {
+  if (!landing) return null;
+  if (landing.scores) {
+    return (
+      <span className="text-xs text-emerald-300">
+        ✓ lands {landing.duelScores ? landing.duelTheme : landing.fotpStage} —
+        scores {landing.type}
+      </span>
+    );
+  }
+  const next = nextDuelScoringDay(schedule, now, landing.type);
+  return (
+    <span className="text-xs text-amber-300">
+      lands {landing.duelOff ? 'a rest day' : landing.duelTheme} — no {landing.type}{' '}
+      scoring
+      {next && <> · next: {dateTimeFmt.format(next.at)}</>}
+    </span>
+  );
+}
+
+function QueueSlotRow({ slot, item, now, landing, schedule, onUpdate, onClear }) {
   const [d, setD] = useState('');
   const [h, setH] = useState('');
   const [m, setM] = useState('');
@@ -313,11 +440,14 @@ function QueueSlotRow({ slot, item, now, onUpdate, onClear }) {
 
       <div className="flex flex-wrap items-center gap-2 pl-10">
         {active ? (
-          <span className="text-sm text-slate-300">
-            <span className="font-semibold tabular-nums">
-              {formatDHM(remaining)}
-            </span>{' '}
-            left · done {dateTimeFmt.format(new Date(item.completesAt))}
+          <span className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-sm text-slate-300">
+            <span>
+              <span className="font-semibold tabular-nums">
+                {formatDHM(remaining)}
+              </span>{' '}
+              left · done {dateTimeFmt.format(new Date(item.completesAt))}
+            </span>
+            <LandingHint landing={landing} schedule={schedule} now={now} />
           </span>
         ) : (
           <span className="text-subtle">No timer set</span>
@@ -476,13 +606,7 @@ function HospitalPanel({ schedule, planner }) {
   );
 }
 
-function BudgetPanel({ inventory }) {
-  const budget = speedupBudget(
-    inventory,
-    SPEEDUP_TYPE_TO_CATEGORY,
-    categoryTotalMinutes,
-  );
-
+function BudgetPanel({ budget }) {
   return (
     <section className="flex flex-col gap-3">
       <div>
