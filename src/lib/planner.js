@@ -139,3 +139,136 @@ export function nowStrip(schedule, now) {
     anchorExpired: anchorExpired(schedule, now),
   };
 }
+
+// --- Queue timing -------------------------------------------------------
+
+// Whole minutes of active timer left on a queue item (0 if empty/done).
+export function queueRemainingMinutes(item, now) {
+  if (!item?.completesAt) return 0;
+  const diffMs = Date.parse(item.completesAt) - now.getTime();
+  return diffMs > 0 ? Math.floor(diffMs / 60000) : 0;
+}
+
+// --- Cooldown scheduler -------------------------------------------------
+
+// Instabuild (camp order) wants to land on building-scoring Duel days; the
+// Tue -> Thu -> Sat phase puts 2 of 3 pops on scoring days. Class skills (free
+// time-shaving that destroys burnable minutes) want dead days (Sun/Mon).
+const INSTABUILD_TARGET_WEEKDAYS = [2, 4, 6]; // Tue, Thu, Sat
+const CLASS_SKILL_TARGET_WEEKDAYS = [0, 1]; // Sun, Mon
+const COOLDOWN_TARGET_HOUR = 8; // server-local hour to aim a pop at
+
+// Build an absolute instant from server-local wall-clock fields (fixed offset).
+function serverWallToInstant(schedule, y, month, day, hour, minute = 0) {
+  const offset = schedule.gameClock.utcOffsetHours;
+  return new Date(Date.UTC(y, month, day, hour, minute, 0) - offset * 3600 * 1000);
+}
+
+// Earliest instant at/after `from` whose server-local weekday is in `weekdays`
+// and whose server-local time is `hour`:00.
+export function nextServerWeekdayAtHour(schedule, from, weekdays, hour) {
+  const offset = schedule.gameClock.utcOffsetHours;
+  const shifted = new Date(from.getTime() + offset * 3600 * 1000);
+  const y = shifted.getUTCFullYear();
+  const month = shifted.getUTCMonth();
+  const day = shifted.getUTCDate();
+  for (let i = 0; i < 8; i += 1) {
+    const cand = serverWallToInstant(schedule, y, month, day + i, hour);
+    if (
+      cand.getTime() >= from.getTime() &&
+      weekdays.includes(serverParts(schedule, cand).weekday)
+    ) {
+      return cand;
+    }
+  }
+  return null;
+}
+
+function targetWeekdaysFor(cooldownKey) {
+  return cooldownKey === 'instabuild'
+    ? INSTABUILD_TARGET_WEEKDAYS
+    : CLASS_SKILL_TARGET_WEEKDAYS;
+}
+
+// Per-cooldown status: when it's ready, when to fire it next under its phase
+// policy, and whether it's ready-but-should-hold.
+export function cooldownSchedule(schedule, plannerState, now) {
+  const fired = plannerState?.cooldowns ?? {};
+  return schedule.cooldowns.map((cd) => {
+    const lastFired = fired[cd.key] ? new Date(Date.parse(fired[cd.key])) : null;
+    const readyAt = lastFired
+      ? new Date(lastFired.getTime() + cd.cooldownHours * 3600 * 1000)
+      : null;
+    const ready = !readyAt || readyAt.getTime() <= now.getTime();
+    const availableFrom = readyAt && readyAt > now ? readyAt : now;
+    const nextFire = nextServerWeekdayAtHour(
+      schedule,
+      availableFrom,
+      targetWeekdaysFor(cd.key),
+      COOLDOWN_TARGET_HOUR,
+    );
+    const hold = ready && nextFire != null && nextFire.getTime() > now.getTime();
+    return {
+      key: cd.key,
+      label: cd.label,
+      source: cd.source,
+      effect: cd.effect,
+      scores: cd.scores,
+      cooldownHours: cd.cooldownHours,
+      lastFired,
+      readyAt,
+      ready,
+      nextFire,
+      hold,
+    };
+  });
+}
+
+// --- Speedup budget (reads the existing Speedup Inventory) --------------
+
+// Minutes available per planner speedup type, from the profile's Speedup
+// Inventory. General (Universal) is added to each specific type because a
+// general speedup scores as whatever type it's spent on.
+export function speedupBudget(inventory, typeToCategory, categoryTotalMinutes) {
+  const out = {};
+  const generalMin = categoryTotalMinutes(inventory?.[typeToCategory.general]);
+  for (const type of Object.keys(typeToCategory)) {
+    if (type === 'general') {
+      out.general = generalMin;
+      continue;
+    }
+    const specific = categoryTotalMinutes(inventory?.[typeToCategory[type]]);
+    out[type] = { specific, withGeneral: specific + generalMin };
+  }
+  return out;
+}
+
+// --- Warnings -----------------------------------------------------------
+
+// Non-burn warnings computable in P1a: hospital headroom and a stale FotP
+// anchor. (Queue-depth / burn-cannibalization warnings arrive with the burn
+// planner.) Cooldown holds surface through cooldownSchedule().
+export function plannerWarnings(schedule, plannerState, now) {
+  const warnings = [];
+  const cap = schedule.queues?.hospital?.capacity ?? Infinity;
+  const fill = plannerState?.hospitalFill ?? 0;
+  if (Number.isFinite(cap) && fill >= cap * 0.9) {
+    warnings.push({
+      key: 'hospital',
+      level: fill >= cap ? 'danger' : 'warn',
+      message:
+        fill >= cap
+          ? `Hospital at capacity (${fill}/${cap}) — further casualties become permanent deaths. Heal down before fighting.`
+          : `Hospital at ${fill}/${cap} — nearing the cap. Heal down before fighting; overflow becomes permanent deaths.`,
+    });
+  }
+  if (anchorExpired(schedule, now)) {
+    warnings.push({
+      key: 'anchor',
+      level: 'warn',
+      message:
+        'FotP event anchor has expired — the rotation may be stale. Re-anchor from an in-game calendar screenshot.',
+    });
+  }
+  return warnings;
+}
