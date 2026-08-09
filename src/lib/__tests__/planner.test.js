@@ -1,14 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import {
   anchorExpired,
+  cooldownSchedule,
   doubleDipWindows,
   duelThemeAt,
   fotpSlotAt,
   fotpSlotIndexAt,
   fotpSlots,
+  nextServerWeekdayAtHour,
   nowStrip,
+  plannerWarnings,
+  queueRemainingMinutes,
   serverParts,
+  speedupBudget,
 } from '../planner.js';
+import { SPEEDUP_TYPE_TO_CATEGORY } from '../plannerState.js';
 import realSchedule from '../../../public/schedule.json';
 
 // Self-contained fixture so these tests don't move when the real schedule.json
@@ -62,6 +68,12 @@ const S = {
       'spend-ap': { label: 'Spend AP', tags: ['ap'], source: 'verified' },
     },
   },
+  cooldowns: [
+    { key: 'instabuild', label: 'Instabuild', source: 'Camp order', effect: '-8h build', scores: true, cooldownHours: 48 },
+    { key: 'instant-build', label: 'Instant Build', source: 'Class skill', effect: '-600 build', scores: false, cooldownHours: 47.5 },
+    { key: 'instant-research', label: 'Instant Research', source: 'Class skill', effect: '-600 research', scores: false, cooldownHours: 47.5 },
+  ],
+  queues: { hospital: { capacity: 18000 } },
 };
 
 const ANCHOR = new Date('2026-08-07T00:00:00-02:00'); // 02:00 UTC
@@ -188,6 +200,93 @@ describe('nowStrip', () => {
     expect(strip.fotp.stageKey).toBe('spend-ap');
     expect(strip.duel.key).toBe('fri');
     expect(strip.anchorExpired).toBe(false);
+  });
+});
+
+describe('queueRemainingMinutes', () => {
+  it('floors minutes until completion, clamping done/empty to 0', () => {
+    const item = { completesAt: new Date(ANCHOR.getTime() + 90 * 60000).toISOString() };
+    expect(queueRemainingMinutes(item, ANCHOR)).toBe(90);
+    expect(queueRemainingMinutes({ completesAt: null }, ANCHOR)).toBe(0);
+    const past = { completesAt: new Date(ANCHOR.getTime() - 60000).toISOString() };
+    expect(queueRemainingMinutes(past, ANCHOR)).toBe(0);
+  });
+});
+
+describe('nextServerWeekdayAtHour', () => {
+  it('finds the next Tuesday at 08:00 server after a Friday anchor', () => {
+    const next = nextServerWeekdayAtHour(S, ANCHOR, [2], 8);
+    expect(serverParts(S, next)).toMatchObject({ weekday: 2, hour: 8 });
+    expect(next.getTime()).toBeGreaterThan(ANCHOR.getTime());
+  });
+
+  it('returns same-day if the target hour is still ahead', () => {
+    // ANCHOR is Fri 00:00 server; ask for Fri (5) at 08:00 -> same day.
+    const next = nextServerWeekdayAtHour(S, ANCHOR, [5], 8);
+    expect(serverParts(S, next)).toMatchObject({ weekday: 5, hour: 8 });
+  });
+});
+
+describe('cooldownSchedule', () => {
+  it('marks a never-fired cooldown ready, with a phase-target next fire', () => {
+    const rows = cooldownSchedule(S, { cooldowns: {} }, ANCHOR);
+    expect(rows).toHaveLength(3);
+    const insta = rows.find((r) => r.key === 'instabuild');
+    expect(insta.ready).toBe(true);
+    expect(insta.hold).toBe(true); // ready but should wait for a target day
+    expect([2, 4, 6]).toContain(serverParts(S, insta.nextFire).weekday);
+  });
+
+  it('respects the cooldown window when recently fired', () => {
+    const rows = cooldownSchedule(
+      S,
+      { cooldowns: { instabuild: ANCHOR.toISOString() } },
+      ANCHOR,
+    );
+    const insta = rows.find((r) => r.key === 'instabuild');
+    expect(insta.ready).toBe(false);
+    expect(insta.hold).toBe(false);
+    expect(insta.readyAt.getTime()).toBe(ANCHOR.getTime() + 48 * HOUR);
+  });
+
+  it('aims class skills at dead days (Sun/Mon)', () => {
+    const rows = cooldownSchedule(S, { cooldowns: {} }, ANCHOR);
+    const ib = rows.find((r) => r.key === 'instant-build');
+    expect([0, 1]).toContain(serverParts(S, ib.nextFire).weekday);
+  });
+});
+
+describe('speedupBudget', () => {
+  it('adds general (universal) minutes to each specific type', () => {
+    const inventory = { construction: { m: 100 }, universal: { m: 30 } };
+    const total = (counts) => counts?.m ?? 0;
+    const budget = speedupBudget(inventory, SPEEDUP_TYPE_TO_CATEGORY, total);
+    expect(budget.general).toBe(30);
+    expect(budget.building).toEqual({ specific: 100, withGeneral: 130 });
+    expect(budget.tech).toEqual({ specific: 0, withGeneral: 30 });
+  });
+});
+
+describe('plannerWarnings', () => {
+  it('is quiet with headroom and a live anchor', () => {
+    expect(plannerWarnings(S, { hospitalFill: 100 }, ANCHOR)).toEqual([]);
+  });
+
+  it('warns near the hospital cap and escalates at it', () => {
+    expect(plannerWarnings(S, { hospitalFill: 17000 }, ANCHOR)[0]).toMatchObject({
+      key: 'hospital',
+      level: 'warn',
+    });
+    expect(plannerWarnings(S, { hospitalFill: 18000 }, ANCHOR)[0]).toMatchObject({
+      key: 'hospital',
+      level: 'danger',
+    });
+  });
+
+  it('warns when the FotP anchor has expired', () => {
+    const late = new Date('2026-08-22T00:00:00-02:00');
+    const keys = plannerWarnings(S, { hospitalFill: 0 }, late).map((w) => w.key);
+    expect(keys).toContain('anchor');
   });
 });
 
