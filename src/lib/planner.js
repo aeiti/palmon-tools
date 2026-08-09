@@ -8,6 +8,13 @@
 // absolute instant by the offset and reading UTC fields — no Intl timezone
 // database needed, and the result is deterministic for tests.
 
+import { formatDHM } from './time.js';
+import { QUEUE_SLOTS } from './plannerState.js';
+
+// Speedup types with a queue-depth model (healing burns against the hospital,
+// not a queue timer, so it's handled separately).
+const DEPTH_SPEEDUP_TYPES = ['building', 'tech', 'training'];
+
 function mod(n, m) {
   return ((n % m) + m) % m;
 }
@@ -271,4 +278,159 @@ export function plannerWarnings(schedule, plannerState, now) {
     });
   }
   return warnings;
+}
+
+// --- Back-scheduler / burn planner (P1b) --------------------------------
+
+// Absolute instant of server-local 00:00 on the day containing `date`.
+export function serverDayStart(schedule, date) {
+  const offset = schedule.gameClock.utcOffsetHours;
+  const shifted = new Date(date.getTime() + offset * 3600 * 1000);
+  return serverWallToInstant(
+    schedule,
+    shifted.getUTCFullYear(),
+    shifted.getUTCMonth(),
+    shifted.getUTCDate(),
+    0,
+  );
+}
+
+// Minutes of timer left on an item as of an arbitrary reference instant
+// (ms). Used to project how much burnable depth a queue still has at the
+// start of a future scoring day.
+export function remainingMinutesAsOf(item, refMs) {
+  if (!item?.completesAt) return 0;
+  const diffMs = Date.parse(item.completesAt) - refMs;
+  return diffMs > 0 ? Math.floor(diffMs / 60000) : 0;
+}
+
+// Total burnable minutes across the queues of one speedup type, as of refMs.
+export function queueDepthMinutes(planner, speedupType, refMs) {
+  return QUEUE_SLOTS.filter((s) => s.type === speedupType).reduce(
+    (sum, s) => sum + remainingMinutesAsOf(planner?.queues?.[s.key], refMs),
+    0,
+  );
+}
+
+// The speedup types that score on a given Duel day (its tags ∩ depth types).
+function scoringTypesForDuelDay(day) {
+  if (!day || day.off) return [];
+  return DEPTH_SPEEDUP_TYPES.filter((t) => day.tags.includes(t));
+}
+
+// Back-scheduler: for each active queue item, where does its completion land,
+// and does that landing score (Duel power day and/or matching FotP stage)?
+export function queueLandings(schedule, planner, now) {
+  const out = [];
+  for (const slot of QUEUE_SLOTS) {
+    const item = planner?.queues?.[slot.key];
+    if (!item?.completesAt) continue;
+    const completes = new Date(Date.parse(item.completesAt));
+    if (completes.getTime() <= now.getTime()) continue; // already done
+    const duel = duelThemeAt(schedule, completes);
+    const fotp = fotpSlotAt(schedule, completes);
+    const duelScores = Boolean(duel && !duel.off && duel.tags.includes(slot.type));
+    const fotpMatches = (fotp.stage?.tags ?? []).includes(slot.type);
+    out.push({
+      slotKey: slot.key,
+      name: item.name,
+      type: slot.type,
+      completesAt: completes,
+      duelTheme: duel?.theme ?? null,
+      duelOff: Boolean(duel?.off),
+      duelScores,
+      fotpStage: fotp.stage?.label ?? fotp.stageKey,
+      fotpMatches,
+      scores: duelScores || fotpMatches,
+    });
+  }
+  return out;
+}
+
+// The next Duel day (within `horizonDays`) whose theme scores `type`.
+export function nextDuelScoringDay(schedule, from, type, horizonDays = 8) {
+  for (let i = 0; i < horizonDays; i += 1) {
+    const dayInstant = new Date(from.getTime() + i * 86400000);
+    const duel = duelThemeAt(schedule, dayInstant);
+    if (duel && !duel.off && duel.tags.includes(type)) {
+      return { at: serverDayStart(schedule, dayInstant), duelTheme: duel.theme };
+    }
+  }
+  return null;
+}
+
+// Burn planner: for each upcoming Duel scoring day, per scoring type, the
+// burnable queue depth vs. the available budget, and the recommended burn
+// (min of the two). `budget` is the output of speedupBudget().
+export function burnWindows(schedule, planner, budget, now, horizonDays = 7) {
+  const windows = [];
+  for (let i = 0; i < horizonDays; i += 1) {
+    const dayInstant = new Date(now.getTime() + i * 86400000);
+    const duel = duelThemeAt(schedule, dayInstant);
+    const types = scoringTypesForDuelDay(duel);
+    if (types.length === 0) continue;
+    const at = i === 0 ? now : serverDayStart(schedule, dayInstant);
+    const refMs = at.getTime();
+    for (const type of types) {
+      const depthMinutes = queueDepthMinutes(planner, type, refMs);
+      const budgetMinutes = budget?.[type]?.withGeneral ?? 0;
+      windows.push({
+        at,
+        dayKey: duel.key,
+        duelTheme: duel.theme,
+        type,
+        depthMinutes,
+        budgetMinutes,
+        recommendedBurn: Math.min(depthMinutes, budgetMinutes),
+      });
+    }
+  }
+  return windows;
+}
+
+// Recommendation stream (plan §3.4): a single time-sorted list merging
+// cooldown pops and burn windows into dated, local-time-ready items. The
+// `weighting` knob (0 = Duel, 100 = FotP) only nudges tie-order for now;
+// deeper FotP leaderboard-defense recommendations arrive with verified
+// stage rates.
+export function recommendationStream(
+  schedule,
+  planner,
+  budget,
+  now,
+  { horizonDays = 7 } = {},
+) {
+  const horizonMs = now.getTime() + horizonDays * 86400000;
+  const items = [];
+
+  for (const cd of cooldownSchedule(schedule, planner, now)) {
+    if (cd.ready && !cd.hold) {
+      items.push({
+        at: now,
+        kind: 'cooldown',
+        priority: cd.scores ? 3 : 1,
+        text: `Pop ${cd.label} now${cd.scores ? ' — it scores' : ''}.`,
+      });
+    } else if (cd.nextFire && cd.nextFire.getTime() <= horizonMs) {
+      items.push({
+        at: cd.nextFire,
+        kind: 'cooldown',
+        priority: cd.scores ? 3 : 1,
+        text: `Pop ${cd.label}${cd.scores ? ' (scores)' : ''}.`,
+      });
+    }
+  }
+
+  for (const w of burnWindows(schedule, planner, budget, now, horizonDays)) {
+    if (w.recommendedBurn <= 0) continue;
+    items.push({
+      at: w.at,
+      kind: 'burn',
+      priority: 2,
+      text: `Burn ~${formatDHM(w.recommendedBurn)} ${w.type} speedups (Duel: ${w.duelTheme}).`,
+    });
+  }
+
+  items.sort((a, b) => a.at.getTime() - b.at.getTime() || b.priority - a.priority);
+  return items;
 }
