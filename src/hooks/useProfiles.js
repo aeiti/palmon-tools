@@ -54,6 +54,7 @@ import {
   isQueueSlotKey,
   normalizePlanner,
   normalizeQueueItem,
+  nudgeFireTimestamp,
 } from '../lib/plannerState.js';
 
 function makeId() {
@@ -841,6 +842,25 @@ export function useProfiles() {
     );
   }, []);
 
+  // Shift a cooldown's recorded fire time by deltaMinutes (negative = earlier),
+  // for correcting a pop that was logged late. Clamped to <= now.
+  const adjustPlannerCooldown = useCallback((key, deltaMinutes) => {
+    if (!isCooldownKey(key)) return;
+    setState((s) =>
+      mutatePlanner(s, (planner) => ({
+        ...planner,
+        cooldowns: {
+          ...planner.cooldowns,
+          [key]: nudgeFireTimestamp(
+            planner.cooldowns[key],
+            deltaMinutes,
+            Date.now(),
+          ),
+        },
+      })),
+    );
+  }, []);
+
   const updatePlannerHospital = useCallback((value) => {
     const v = Math.min(HOSPITAL_CAP, Math.max(0, Math.floor(Number(value) || 0)));
     setState((s) =>
@@ -917,6 +937,7 @@ export function useProfiles() {
     updatePlannerQueue,
     clearPlannerQueueSlot,
     updatePlannerCooldown,
+    adjustPlannerCooldown,
     updatePlannerHospital,
     updatePlannerWeighting,
     resetActivePlanner,

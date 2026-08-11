@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
 import ProfilePicker from '../components/ui/ProfilePicker.jsx';
 import ResetButton from '../components/ui/ResetButton.jsx';
+import CompactInput from '../components/ui/CompactInput.jsx';
 import { useProfiles } from '../hooks/useProfiles.js';
 import { ROUTES } from '../routes.js';
 import { formatDHM } from '../lib/time.js';
@@ -119,6 +120,7 @@ export default function Planner() {
     updatePlannerQueue,
     clearPlannerQueueSlot,
     updatePlannerCooldown,
+    adjustPlannerCooldown,
     updatePlannerHospital,
     updatePlannerWeighting,
   } = useProfiles();
@@ -183,6 +185,7 @@ export default function Planner() {
             planner={planner}
             now={now}
             updatePlannerCooldown={updatePlannerCooldown}
+            adjustPlannerCooldown={adjustPlannerCooldown}
           />
           <HospitalPanel
             schedule={schedule}
@@ -510,7 +513,21 @@ function DhmInput({ value, onChange, unit, label }) {
   );
 }
 
-function CooldownsPanel({ schedule, planner, now, updatePlannerCooldown }) {
+const NUDGES = [-60, -15, 15, 60];
+
+function nudgeLabel(delta) {
+  const sign = delta < 0 ? '−' : '+';
+  const abs = Math.abs(delta);
+  return abs >= 60 ? `${sign}${abs / 60}h` : `${sign}${abs}m`;
+}
+
+function CooldownsPanel({
+  schedule,
+  planner,
+  now,
+  updatePlannerCooldown,
+  adjustPlannerCooldown,
+}) {
   const rows = cooldownSchedule(schedule, planner, now);
 
   return (
@@ -518,8 +535,8 @@ function CooldownsPanel({ schedule, planner, now, updatePlannerCooldown }) {
       <div>
         <h2 className="h-section">Cooldowns</h2>
         <p className="text-subtle">
-          Manual-fire abilities. Tap “Fire now” when you pop one — the schedule
-          recomputes from that timestamp.
+          Manual-fire abilities (class skills + camp order). Tap “Fire now” when
+          you pop one; use the ± buttons to correct a pop you logged late.
         </p>
       </div>
 
@@ -559,6 +576,24 @@ function CooldownsPanel({ schedule, planner, now, updatePlannerCooldown }) {
               <span className="text-sm text-slate-400">
                 <CooldownStatus cd={cd} now={now} />
               </span>
+              {cd.lastFired && (
+                <div className="flex flex-wrap items-center gap-1">
+                  <span className="text-xs text-slate-500">
+                    Adjust fired time:
+                  </span>
+                  {NUDGES.map((delta) => (
+                    <button
+                      key={delta}
+                      type="button"
+                      onClick={() => adjustPlannerCooldown(cd.key, delta)}
+                      className="btn-ghost"
+                      aria-label={`${cd.label} ${nudgeLabel(delta)}`}
+                    >
+                      {nudgeLabel(delta)}
+                    </button>
+                  ))}
+                </div>
+              )}
             </li>
           ))}
         </ul>
@@ -609,13 +644,11 @@ function HospitalPanel({ schedule, planner, updatePlannerHospital }) {
         <label className="text-sm text-slate-300" htmlFor="hospital-fill">
           Current injuries
         </label>
-        <input
+        <CompactInput
           id="hospital-fill"
-          type="number"
-          min="0"
-          max={cap}
           value={fill}
-          onChange={(e) => updatePlannerHospital(e.target.value)}
+          onChange={updatePlannerHospital}
+          ariaLabel="Current injuries"
           className="input w-28 tabular-nums"
         />
         <span className="text-subtle tabular-nums">
