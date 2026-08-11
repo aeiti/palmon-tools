@@ -86,9 +86,11 @@ export function emptyPlanner() {
 
 // Runtime (permissive) normalizer for a single queue slot: trims/clamps but
 // never rejects a partial edit — a half-typed name with no timer is fine.
+// Does NOT trim: trimming on every keystroke eats the space between words as
+// you type a multi-word name. The load-time pass trims instead.
 export function normalizeQueueItem(raw) {
   const name =
-    typeof raw?.name === 'string' ? raw.name.trim().slice(0, NAME_MAX) : '';
+    typeof raw?.name === 'string' ? raw.name.slice(0, NAME_MAX) : '';
   const completesAt = isValidISO(raw?.completesAt) ? raw.completesAt : null;
   return { name, completesAt };
 }
@@ -97,13 +99,28 @@ function normalizeCooldownTs(raw) {
   return isValidISO(raw) ? raw : null;
 }
 
+// Shift a cooldown's last-fired timestamp by `deltaMinutes` (negative = earlier),
+// clamped to not exceed `nowMs` — a pop can't be in the future. Falls back to
+// `nowMs` as the base when there's no timestamp yet, so a single -1h press logs
+// a pop that happened an hour ago.
+export function nudgeFireTimestamp(currentISO, deltaMinutes, nowMs) {
+  const base =
+    currentISO && !Number.isNaN(Date.parse(currentISO))
+      ? Date.parse(currentISO)
+      : nowMs;
+  const next = Math.min(nowMs, base + deltaMinutes * 60000);
+  return new Date(next).toISOString();
+}
+
 // Load-time normalizer for the whole planner field. Always returns all ten
 // slots and all three cooldown keys so consumers can index without guards.
 export function normalizePlanner(raw) {
   const src = raw && typeof raw === 'object' ? raw : {};
   const queues = {};
   for (const slot of QUEUE_SLOTS) {
-    queues[slot.key] = normalizeQueueItem(src.queues?.[slot.key]);
+    const item = normalizeQueueItem(src.queues?.[slot.key]);
+    // Trim at load: internal spaces survive, leading/trailing don't.
+    queues[slot.key] = { name: item.name.trim(), completesAt: item.completesAt };
   }
   const cooldowns = {};
   for (const key of COOLDOWN_KEYS) {

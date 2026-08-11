@@ -5,6 +5,7 @@ import {
   HOSPITAL_CAP,
   normalizePlanner,
   normalizeQueueItem,
+  nudgeFireTimestamp,
   QUEUE_SLOTS,
 } from '../plannerState.js';
 
@@ -20,8 +21,13 @@ describe('emptyPlanner', () => {
 });
 
 describe('normalizeQueueItem', () => {
-  it('trims and caps the name', () => {
-    expect(normalizeQueueItem({ name: '  Barracks  ' }).name).toBe('Barracks');
+  it('caps the name but does not trim (so spaces survive typing)', () => {
+    // Internal spaces and an in-progress trailing space are preserved — the
+    // runtime pass must not eat the space between words as you type.
+    expect(normalizeQueueItem({ name: 'Barracks Lv 12' }).name).toBe(
+      'Barracks Lv 12',
+    );
+    expect(normalizeQueueItem({ name: 'Barracks ' }).name).toBe('Barracks ');
     expect(normalizeQueueItem({ name: 'x'.repeat(200) }).name).toHaveLength(80);
   });
 
@@ -73,6 +79,13 @@ describe('normalizePlanner', () => {
     expect(p.queues.T4).toEqual({ name: '', completesAt: null });
   });
 
+  it('trims queue names at load, preserving internal spaces', () => {
+    const p = normalizePlanner({
+      queues: { B1: { name: '  Barracks Lv 12  ' } },
+    });
+    expect(p.queues.B1.name).toBe('Barracks Lv 12');
+  });
+
   it('round-trips: normalize(normalize(x)) === normalize(x)', () => {
     const once = normalizePlanner({
       queues: { B1: { name: 'Wall', completesAt: '2026-08-10T00:00:00Z' } },
@@ -81,5 +94,30 @@ describe('normalizePlanner', () => {
       weighting: 30,
     });
     expect(normalizePlanner(once)).toEqual(once);
+  });
+});
+
+describe('nudgeFireTimestamp', () => {
+  const NOW = Date.parse('2026-08-11T12:00:00Z');
+
+  it('shifts an existing timestamp earlier or later', () => {
+    const t = '2026-08-11T10:00:00Z';
+    expect(nudgeFireTimestamp(t, -60, NOW)).toBe(
+      new Date(Date.parse(t) - 3600000).toISOString(),
+    );
+    expect(nudgeFireTimestamp(t, 30, NOW)).toBe(
+      new Date(Date.parse(t) + 1800000).toISOString(),
+    );
+  });
+
+  it('clamps to now — a fire time can’t be in the future', () => {
+    const t = '2026-08-11T11:50:00Z'; // +60m would overshoot now
+    expect(nudgeFireTimestamp(t, 60, NOW)).toBe(new Date(NOW).toISOString());
+  });
+
+  it('falls back to now when there is no timestamp (−1h = fired an hour ago)', () => {
+    expect(nudgeFireTimestamp(null, -60, NOW)).toBe(
+      new Date(NOW - 3600000).toISOString(),
+    );
   });
 });
