@@ -5,7 +5,7 @@ import ResetButton from '../components/ui/ResetButton.jsx';
 import StepperInput from '../components/ui/StepperInput.jsx';
 import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
 import {
-  MAX_MOUNT_LEVEL,
+  MOUNT_LEVEL_INPUT_MAX,
   MAX_MOUNT_SKILL_LEVEL,
   MOUNTS,
   MOUNT_SKILL_LEVEL_THRESHOLDS,
@@ -80,7 +80,7 @@ function MountCard({ mount, entry, onChange }) {
               value={entry.level}
               onChange={(v) =>
                 onChange({
-                  level: Math.max(0, Math.min(MAX_MOUNT_LEVEL, Math.floor(v))),
+                  level: Math.max(0, Math.min(MOUNT_LEVEL_INPUT_MAX, Math.floor(v))),
                 })
               }
               id={`${mount.key}-level`}

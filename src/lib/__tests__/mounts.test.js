@@ -6,7 +6,7 @@ import {
   normalizeMounts,
 } from '../mounts.js';
 import {
-  MAX_MOUNT_LEVEL,
+  MOUNT_LEVEL_INPUT_MAX,
   MOUNTS,
   mountSkillLevelFor,
 } from '../data/mounts.js';
@@ -34,15 +34,15 @@ describe('normalizeMountEntry', () => {
     expect(normalizeMountEntry('garbage')).toEqual({ level: 0, power: 0 });
   });
 
-  it('clamps level to [0, MAX_MOUNT_LEVEL]', () => {
+  it('clamps level to [0, MOUNT_LEVEL_INPUT_MAX] (a sanity bound, not the game cap)', () => {
     expect(normalizeMountEntry({ level: -5 })).toEqual({ level: 0, power: 0 });
     expect(normalizeMountEntry({ level: 0 })).toEqual({ level: 0, power: 0 });
     expect(normalizeMountEntry({ level: 50 })).toEqual({
       level: 50,
       power: 0,
     });
-    expect(normalizeMountEntry({ level: MAX_MOUNT_LEVEL + 999 })).toEqual({
-      level: MAX_MOUNT_LEVEL,
+    expect(normalizeMountEntry({ level: MOUNT_LEVEL_INPUT_MAX + 999 })).toEqual({
+      level: MOUNT_LEVEL_INPUT_MAX,
       power: 0,
     });
   });
@@ -110,7 +110,7 @@ describe('normalizeMounts', () => {
       narfoal: { level: 35.7, power: 4200.9 },
     });
     expect(out.skyboundPatrol).toEqual({
-      level: MAX_MOUNT_LEVEL,
+      level: MOUNT_LEVEL_INPUT_MAX,
       power: 0,
     });
     expect(out.narfoal).toEqual({ level: 35, power: 4200 });
