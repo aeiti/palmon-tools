@@ -11,8 +11,10 @@
     "note": "Fixed UTC-2, no DST. All internal projection math runs on this offset; display in the visitor's local time."
   },
   "duel": {
-    "note": "Guild Duel: 6 scoring days Mon-Sat, Sunday off. Week boundary Sun 23:00 -> Sat 24:00 server time; per-day themes are modelled on the server calendar weekday (the 23:00 early-start of the boundary is not yet modelled).",
-    "personalChestThresholds": [700000, 1000000, 2200000],
+    "note": "Guild Duel: 6 scoring days Mon-Sat, Sunday off. Scoring week starts MONDAY 00:00 server time (= Sunday 19:00 America/Los_Angeles while PDT is in force). The 'Sun 23:00' figure previously recorded here is real but is a different thing: the game's own About panel rule 7 describes a guild-TRANSFER lockout from Sunday 23:00, not the scoring boundary. Use Monday 00:00 for scoring and days; use guildTransferLockout when warning about guild switches. Per-day themes are modelled on the server calendar weekday.",
+    "guildTransferLockout": { "weekday": 0, "time": "23:00", "note": "Sunday 23:00 server. From the About panel rule 7. NOT the scoring boundary." },
+    "personalChestThresholds": [30000, 150000, 500000, 700000, 1000000, 2200000, 2700000, 3500000, 7250000],
+    "personalChestThresholdsNote": "Nine tiers, read from the in-game chest ladder. The three values previously here (700000/1000000/2200000) were items 4-6 of this list, not the whole ladder. Identical to Desert Showdown's personal ladder.",
     "days": [
       {
         "weekday": 0,
@@ -43,9 +45,10 @@
         "weekday": 3,
         "key": "wed",
         "theme": "Research Techs",
-        "tags": ["tech"],
+        "tags": ["tech", "breeding"],
         "scoring": [
           { "label": "Tech speedup", "points": 125, "per": "minute" },
+          { "label": "Breeding speedup", "points": 125, "per": "minute", "note": "Camp Nursery. Wednesday is Tech OR Breeding; breeding minutes were previously unscoreable here." },
           { "label": "Tech power", "points": 10, "per": "power" }
         ]
       },
@@ -60,14 +63,14 @@
         "weekday": 5,
         "key": "fri",
         "theme": "Prepare for Battle",
-        "tags": ["building", "tech", "training", "healing"],
+        "tags": ["building", "tech", "training"],
         "scoring": [
-          { "label": "All speedups", "points": 125, "per": "minute" },
+          { "label": "Building, Tech or Training speedup", "points": 125, "per": "minute", "note": "NOT healing - healing scores on Saturday only." },
           { "label": "Building power", "points": 10, "per": "power" },
           { "label": "Tech power", "points": 10, "per": "power" },
           { "label": "Training speedup", "points": 125, "per": "minute" }
         ],
-        "note": "Universal dump day: every speedup type scores. Generals sink here."
+        "note": "Heavy dump day, but NOT universal: Building, Tech and Training score, healing does NOT. The in-game Friday list has no Healing Speedups row. Any hospital strategy that banked on a Friday leg loses it."
       },
       {
         "weekday": 6,
@@ -96,12 +99,12 @@
       "slotsPerDay": 6
     },
     "anchor": {
-      "eventName": "August 2026",
-      "day1DateTime": "2026-08-07T00:00:00-02:00",
-      "day1StartStage": "spend-ap",
-      "expires": "2026-08-21T00:00:00-02:00",
+      "eventName": "September 2026",
+      "day1DateTime": "2026-09-24T00:00:00-02:00",
+      "day1StartStage": "train-armigo",
+      "expires": "2026-10-08T00:00:00-02:00",
       "expiresSource": "estimated",
-      "note": "Day 1 = Fri Aug 7 00:00 UTC-2. Event duration unverified; past `expires`, reminders flip to a verify-new-event warning instead of announcing a stale rotation."
+      "note": "Day 1 = Wed Sep 24 00:00 UTC-2. Replaces the August 2026 anchor, which expired 2026-08-21 and had been stale for 37 days. Duration is still unverified; the 14-day span is carried over from the August anchor, so past `expires` reminders still flip to a verify-new-event warning rather than announcing a stale rotation."
     },
     "stages": {
       "upgrade-palmon": {
@@ -129,12 +132,16 @@
       "train-armigo": {
         "label": "Train Armigo",
         "tags": ["training"],
-        "source": "estimated",
-        "chestThresholds": [6000, 12000, 30000],
+        "source": "verified",
+        "chestThresholds": [7500, 20000, 50000],
+        "chestThresholdsNote": "Read from this stage's own chest ladder. The previous 6000/12000/30000 was borrowed from a Guild Duel curve - a different event - and was never observed here.",
         "scoring": [
-          { "label": "Train Armigo (per level)", "points": null, "per": "Armigo", "note": "Per-level curve, placeholder; Duel Day-5 list scales 75->338 for Lv1->10." },
-          { "label": "Training speedup", "points": 10, "per": "minute", "note": "Magnitude mirrors the Upgrade Buildings shape; awaiting screenshot." }
-        ]
+          { "label": "Train a Lvl 10 Armigo", "points": 30, "per": "Armigo" },
+          { "label": "Train a Lvl 9 Armigo", "points": 23, "per": "Armigo" },
+          { "label": "Magic Bean", "points": 300, "per": "item" },
+          { "label": "Training speedup", "points": 10, "per": "minute" }
+        ],
+        "scoringNote": "Per-Armigo points below Lvl 9 are not captured. The previous placeholder cited the Duel Day-5 curve (75->338 for Lv1->10), which belongs to the Guild Duel and does not apply to this stage."
       },
       "research-techs": {
         "label": "Research Techs",
