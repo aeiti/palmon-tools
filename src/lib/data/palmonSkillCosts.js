@@ -179,9 +179,18 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
 ];
 
 // Skillfruit cost to go from `level` → `level + 1`. Universal: no species or
-// slot dependence. Derived from the observations above; 16 of the 29 steps are
-// covered, and the 13 gaps (8, 9, 16-19, 21, 23, 24, 26-29) are simply
-// uncaptured. A missing key means unknown, never zero.
+// slot dependence. All 29 steps, max skill level 30.
+//
+// 16 steps come from the observations above. The other 13 come from an in-game
+// cost table transcribed in apex-showdown (`data/palmon_data.json`, `_meta
+// .skill_fruit_cost_table`), which is keyed by the level REACHED and converted
+// here to the level upgraded FROM. That table agrees with all 16 observations
+// EXACTLY. The curve is irregular — 100, 200, 300, 400, 600, 800, 1000, 1200,
+// 1400, 1700, … — so a 16-for-16 match is not coincidence; it establishes the
+// artefact. The table independently states the cost is universal across skills
+// and species, which is the same conclusion the observations reach.
+//
+// A missing key would mean unknown, never zero. There are none left.
 export const PALMON_SKILL_UPGRADE_COST_BY_LEVEL = {
   1: 100,
   2: 200,
@@ -190,15 +199,28 @@ export const PALMON_SKILL_UPGRADE_COST_BY_LEVEL = {
   5: 600,
   6: 800,
   7: 1000,
+  8: 1200,
+  9: 1400,
   10: 1700,
   11: 2000,
   12: 2300,
   13: 2600,
   14: 2900,
   15: 3200,
+  16: 3500,
+  17: 3800,
+  18: 4100,
+  19: 4400,
   20: 4700,
+  21: 5000,
   22: 5500,
+  23: 6000,
+  24: 6500,
   25: 7000,
+  26: 7500,
+  27: 8000,
+  28: 8500,
+  29: 9000,
 };
 
 /** Skillfruit needed to take a skill from `fromLevel` to `fromLevel + 1`.
