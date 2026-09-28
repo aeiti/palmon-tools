@@ -1,14 +1,33 @@
 // Raw skillfruit upgrade-cost observations.
 //
-// Confirmed shape: cost is per-(species, slot). Same slot at the same source
-// level yields very different amounts across palmon. Each palmon's slot will
-// have its own 29-entry cost curve once we've covered every level.
+// Shape: cost depends ONLY on the source level. It is NOT per-(species, slot).
+//
+// The previous header here asserted the opposite — that the same slot at the
+// same source level "yields very different amounts across palmon", implying a
+// 29-entry curve per (species, slot), i.e. a 6,728-cell table that was 2.2%
+// filled. That was wrong. Grouping all 146 observations by fromLevel gives
+// exactly one cost at every level, across 50 species and every slot. The real
+// table is the 29-entry universal lookup below, and it is ~55% filled.
+//
+// The assertion rested on one outlier, { fulgairy, slot 2, fromLevel 1,
+// cost 300 }, against 97 rows reading 100 at fromLevel 1. 300 is the cost at
+// fromLevel 3 everywhere else, so either the level or the cost was mis-read.
+// Which of the two is unknown, so the row is dropped rather than repaired —
+// fromLevel 1 → 100 is independently attested 97 times and loses nothing.
+// (Two notes elsewhere cited Ninjump and Regalion as further evidence for
+// per-species variation; both recorded the wrong source level, so the two
+// observations were never at the same level to begin with.)
+// Owner-confirmed 2026-09-27.
 //
 // Each entry: { species, slot, fromLevel, cost }
 //   - slot: 0-3 (matches PALMON_SKILLS[species] index)
 //   - fromLevel: the skill level *before* the upgrade (cost shown is to go
 //     from fromLevel → fromLevel + 1)
 //   - cost: skillfruit amount required for that step
+//
+// Prefer PALMON_SKILL_UPGRADE_COST_BY_LEVEL for lookups. The observations are
+// kept as the evidence the table is derived from, and as the place new
+// captures land.
 
 export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'auktyke', slot: 0, fromLevel: 1, cost: 100 },
@@ -55,7 +74,7 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'fingenue', slot: 2, fromLevel: 1, cost: 100 },
   { species: 'fulgairy', slot: 0, fromLevel: 1, cost: 100 },
   { species: 'fulgairy', slot: 1, fromLevel: 1, cost: 100 },
-  { species: 'fulgairy', slot: 2, fromLevel: 1, cost: 300 },
+  // { species: 'fulgairy', slot: 2, fromLevel: 1, cost: 300 } — dropped, see header.
   { species: 'ghillant', slot: 0, fromLevel: 1, cost: 100 },
   { species: 'ghillant', slot: 1, fromLevel: 1, cost: 100 },
   { species: 'ghillant', slot: 2, fromLevel: 1, cost: 100 },
@@ -158,3 +177,33 @@ export const PALMON_SKILL_UPGRADE_COST_OBSERVATIONS = [
   { species: 'wyvierno', slot: 1, fromLevel: 1, cost: 100 },
   { species: 'wyvierno', slot: 2, fromLevel: 14, cost: 2900 },
 ];
+
+// Skillfruit cost to go from `level` → `level + 1`. Universal: no species or
+// slot dependence. Derived from the observations above; 16 of the 29 steps are
+// covered, and the 13 gaps (8, 9, 16-19, 21, 23, 24, 26-29) are simply
+// uncaptured. A missing key means unknown, never zero.
+export const PALMON_SKILL_UPGRADE_COST_BY_LEVEL = {
+  1: 100,
+  2: 200,
+  3: 300,
+  4: 400,
+  5: 600,
+  6: 800,
+  7: 1000,
+  10: 1700,
+  11: 2000,
+  12: 2300,
+  13: 2600,
+  14: 2900,
+  15: 3200,
+  20: 4700,
+  22: 5500,
+  25: 7000,
+};
+
+/** Skillfruit needed to take a skill from `fromLevel` to `fromLevel + 1`.
+ *  Returns null when that step has not been captured yet. */
+export function skillUpgradeCost(fromLevel) {
+  const cost = PALMON_SKILL_UPGRADE_COST_BY_LEVEL[fromLevel];
+  return cost === undefined ? null : cost;
+}
