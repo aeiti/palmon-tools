@@ -436,4 +436,30 @@ describe('real schedule.json integration', () => {
       expect(realSchedule.fotp.stages[key]).toBeDefined();
     }
   });
+
+  it('the rotation is continuous — the anchor never expires', () => {
+    // FotP runs indefinitely and does not re-anchor per event. Every expiry
+    // this field has held was an assumption carried from a 14-day guess, so a
+    // non-null value here means one crept back in without being observed.
+    expect(realSchedule.fotp.anchor.expires).toBeNull();
+    expect(anchorExpired(realSchedule, new Date('2030-01-01T00:00:00-02:00')))
+      .toBe(false);
+  });
+
+  it('the August 2026 anchor still predicts the shipped one', () => {
+    // The evidence that the cycle is unbroken: two independently captured
+    // anchors, 48 days apart, agree under a plain 5-day rotation. If the
+    // shipped anchor is ever replaced with one that does not satisfy this,
+    // either the new anchor is misread or the rotation is not continuous
+    // after all — both worth failing over.
+    const { order } = realSchedule.fotp.rotation;
+    const AUG = { date: '2026-08-07T00:00:00-02:00', stage: 'spend-ap' };
+    const days = Math.round(
+      (Date.parse(realSchedule.fotp.anchor.day1DateTime) - Date.parse(AUG.date))
+        / 86400000,
+    );
+    const predicted =
+      order[(order.indexOf(AUG.stage) + days) % order.length];
+    expect(predicted).toBe(realSchedule.fotp.anchor.day1StartStage);
+  });
 });
