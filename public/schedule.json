@@ -86,7 +86,7 @@
     ]
   },
   "fotp": {
-    "note": "Front of the Pack: 5 stages of 4h slots, 6 slots/day, each day starting one stage later -> 5-day super-cycle. Re-anchors per event: the opening stage is not stable across events.",
+    "note": "Front of the Pack: 5 stages of 4h slots, 6 slots/day, each day starting one stage later -> 5-day super-cycle, repeating indefinitely. It does NOT re-anchor per event: one unbroken rotation, verified across the 48 days between the August and September anchors. Note the weekday-to-stage mapping is NOT weekly — six slots over five stages advances one stage per day, so a given weekday sees the same opening stage only every LCM(5,7) = 35 days.",
     "rotation": {
       "order": [
         "upgrade-palmon",
@@ -102,9 +102,9 @@
       "eventName": "September 2026",
       "day1DateTime": "2026-09-24T00:00:00-02:00",
       "day1StartStage": "train-armigo",
-      "expires": "2026-10-08T00:00:00-02:00",
-      "expiresSource": "estimated",
-      "note": "Day 1 = Wed Sep 24 00:00 UTC-2. Replaces the August 2026 anchor, which expired 2026-08-21 and had been stale for 37 days. Duration is still unverified; the 14-day span is carried over from the August anchor, so past `expires` reminders still flip to a verify-new-event warning rather than announcing a stale rotation."
+      "expires": null,
+      "expiresNote": "The rotation does NOT expire. Front of the Pack runs continuously and never re-anchors, so there is no stale-anchor state to warn about. Every expiry this field has ever held was an assumption carried from a 14-day guess, never an observation.",
+      "note": "Day 1 = Wed Sep 24 00:00 UTC-2 — but the anchor is arbitrary: any known (date, opening stage) pair anchors the same unbroken cycle. Verified: the August 2026 anchor (2026-08-07, spend-ap) predicts this one exactly across 48 days, since (index 4 + 48) mod 5 = index 2 = train-armigo."
     },
     "stages": {
       "upgrade-palmon": {

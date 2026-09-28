@@ -98,8 +98,13 @@ export function fotpSlots(schedule, from, count) {
   );
 }
 
-// Whether the current FotP anchor has expired at `date` (guardrail: past this
-// the rotation is stale and needs a re-anchor screenshot).
+// Whether the current FotP anchor has expired at `date`.
+//
+// In practice this is now always false: the FotP rotation is continuous and
+// never re-anchors, so schedule.json carries `expires: null`. The guardrail is
+// kept rather than deleted because it costs nothing and would catch a future
+// event that genuinely is bounded — but it should no longer fire, and if it
+// does, the data has grown an expiry that was not observed.
 export function anchorExpired(schedule, date) {
   const expires = schedule.fotp.anchor.expires;
   return expires ? date.getTime() >= Date.parse(expires) : false;
