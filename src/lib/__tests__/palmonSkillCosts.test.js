@@ -48,13 +48,18 @@ describe('skillUpgradeCost', () => {
     expect(skillUpgradeCost(25)).toBe(7000);
   });
 
-  it('returns null for an uncaptured step rather than zero', () => {
-    // A missing step means unknown. Returning 0 would read as "free".
-    expect(skillUpgradeCost(8)).toBeNull();
-    expect(skillUpgradeCost(29)).toBeNull();
+  it('covers every step from 1 to 29 with no gaps', () => {
+    // The table was 16 of 29 steps until the in-game cost table closed the
+    // rest. A gap would mean unknown; returning 0 would read as "free".
+    const missing = Array.from({ length: 29 }, (_, i) => i + 1).filter(
+      (level) => skillUpgradeCost(level) === null,
+    );
+    expect(missing).toEqual([]);
   });
 
-  it('returns null outside the level range', () => {
+  it('returns null outside the level range rather than guessing', () => {
+    // 30 is the max skill level, so there is no step out of it.
+    expect(skillUpgradeCost(30)).toBeNull();
     expect(skillUpgradeCost(0)).toBeNull();
     expect(skillUpgradeCost(999)).toBeNull();
   });

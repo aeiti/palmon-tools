@@ -2,14 +2,14 @@
 // normalizers. Catalog data (MOUNTS, thresholds, helpers) lives in
 // src/lib/data/mounts.js.
 
-import { MAX_MOUNT_LEVEL, MOUNTS } from './data/mounts.js';
+import { MOUNT_LEVEL_INPUT_MAX, MOUNTS } from './data/mounts.js';
 
 const MOUNT_KEYS = new Set(MOUNTS.map((m) => m.key));
 
 function clampLevel(raw) {
   const n = Number(raw);
   if (!Number.isFinite(n) || n <= 0) return 0;
-  return Math.min(MAX_MOUNT_LEVEL, Math.floor(n));
+  return Math.min(MOUNT_LEVEL_INPUT_MAX, Math.floor(n));
 }
 
 function clampPower(raw) {
