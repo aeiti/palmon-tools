@@ -11,6 +11,7 @@ import {
   projectionBasis,
   projectSteps,
   setCurrentStep,
+  splitBundles,
   uniformRate,
 } from '../campMastery.js';
 import { MASTERY_STEPS } from '../data/campMastery.js';
@@ -292,5 +293,24 @@ describe('projectionBasis', () => {
   it('falls back to on-hand stock as of now', () => {
     const basis = projectionBasis([], { gold: 7, lumber: 8, steel: 9 }, 123);
     expect(basis).toEqual({ at: 123, stock: { gold: 7, lumber: 8, steel: 9 } });
+  });
+});
+
+describe('splitBundles', () => {
+  it('never asks for more bundles than are available', () => {
+    // 287 bundles' worth split three ways; rounding each share up gave 289.
+    const value = 5 * M;
+    const allocation = { gold: 117.2 * value, lumber: 77.3 * value, steel: 92.5 * value };
+    const out = splitBundles(allocation, value, 287);
+    expect(out.gold + out.lumber + out.steel).toBe(287);
+    expect(out).toEqual({ gold: 117, lumber: 77, steel: 93 });
+  });
+
+  it('rounds a lone partial share up when bundles are spare', () => {
+    expect(splitBundles({ gold: 2.1 * M, lumber: 0, steel: 0 }, M, 10)).toEqual({
+      gold: 3,
+      lumber: 0,
+      steel: 0,
+    });
   });
 });

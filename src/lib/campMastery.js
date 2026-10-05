@@ -189,6 +189,38 @@ export function masteryChestPool(resourceChestTotals, otherCounts) {
   return { fixed, flexible: awakening * MASTERY_BUNDLES.awakening.value };
 }
 
+// Turns a resource allocation of the flexible pool into whole bundle counts
+// that never exceed `available`: floor each share, then hand leftover
+// bundles to the largest remainders. Rounding each share up instead can ask
+// for more bundles than the player has.
+export function splitBundles(allocation, bundleValue, available) {
+  const out = { gold: 0, lumber: 0, steel: 0 };
+  if (!allocation || !(bundleValue > 0)) return out;
+  const exact = MASTERY_RESOURCES.map((r) => ({
+    r,
+    x: Math.max(0, allocation[r] || 0) / bundleValue,
+  }));
+  const want = Math.min(
+    Math.max(0, Math.floor(available) || 0),
+    Math.ceil(exact.reduce((a, e) => a + e.x, 0) - 1e-9),
+  );
+  let used = 0;
+  for (const e of exact) {
+    out[e.r] = Math.floor(e.x);
+    used += out[e.r];
+  }
+  const byRemainder = [...exact].sort(
+    (a, b) => (b.x - Math.floor(b.x)) - (a.x - Math.floor(a.x)),
+  );
+  for (const e of byRemainder) {
+    if (used >= want) break;
+    if (e.x - Math.floor(e.x) <= 1e-9) continue;
+    out[e.r] += 1;
+    used += 1;
+  }
+  return out;
+}
+
 // ---- Projection -------------------------------------------------------------
 
 // Hours until every `need` is covered by income at `rates`, after pointing
