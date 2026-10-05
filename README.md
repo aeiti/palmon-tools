@@ -14,6 +14,7 @@ Everything you enter is saved to your browser's `localStorage`. Nothing is sent 
 - **Dashboard** — landing page with a tile per tool.
 - **About** — what this is, disclaimer, feedback link.
 - **Buildings** — track the level and assigned Palmon for each building in your camp.
+- **Camp Mastery** — log gold, lumber and steel over time to measure your net income, and project when each Camp Mastery step (30-1 through 35) becomes affordable, counting unopened chests and bundles.
 - **Inventory** — hub page for everything in your bag:
   - **Equipment Inventory** — each piece of equipment as its own instance: ascend and enhance levels plus assignment to a Palmon.
   - **Other Inventory** — miscellaneous items.
