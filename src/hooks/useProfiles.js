@@ -56,6 +56,14 @@ import {
   normalizeQueueItem,
   nudgeFireTimestamp,
 } from '../lib/plannerState.js';
+import {
+  emptyMastery,
+  normalizeMastery,
+  normalizeMasteryEntry,
+  setCurrentStep,
+  sortLog,
+} from '../lib/campMastery.js';
+import { MASTERY_STEP_KEYS } from '../lib/data/campMastery.js';
 
 function makeId() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -104,6 +112,7 @@ function makeProfile(name) {
     equipment: [],
     notes: [],
     planner: emptyPlanner(),
+    mastery: emptyMastery(),
   };
 }
 
@@ -132,6 +141,20 @@ function scrubBuildingPalmonRefs(buildings, validIds) {
 function defaultState() {
   const p = makeProfile('Main');
   return { activeProfileId: p.id, profiles: [p] };
+}
+
+// Patch the active profile from its mastery field: `mutate(mastery, profile)`
+// returns the profile fields to replace — `{ mastery }`, or
+// `{ mastery, onHand }` when a change should also move the on-hand stockpile.
+function patchFromMastery(s, mutate) {
+  return {
+    ...s,
+    profiles: s.profiles.map((p) =>
+      p.id !== s.activeProfileId
+        ? p
+        : { ...p, ...mutate(p.mastery || emptyMastery(), p) },
+    ),
+  };
 }
 
 // Mutate the active profile's planner field via `mutate(planner)`, always
@@ -211,6 +234,7 @@ function normalize(state) {
       equipment,
       notes: normalizeNotes(p.notes),
       planner: normalizePlanner(p.planner),
+      mastery: normalizeMastery(p.mastery),
     });
   });
   const activeProfileId = profiles.find((p) => p.id === state.activeProfileId)
@@ -879,6 +903,83 @@ export function useProfiles() {
     setState((s) => mutatePlanner(s, () => emptyPlanner()));
   }, []);
 
+  // --- Camp Mastery ----------------------------------------------------
+
+  // Adds a stock reading. When it is the newest reading, the on-hand gold,
+  // lumber and steel follow it so Resource Inventory stays in step.
+  const addMasteryLogEntry = useCallback((raw) => {
+    const entry = normalizeMasteryEntry(raw);
+    if (!entry) return null;
+    setState((s) =>
+      patchFromMastery(s, (mastery, p) => {
+        const log = sortLog([...mastery.log, entry]);
+        const patch = { mastery: { ...mastery, log } };
+        if (log[log.length - 1].id !== entry.id) return patch;
+        return {
+          ...patch,
+          onHand: {
+            ...p.onHand,
+            gold: entry.gold,
+            lumber: entry.lumber,
+            steel: entry.steel,
+          },
+        };
+      }),
+    );
+    return entry.id;
+  }, []);
+
+  const deleteMasteryLogEntry = useCallback((entryId) => {
+    setState((s) =>
+      patchFromMastery(s, (mastery) => ({
+        mastery: {
+          ...mastery,
+          log: mastery.log.filter((e) => e.id !== entryId),
+        },
+      })),
+    );
+  }, []);
+
+  // "Working toward this step": earlier steps become done, later cleared.
+  const setMasteryCurrentStep = useCallback((stepKey) => {
+    setState((s) =>
+      patchFromMastery(s, (mastery) => ({
+        mastery: {
+          ...mastery,
+          completed: setCurrentStep(mastery.completed, stepKey),
+        },
+      })),
+    );
+  }, []);
+
+  // Records a purchase at `iso` (defaults to now), which the rate measure
+  // adds back if it falls between two log entries.
+  const markMasteryStepBought = useCallback((stepKey, iso) => {
+    if (!MASTERY_STEP_KEYS.includes(stepKey)) return;
+    const at = iso || new Date().toISOString();
+    setState((s) =>
+      patchFromMastery(s, (mastery) => ({
+        mastery: {
+          ...mastery,
+          completed: { ...mastery.completed, [stepKey]: at },
+        },
+      })),
+    );
+  }, []);
+
+  const updateMasteryPlanningRate = useCallback((value) => {
+    const v = Math.max(0, Math.floor(Number(value) || 0));
+    setState((s) =>
+      patchFromMastery(s, (mastery) => ({
+        mastery: { ...mastery, planningRate: v },
+      })),
+    );
+  }, []);
+
+  const resetActiveMastery = useCallback(() => {
+    setState((s) => patchFromMastery(s, () => ({ mastery: emptyMastery() })));
+  }, []);
+
   const replaceAllProfiles = useCallback((nextState) => {
     setState(normalize(nextState));
   }, []);
@@ -941,6 +1042,12 @@ export function useProfiles() {
     updatePlannerHospital,
     updatePlannerWeighting,
     resetActivePlanner,
+    addMasteryLogEntry,
+    deleteMasteryLogEntry,
+    setMasteryCurrentStep,
+    markMasteryStepBought,
+    updateMasteryPlanningRate,
+    resetActiveMastery,
     replaceAllProfiles,
   };
 }

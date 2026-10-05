@@ -6,6 +6,7 @@ export const ROUTES = {
   home: '/',
   about: '/about',
   buildings: '/buildings',
+  campMastery: '/camp-mastery',
   inventory: '/inventory',
   inventoryEquipment: '/inventory/equipment',
   inventoryOther: '/inventory/other',

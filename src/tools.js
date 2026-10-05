@@ -47,6 +47,15 @@ export const TOOLS = [
     page: lazy(() => import('./pages/Buildings.jsx')),
   },
   {
+    key: 'campMastery',
+    path: ROUTES.campMastery,
+    label: 'Camp Mastery',
+    description:
+      'Log your gold, lumber and steel over time and see when you can afford each Camp Mastery step.',
+    section: SECTIONS.PROFILE,
+    page: lazy(() => import('./pages/CampMastery.jsx')),
+  },
+  {
     key: 'inventory',
     path: ROUTES.inventory,
     label: 'Inventory',

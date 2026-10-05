@@ -10,6 +10,7 @@ export const OTHER_GROUPS = [
   { key: 'totem-essence', label: 'Totem Essence' },
   { key: 'camp-movers', label: 'Camp Movers' },
   { key: 'camp-shields', label: 'Camp Shields' },
+  { key: 'mastery', label: 'Camp Mastery' },
   { key: 'equipment', label: 'Equipment' },
   { key: 'evolution-items', label: 'Evolution Items' },
   { key: 'mount', label: 'Mount Items' },
@@ -172,6 +173,18 @@ export const OTHER_ITEMS = [
     key: 'element-energy-water-refund',
     label: 'Water Energy (Refund)',
     group: 'evolution-items',
+  },
+
+  // Camp Mastery (values in src/lib/data/campMastery.js)
+  {
+    key: 'master-awakening-bundle',
+    label: 'Master Awakening Bundle',
+    group: 'mastery',
+  },
+  {
+    key: 'master-rank-supply-chest',
+    label: 'Master Rank Supply Chest',
+    group: 'mastery',
   },
 
   // Mount Items
