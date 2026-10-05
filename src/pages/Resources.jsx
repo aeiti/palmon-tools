@@ -1,23 +1,17 @@
 import { useProfiles } from '../hooks/useProfiles.js';
-import ChestInventory from '../components/inventory/ChestInventory.jsx';
-import OnHandResources from '../components/inventory/OnHandResources.jsx';
+import ResourceSnapshot from '../components/inventory/ResourceSnapshot.jsx';
 import ResourceTotals from '../components/inventory/ResourceTotals.jsx';
 import ProfilePicker from '../components/ui/ProfilePicker.jsx';
-import ResetButton from '../components/ui/ResetButton.jsx';
 import SectionCard from '../components/ui/SectionCard.jsx';
 import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
 import { ROUTES } from '../routes.js';
 
 export default function Resources() {
-  const {
-    activeProfile,
-    updateChestCount,
-    resetActiveChests,
-    updateLeveledChestOverride,
-    resetActiveLeveledChestOverrides,
-    updateOnHand,
-    resetActiveOnHand,
-  } = useProfiles();
+  const profiles = useProfiles();
+  const { activeProfile } = profiles;
+  const { log } = activeProfile.mastery;
+  const lastLoggedAt =
+    log.length > 0 ? Date.parse(log[log.length - 1].at) : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -38,40 +32,11 @@ export default function Resources() {
         />
       </SectionCard>
 
-      <SectionCard
-        title="On-hand"
-        actions={
-          <ResetButton
-            onReset={resetActiveOnHand}
-            confirmTitle="Reset on-hand resources?"
-            confirmMessage={`Set on-hand XP, Electricity, Gold, Lumber, and Steel for "${activeProfile.name}" back to 0.`}
-          />
-        }
-      >
-        <OnHandResources
-          onHand={activeProfile.onHand}
-          onChange={updateOnHand}
-        />
-      </SectionCard>
-
-      <section className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <h2 className="h-section">Chests</h2>
-          <ResetButton
-            onReset={resetActiveChests}
-            confirmTitle="Reset chests?"
-            confirmMessage={`Set all chest counts for "${activeProfile.name}" back to 0.`}
-          />
-        </div>
-        <ChestInventory
-          chests={activeProfile.chests}
-          onChange={updateChestCount}
-          leveledOverrides={activeProfile.leveledChestOverrides}
-          playerLevel={activeProfile.level}
-          onLeveledOverrideChange={updateLeveledChestOverride}
-          onLeveledOverrideReset={resetActiveLeveledChestOverrides}
-        />
-      </section>
+      <ResourceSnapshot
+        profile={activeProfile}
+        actions={profiles}
+        lastLoggedAt={lastLoggedAt}
+      />
     </div>
   );
 }

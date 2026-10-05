@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useProfiles.js';
+import ResourceSnapshot from '../components/inventory/ResourceSnapshot.jsx';
 import MasteryProgress from '../components/mastery/MasteryProgress.jsx';
 import StepLadder from '../components/mastery/StepLadder.jsx';
 import StockLog from '../components/mastery/StockLog.jsx';
@@ -26,16 +27,16 @@ import {
 import { ROUTES } from '../routes.js';
 
 export default function CampMastery() {
+  const profiles = useProfiles();
   const {
     activeProfile,
-    addMasteryLogEntry,
     updateMasteryLogEntry,
     deleteMasteryLogEntry,
     setMasteryCurrentStep,
     markMasteryStepBought,
     updateMasteryPlanningRate,
     resetActiveMastery,
-  } = useProfiles();
+  } = profiles;
 
   // Only used when the log is empty; a page-load timestamp is close enough.
   const [openedAt] = useState(() => Date.now());
@@ -114,22 +115,26 @@ export default function CampMastery() {
         </p>
       </SectionCard>
 
-      <SectionCard title="Stock log">
-        <StockLog
-          key={activeProfile.id}
-          log={mastery.log}
-          prefill={{ ...basis.stock, chests: basis.chests }}
-          onAdd={addMasteryLogEntry}
-          onUpdate={updateMasteryLogEntry}
-          onDelete={deleteMasteryLogEntry}
-        />
-      </SectionCard>
-
       {rows.length > 0 && (
         <SectionCard title="Remaining steps">
           <StepLadder rows={rows} basisAt={basis.at} />
         </SectionCard>
       )}
+
+      <ResourceSnapshot
+        profile={activeProfile}
+        actions={profiles}
+        lastLoggedAt={mastery.log.length > 0 ? basis.at : null}
+      />
+
+      <SectionCard title="Reading log">
+        <StockLog
+          key={activeProfile.id}
+          log={mastery.log}
+          onUpdate={updateMasteryLogEntry}
+          onDelete={deleteMasteryLogEntry}
+        />
+      </SectionCard>
 
       <SectionCard title="Settings">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -149,8 +154,8 @@ export default function CampMastery() {
           The planning rate is a conservative fallback for when the log is too
           short. Choice chests are valued like leveled chests of the same tier
           at your level; Awakening Bundles as 5M of whichever resource you
-          need; Supply Chests as ~300K split evenly (unconfirmed). Other chests
-          come from{' '}
+          need; Supply Chests as ~300K split evenly (unconfirmed). The counts
+          above are the same ones shown on{' '}
           <Link to={ROUTES.inventoryResources} className="link-inline">
             Resource Inventory
           </Link>
