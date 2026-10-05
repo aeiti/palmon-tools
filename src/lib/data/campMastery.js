@@ -52,16 +52,29 @@ export const MASTERY_STEP_KEYS = MASTERY_STEPS.map((s) => s.key);
 // The three resources every mastery step costs.
 export const MASTERY_RESOURCES = ['gold', 'lumber', 'steel'];
 
-// Resource bundles that pay out mastery resources. Counts live in Other
-// Inventory (see OTHER_ITEMS); these are the per-item values.
+// Chests and bundles that pay out mastery resources, tracked in the stock
+// log and in Other Inventory (keys match OTHER_ITEMS).
 //
+// kind:
+//   'choice' — the player picks gold, lumber or steel when opening, so the
+//              value is a flexible pool that can go wherever it is short.
+//   'random' — the resource is random; modelled as split evenly.
+// Value comes from one of:
+//   leveledTier — the ore value of that leveled chest tier at the player's
+//                 level (src/lib/data/chestValues.js, with any overrides).
+//                 At level 30: SR 175K, SSR 1.4M, UR 4.2M.
+//   value       — a flat amount.
+//
+// - Choice chests: valued like the leveled chest of the same tier. That is
+//   the site's model, not a measured payout.
 // - Master Awakening Bundle: the in-game description offers 5M of gold,
-//   lumber OR steel (or 50 five-minute building speedups). The player picks,
-//   so it is modelled as a flexible pool.
-// - Master Rank Supply Chest: random resource. ~300K per chest is the
-//   player's estimate and NOT confirmed — it may be 300K of each. Modelled as
-//   300K total, split evenly across the three resources.
-export const MASTERY_BUNDLES = {
-  awakening: { otherKey: 'master-awakening-bundle', value: 5 * M, kind: 'choice' },
-  supply: { otherKey: 'master-rank-supply-chest', value: 300_000, kind: 'random' },
-};
+//   lumber OR steel (or 50 five-minute building speedups).
+// - Master Rank Supply Chest: ~300K is the player's estimate and NOT
+//   confirmed — it may be 300K of each. Modelled as 300K total.
+export const MASTERY_CHESTS = [
+  { key: 'sr-choice-chest', short: 'SR', kind: 'choice', leveledTier: 'blue' },
+  { key: 'ssr-choice-chest', short: 'SSR', kind: 'choice', leveledTier: 'purple' },
+  { key: 'ur-choice-chest', short: 'UR', kind: 'choice', leveledTier: 'gold' },
+  { key: 'master-awakening-bundle', short: 'Awakening', kind: 'choice', value: 5 * M },
+  { key: 'master-rank-supply-chest', short: 'Supply', kind: 'random', value: 300_000 },
+];

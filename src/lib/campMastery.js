@@ -4,13 +4,16 @@
 //
 // Profile shape:
 //   mastery: {
-//     log: [{ id, at, gold, lumber, steel, note }],  // sorted oldest first
+//     log: [{ id, at, gold, lumber, steel, chests, note }],  // oldest first
 //     completed: { [stepKey]: isoString | null },     // null = done before tracking
 //     planningRate: number,                           // per resource, per hour
 //   }
+//
+// `chests` maps each MASTERY_CHESTS key to a count, or null when the reading
+// didn't record it (readings logged before chests were tracked).
 
 import {
-  MASTERY_BUNDLES,
+  MASTERY_CHESTS,
   MASTERY_RESOURCES,
   MASTERY_STEPS,
   MASTERY_STEP_KEYS,
@@ -52,8 +55,19 @@ export function normalizeMasteryEntry(raw) {
     gold: nonNegativeInt(raw.gold),
     lumber: nonNegativeInt(raw.lumber),
     steel: nonNegativeInt(raw.steel),
+    chests: normalizeEntryChests(raw.chests),
     note: typeof raw.note === 'string' ? raw.note : '',
   };
+}
+
+function normalizeEntryChests(raw) {
+  const out = {};
+  for (const c of MASTERY_CHESTS) {
+    const v = raw && typeof raw === 'object' ? raw[c.key] : null;
+    out[c.key] =
+      v === null || v === undefined || v === '' ? null : nonNegativeInt(v);
+  }
+  return out;
 }
 
 export function sortLog(log) {
@@ -132,31 +146,76 @@ function zero() {
   return { gold: 0, lumber: 0, steel: 0 };
 }
 
-function rateBetween(first, last, completed) {
+// Per-chest value of each MASTERY_CHESTS entry. `leveledValues` is a row of
+// leveled chest values for the player (leveledValuesWithOverrides()).
+export function masteryChestValues(leveledValues) {
+  const out = {};
+  for (const c of MASTERY_CHESTS) {
+    out[c.key] = c.leveledTier
+      ? Number(leveledValues?.[c.leveledTier]?.gold) || 0
+      : c.value;
+  }
+  return out;
+}
+
+// What a set of chest counts is worth: `fixed` per resource (random chests,
+// split evenly) and a `flexible` pool (choice chests). Null counts are 0.
+export function chestWorth(counts, values) {
+  const fixed = zero();
+  let flexible = 0;
+  for (const c of MASTERY_CHESTS) {
+    const worth = (Number(counts?.[c.key]) || 0) * (values?.[c.key] || 0);
+    if (c.kind === 'choice') flexible += worth;
+    else for (const r of MASTERY_RESOURCES) fixed[r] += worth / MASTERY_RESOURCES.length;
+  }
+  return { fixed, flexible };
+}
+
+// Change in chest worth between two readings, counting only chest types
+// both readings recorded. Opening chests lowers it while raising stock, so
+// opened chests cancel out instead of reading as income; chests earned
+// from events raise it, which is income.
+function chestWorthDelta(first, last, values) {
+  const delta = { ...zero(), flexible: 0 };
+  for (const c of MASTERY_CHESTS) {
+    const a = first.chests?.[c.key];
+    const b = last.chests?.[c.key];
+    if (a === null || a === undefined || b === null || b === undefined) continue;
+    const worth = (b - a) * (values?.[c.key] || 0);
+    if (c.kind === 'choice') delta.flexible += worth;
+    else for (const r of MASTERY_RESOURCES) delta[r] += worth / MASTERY_RESOURCES.length;
+  }
+  return delta;
+}
+
+function rateBetween(first, last, completed, values) {
   const from = Date.parse(first.at);
   const to = Date.parse(last.at);
   const hours = (to - from) / HOUR_MS;
   if (!(hours > 0)) return null;
   const bought = costBoughtBetween(completed, from, to);
-  const rate = zero();
+  const chests = chestWorthDelta(first, last, values);
+  const rate = { flexible: chests.flexible / hours };
   for (const r of MASTERY_RESOURCES) {
-    rate[r] = (last[r] - first[r] + bought[r]) / hours;
+    rate[r] = (last[r] - first[r] + bought[r] + chests[r]) / hours;
   }
   return { rate, hours };
 }
 
-// Net income per hour per resource, measured from the log.
+// Net income per hour, measured from the log: gold / lumber / steel, plus
+// `flexible` — choice-chest value gained per hour, which can go to any of
+// the three. Pass masteryChestValues() as `values` to count chests.
 // - average: first entry → latest entry.
 // - recent: the last `window` intervals (window + 1 entries).
 // Each is null until there are two entries with distinct times.
-export function measureRates(log, completed, window = 3) {
+export function measureRates(log, completed, window = 3, values = null) {
   const sorted = sortLog(log || []);
   const n = sorted.length;
   if (n < 2) return { average: null, recent: null, hours: 0 };
   const last = sorted[n - 1];
-  const avg = rateBetween(sorted[0], last, completed);
+  const avg = rateBetween(sorted[0], last, completed, values);
   const start = sorted[Math.max(0, n - 1 - Math.max(1, window))];
-  const recent = rateBetween(start, last, completed);
+  const recent = rateBetween(start, last, completed, values);
   return {
     average: avg?.rate ?? null,
     recent: recent?.rate ?? null,
@@ -166,101 +225,63 @@ export function measureRates(log, completed, window = 3) {
 
 export function uniformRate(perHour) {
   const v = Math.max(0, Number(perHour) || 0);
-  return { gold: v, lumber: v, steel: v };
-}
-
-// ---- Chests -----------------------------------------------------------------
-
-// Splits chest value into what is already tied to a resource (`fixed`) and a
-// pool the player can point at any of the three (`flexible`).
-// - resourceChestTotals: Resource Inventory's opened-chest totals.
-// - otherCounts: profile.other, for the two mastery bundle items.
-export function masteryChestPool(resourceChestTotals, otherCounts) {
-  const fixed = zero();
-  for (const r of MASTERY_RESOURCES) {
-    fixed[r] = Math.max(0, Number(resourceChestTotals?.[r]) || 0);
-  }
-  const supply = nonNegativeInt(otherCounts?.[MASTERY_BUNDLES.supply.otherKey]);
-  const perResource = (supply * MASTERY_BUNDLES.supply.value) / MASTERY_RESOURCES.length;
-  for (const r of MASTERY_RESOURCES) fixed[r] += perResource;
-  const awakening = nonNegativeInt(
-    otherCounts?.[MASTERY_BUNDLES.awakening.otherKey],
-  );
-  return { fixed, flexible: awakening * MASTERY_BUNDLES.awakening.value };
-}
-
-// Turns a resource allocation of the flexible pool into whole bundle counts
-// that never exceed `available`: floor each share, then hand leftover
-// bundles to the largest remainders. Rounding each share up instead can ask
-// for more bundles than the player has.
-export function splitBundles(allocation, bundleValue, available) {
-  const out = { gold: 0, lumber: 0, steel: 0 };
-  if (!allocation || !(bundleValue > 0)) return out;
-  const exact = MASTERY_RESOURCES.map((r) => ({
-    r,
-    x: Math.max(0, allocation[r] || 0) / bundleValue,
-  }));
-  const want = Math.min(
-    Math.max(0, Math.floor(available) || 0),
-    Math.ceil(exact.reduce((a, e) => a + e.x, 0) - 1e-9),
-  );
-  let used = 0;
-  for (const e of exact) {
-    out[e.r] = Math.floor(e.x);
-    used += out[e.r];
-  }
-  const byRemainder = [...exact].sort(
-    (a, b) => (b.x - Math.floor(b.x)) - (a.x - Math.floor(a.x)),
-  );
-  for (const e of byRemainder) {
-    if (used >= want) break;
-    if (e.x - Math.floor(e.x) <= 1e-9) continue;
-    out[e.r] += 1;
-    used += 1;
-  }
-  return out;
+  return { gold: v, lumber: v, steel: v, flexible: 0 };
 }
 
 // ---- Projection -------------------------------------------------------------
 
-// Hours until every `need` is covered by income at `rates`, after pointing
-// the `flexible` pool wherever it shortens the wait most. Returns the hours
-// and the split of the pool. The optimal split leaves every resource the
-// pool touches finishing at the same moment T, so we solve
-//   Σ max(0, need_i − rate_i · T) = flexible
-// for T by bisection. A resource with no positive income can only be covered
-// by the pool; if the pool can't cover those, hours is Infinity.
+// Hours until every `need` is covered, after pointing the `flexible` pool
+// wherever it shortens the wait most. `rates` may carry a `flexible` rate:
+// choice-chest value earned per hour, which grows the pool over time.
+// Returns the hours and the split of the pool at that moment.
+//
+// The optimal split leaves every resource the pool touches finishing at the
+// same moment T, so we solve
+//   Σ max(0, need_i − rate_i · T) = flexible + flexibleRate · T
+// for T by bisection. A negative flexible rate (choice chests opened faster
+// than earned) is folded into the resource rates first, shared in
+// proportion to them, so both sides stay monotonic in T.
 export function hoursToAfford(need, rates, flexible = 0) {
   const pool = Math.max(0, flexible);
+  const base = {};
+  for (const r of MASTERY_RESOURCES) base[r] = rates?.[r] || 0;
+  let poolRate = rates?.flexible || 0;
+  if (poolRate < 0) {
+    const positive = MASTERY_RESOURCES.reduce((a, r) => a + Math.max(0, base[r]), 0);
+    if (positive > 0) {
+      for (const r of MASTERY_RESOURCES) {
+        if (base[r] > 0) base[r] += poolRate * (base[r] / positive);
+      }
+    }
+    poolRate = 0;
+  }
   const shortAt = (T) => {
     const out = zero();
     for (const r of MASTERY_RESOURCES) {
       const n = Math.max(0, need[r] || 0);
-      const rate = rates?.[r] || 0;
-      out[r] = rate > 0 ? Math.max(0, n - rate * T) : n;
+      out[r] = base[r] > 0 ? Math.max(0, n - base[r] * T) : n;
     }
     return out;
   };
   const sum = (o) => MASTERY_RESOURCES.reduce((a, r) => a + o[r], 0);
+  const fits = (T) => sum(shortAt(T)) <= pool + poolRate * T;
 
-  const atZero = shortAt(0);
-  if (sum(atZero) <= pool) return { hours: 0, allocation: atZero };
+  if (fits(0)) return { hours: 0, allocation: shortAt(0) };
 
   let hi = 0;
   for (const r of MASTERY_RESOURCES) {
-    const rate = rates?.[r] || 0;
-    if (rate > 0) hi = Math.max(hi, (need[r] || 0) / rate);
+    if (base[r] > 0) hi = Math.max(hi, (need[r] || 0) / base[r]);
   }
-  const atHi = shortAt(hi);
-  if (sum(atHi) > pool) {
-    // Zero-income shortfalls exceed the pool: never affordable.
-    return { hours: Infinity, allocation: atHi };
+  if (!fits(hi)) {
+    if (!(poolRate > 0)) return { hours: Infinity, allocation: shortAt(hi) };
+    // Only the growing pool can close the remaining gap.
+    hi = Math.max(hi, (sum(shortAt(hi)) - pool) / poolRate);
   }
   let lo = 0;
   for (let i = 0; i < 60; i++) {
     const mid = (lo + hi) / 2;
-    if (sum(shortAt(mid)) > pool) lo = mid;
-    else hi = mid;
+    if (fits(mid)) hi = mid;
+    else lo = mid;
   }
   return { hours: hi, allocation: shortAt(hi) };
 }
@@ -312,14 +333,23 @@ export function projectSteps({ completed, stock, pool, rates }) {
 }
 
 // The basis a projection starts from: the latest log entry if there is one,
-// otherwise the on-hand stockpile as of now.
-export function projectionBasis(log, onHand, nowMs) {
+// otherwise the on-hand stockpile as of now. Chest counts come from the
+// latest entry, falling back to `otherCounts` (Other Inventory) for any
+// chest that entry didn't record.
+export function projectionBasis(log, onHand, otherCounts, nowMs) {
   const sorted = sortLog(log || []);
   const last = sorted[sorted.length - 1];
+  const chests = {};
+  for (const c of MASTERY_CHESTS) {
+    const v = last?.chests?.[c.key];
+    chests[c.key] =
+      v === null || v === undefined ? nonNegativeInt(otherCounts?.[c.key]) : v;
+  }
   if (last) {
     return {
       at: Date.parse(last.at),
       stock: { gold: last.gold, lumber: last.lumber, steel: last.steel },
+      chests,
     };
   }
   return {
@@ -329,5 +359,6 @@ export function projectionBasis(log, onHand, nowMs) {
       lumber: nonNegativeInt(onHand?.lumber),
       steel: nonNegativeInt(onHand?.steel),
     },
+    chests,
   };
 }
