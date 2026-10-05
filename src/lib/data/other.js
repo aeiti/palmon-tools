@@ -176,6 +176,9 @@ export const OTHER_ITEMS = [
   },
 
   // Camp Mastery (values in src/lib/data/campMastery.js)
+  { key: 'sr-choice-chest', label: 'SR Choice Chest', group: 'mastery' },
+  { key: 'ssr-choice-chest', label: 'SSR Choice Chest', group: 'mastery' },
+  { key: 'ur-choice-chest', label: 'UR Choice Chest', group: 'mastery' },
   {
     key: 'master-awakening-bundle',
     label: 'Master Awakening Bundle',
