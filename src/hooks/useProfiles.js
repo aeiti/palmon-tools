@@ -143,6 +143,27 @@ function defaultState() {
   return { activeProfileId: p.id, profiles: [p] };
 }
 
+// `{ mastery }` plus, when `syncId` is the newest reading, on-hand stock and
+// the Other Inventory counts of every chest that reading recorded.
+function withLatestReadingSynced(profile, mastery, syncId) {
+  const latest = mastery.log[mastery.log.length - 1];
+  if (!latest || latest.id !== syncId) return { mastery };
+  const other = { ...profile.other };
+  for (const [key, count] of Object.entries(latest.chests || {})) {
+    if (count !== null) other[key] = count;
+  }
+  return {
+    mastery,
+    onHand: {
+      ...profile.onHand,
+      gold: latest.gold,
+      lumber: latest.lumber,
+      steel: latest.steel,
+    },
+    other,
+  };
+}
+
 // Patch the active profile from its mastery field: `mutate(mastery, profile)`
 // returns the profile fields to replace — `{ mastery }`, or
 // `{ mastery, onHand }` when a change should also move the on-hand stockpile.
@@ -905,28 +926,41 @@ export function useProfiles() {
 
   // --- Camp Mastery ----------------------------------------------------
 
-  // Adds a stock reading. When it is the newest reading, the on-hand gold,
-  // lumber and steel follow it so Resource Inventory stays in step.
+  // Adds a stock reading. When it is the newest reading, on-hand stock and
+  // the mastery chest counts in Other Inventory follow it.
   const addMasteryLogEntry = useCallback((raw) => {
     const entry = normalizeMasteryEntry(raw);
     if (!entry) return null;
     setState((s) =>
-      patchFromMastery(s, (mastery, p) => {
-        const log = sortLog([...mastery.log, entry]);
-        const patch = { mastery: { ...mastery, log } };
-        if (log[log.length - 1].id !== entry.id) return patch;
-        return {
-          ...patch,
-          onHand: {
-            ...p.onHand,
-            gold: entry.gold,
-            lumber: entry.lumber,
-            steel: entry.steel,
-          },
-        };
-      }),
+      patchFromMastery(s, (mastery, p) =>
+        withLatestReadingSynced(
+          p,
+          { ...mastery, log: sortLog([...mastery.log, entry]) },
+          entry.id,
+        ),
+      ),
     );
     return entry.id;
+  }, []);
+
+  // Edits a reading in place. An edit that leaves the entry unusable (e.g. a
+  // cleared time) keeps the old entry. Syncs like add when the edited entry
+  // ends up newest.
+  const updateMasteryLogEntry = useCallback((entryId, patch) => {
+    setState((s) =>
+      patchFromMastery(s, (mastery, p) => {
+        const log = mastery.log.map((e) =>
+          e.id !== entryId
+            ? e
+            : normalizeMasteryEntry({ ...e, ...patch, id: e.id }) || e,
+        );
+        return withLatestReadingSynced(
+          p,
+          { ...mastery, log: sortLog(log) },
+          entryId,
+        );
+      }),
+    );
   }, []);
 
   const deleteMasteryLogEntry = useCallback((entryId) => {
@@ -1043,6 +1077,7 @@ export function useProfiles() {
     updatePlannerWeighting,
     resetActivePlanner,
     addMasteryLogEntry,
+    updateMasteryLogEntry,
     deleteMasteryLogEntry,
     setMasteryCurrentStep,
     markMasteryStepBought,
