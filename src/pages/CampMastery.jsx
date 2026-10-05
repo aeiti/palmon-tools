@@ -9,55 +9,63 @@ import CompactInput from '../components/ui/CompactInput.jsx';
 import ProfilePicker from '../components/ui/ProfilePicker.jsx';
 import ResetButton from '../components/ui/ResetButton.jsx';
 import SectionCard from '../components/ui/SectionCard.jsx';
-import StepperInput from '../components/ui/StepperInput.jsx';
 import ToolPageHeader from '../components/ui/ToolPageHeader.jsx';
 import {
-  masteryChestPool,
+  chestWorth,
+  masteryChestValues,
   measureRates,
   projectionBasis,
   projectSteps,
   uniformRate,
 } from '../lib/campMastery.js';
-import { MASTERY_BUNDLES } from '../lib/data/campMastery.js';
-import { OTHER_ITEMS } from '../lib/data/other.js';
-import { totalResourcesFromChests } from '../lib/resourceTotals.js';
+import { MASTERY_RESOURCES } from '../lib/data/campMastery.js';
+import {
+  leveledValuesWithOverrides,
+  totalResourcesFromChests,
+} from '../lib/resourceTotals.js';
 import { ROUTES } from '../routes.js';
-
-const BUNDLE_ITEMS = [MASTERY_BUNDLES.awakening, MASTERY_BUNDLES.supply].map(
-  (b) => ({ ...b, label: OTHER_ITEMS.find((i) => i.key === b.otherKey).label }),
-);
 
 export default function CampMastery() {
   const {
     activeProfile,
     addMasteryLogEntry,
+    updateMasteryLogEntry,
     deleteMasteryLogEntry,
     setMasteryCurrentStep,
     markMasteryStepBought,
     updateMasteryPlanningRate,
     resetActiveMastery,
-    updateOtherCount,
   } = useProfiles();
 
   // Only used when the log is empty; a page-load timestamp is close enough.
   const [openedAt] = useState(() => Date.now());
 
   const { mastery, onHand, other } = activeProfile;
-  const basis = projectionBasis(mastery.log, onHand, openedAt);
-  const measured = measureRates(mastery.log, mastery.completed);
+  const chestValues = masteryChestValues(
+    leveledValuesWithOverrides(
+      activeProfile.level,
+      activeProfile.leveledChestOverrides,
+    ),
+  );
+  const basis = projectionBasis(mastery.log, onHand, other, openedAt);
+  const measured = measureRates(mastery.log, mastery.completed, 3, chestValues);
   const rates = {
     average: measured.average,
     recent: measured.recent,
     planning: mastery.planningRate > 0 ? uniformRate(mastery.planningRate) : null,
   };
-  const pool = masteryChestPool(
-    totalResourcesFromChests(
-      activeProfile.chests,
-      activeProfile.level,
-      activeProfile.leveledChestOverrides,
-    ),
-    other,
+  // Fixed: resource chests from Resource Inventory plus random mastery
+  // chests. Flexible: choice chests and bundles from the latest reading.
+  const resourceChests = totalResourcesFromChests(
+    activeProfile.chests,
+    activeProfile.level,
+    activeProfile.leveledChestOverrides,
   );
+  const worth = chestWorth(basis.chests, chestValues);
+  const pool = { fixed: {}, flexible: worth.flexible };
+  for (const r of MASTERY_RESOURCES) {
+    pool.fixed[r] = worth.fixed[r] + resourceChests[r];
+  }
   const rows = projectSteps({
     completed: mastery.completed,
     stock: basis.stock,
@@ -110,8 +118,9 @@ export default function CampMastery() {
         <StockLog
           key={activeProfile.id}
           log={mastery.log}
-          onHand={onHand}
+          prefill={{ ...basis.stock, chests: basis.chests }}
           onAdd={addMasteryLogEntry}
+          onUpdate={updateMasteryLogEntry}
           onDelete={deleteMasteryLogEntry}
         />
       </SectionCard>
@@ -135,25 +144,13 @@ export default function CampMastery() {
               ariaLabel="Planning rate per hour"
             />
           </label>
-          {BUNDLE_ITEMS.map((b) => (
-            <label key={b.otherKey} className="flex flex-col gap-1">
-              <span className="text-xs font-medium text-slate-400">
-                {b.label}
-              </span>
-              <StepperInput
-                value={other[b.otherKey] || 0}
-                onChange={(v) => updateOtherCount(b.otherKey, v)}
-                className="h-8 w-full"
-                ariaLabel={b.label}
-              />
-            </label>
-          ))}
         </div>
         <p className="mt-3 text-xs text-slate-500">
           The planning rate is a conservative fallback for when the log is too
-          short. Awakening Bundles count as 5M of whichever resource you need;
-          Supply Chests as ~300K split evenly (unconfirmed). Other chests come
-          from{' '}
+          short. Choice chests are valued like leveled chests of the same tier
+          at your level; Awakening Bundles as 5M of whichever resource you
+          need; Supply Chests as ~300K split evenly (unconfirmed). Other chests
+          come from{' '}
           <Link to={ROUTES.inventoryResources} className="link-inline">
             Resource Inventory
           </Link>

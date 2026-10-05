@@ -1,10 +1,5 @@
 import { CHEST_RESOURCES } from '../../lib/data/chests.js';
-import {
-  MASTERY_BUNDLES,
-  MASTERY_RESOURCES,
-  MASTERY_STEPS,
-} from '../../lib/data/campMastery.js';
-import { splitBundles } from '../../lib/campMastery.js';
+import { MASTERY_RESOURCES, MASTERY_STEPS } from '../../lib/data/campMastery.js';
 import { formatCompact, formatCompactFull } from '../../lib/format.js';
 import { formatDay, formatDays } from './format.js';
 
@@ -24,12 +19,9 @@ export default function MasteryProgress({
   const projectionRate = rates.average ? 'average' : 'planning';
   const hours = row.hours[projectionRate];
   const allocation = row.allocation[projectionRate];
-  const bundles = splitBundles(
-    allocation,
-    MASTERY_BUNDLES.awakening.value,
-    pool.flexible / MASTERY_BUNDLES.awakening.value,
-  );
-  const bundleParts = MASTERY_RESOURCES.filter((r) => bundles[r] > 0);
+  const choiceParts = allocation
+    ? MASTERY_RESOURCES.filter((r) => allocation[r] >= 1)
+    : [];
 
   return (
     <div className="flex flex-col gap-4">
@@ -111,18 +103,20 @@ export default function MasteryProgress({
         <p className="text-xs text-slate-500">
           Blue is stock; grey adds unopened chests from Resource Inventory and
           Supply Chests.
+          {rates[projectionRate]?.flexible > 0 &&
+            ` Choice chests are coming in at ${formatCompact(rates[projectionRate].flexible)}/h.`}
         </p>
       </div>
 
-      {bundleParts.length > 0 && (
+      {choiceParts.length > 0 && (
         <p className="text-sm text-slate-300">
-          Open Awakening Bundles as:{' '}
-          {bundleParts
-            .map((r) => `${bundles[r]} ${RESOURCE_META[r].label}`)
+          Open choice chests and bundles as:{' '}
+          {choiceParts
+            .map((r) => `${formatCompact(allocation[r])} ${RESOURCE_META[r].label}`)
             .join(', ')}
           <span className="text-slate-500">
             {' '}
-            (finishes all three together)
+            (of {formatCompact(pool.flexible)}; finishes all three together)
           </span>
         </p>
       )}
