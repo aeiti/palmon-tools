@@ -11,6 +11,8 @@
 //
 // `chests` maps each MASTERY_CHESTS key to a count, or null when the reading
 // didn't record it (readings logged before chests were tracked).
+// `resourceChests` is the gold / lumber / steel worth of Resource Inventory's
+// chests when the reading was taken, or null for older readings.
 
 import {
   MASTERY_CHESTS,
@@ -56,6 +58,7 @@ export function normalizeMasteryEntry(raw) {
     lumber: nonNegativeInt(raw.lumber),
     steel: nonNegativeInt(raw.steel),
     chests: normalizeEntryChests(raw.chests),
+    resourceChests: normalizeResourceChests(raw.resourceChests),
     note: typeof raw.note === 'string' ? raw.note : '',
   };
 }
@@ -68,6 +71,30 @@ function normalizeEntryChests(raw) {
       v === null || v === undefined || v === '' ? null : nonNegativeInt(v);
   }
   return out;
+}
+
+function normalizeResourceChests(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const out = zero();
+  for (const r of MASTERY_RESOURCES) out[r] = nonNegativeInt(raw[r]);
+  return out;
+}
+
+// A reading of everything the profile holds right now: on-hand stock, the
+// mastery chest counts from Other Inventory, and the worth of Resource
+// Inventory's chests (totalResourcesFromChests()).
+export function snapshotReading({ at, note, onHand, other, resourceChestTotals }) {
+  const chests = {};
+  for (const c of MASTERY_CHESTS) chests[c.key] = nonNegativeInt(other?.[c.key]);
+  return normalizeMasteryEntry({
+    at,
+    note,
+    gold: onHand?.gold,
+    lumber: onHand?.lumber,
+    steel: onHand?.steel,
+    chests,
+    resourceChests: resourceChestTotals || zero(),
+  });
 }
 
 export function sortLog(log) {
@@ -184,6 +211,11 @@ function chestWorthDelta(first, last, values) {
     const worth = (b - a) * (values?.[c.key] || 0);
     if (c.kind === 'choice') delta.flexible += worth;
     else for (const r of MASTERY_RESOURCES) delta[r] += worth / MASTERY_RESOURCES.length;
+  }
+  if (first.resourceChests && last.resourceChests) {
+    for (const r of MASTERY_RESOURCES) {
+      delta[r] += last.resourceChests[r] - first.resourceChests[r];
+    }
   }
   return delta;
 }

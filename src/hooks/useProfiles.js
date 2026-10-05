@@ -8,6 +8,7 @@ import {
   LEVELED_OVERRIDE_TIERS,
   normalizeLeveledOverrides,
   normalizeOnHand,
+  totalResourcesFromChests,
 } from '../lib/resourceTotals.js';
 import { CHEST_RESOURCES } from '../lib/data/chests.js';
 import {
@@ -61,6 +62,7 @@ import {
   normalizeMastery,
   normalizeMasteryEntry,
   setCurrentStep,
+  snapshotReading,
   sortLog,
 } from '../lib/campMastery.js';
 import { MASTERY_STEP_KEYS } from '../lib/data/campMastery.js';
@@ -926,26 +928,33 @@ export function useProfiles() {
 
   // --- Camp Mastery ----------------------------------------------------
 
-  // Adds a stock reading. When it is the newest reading, on-hand stock and
-  // the mastery chest counts in Other Inventory follow it.
-  const addMasteryLogEntry = useCallback((raw) => {
-    const entry = normalizeMasteryEntry(raw);
-    if (!entry) return null;
+  // Logs a reading of what the active profile holds right now: on-hand
+  // stock, mastery chests and resource chest worth. Read inside the state
+  // update so it always snapshots the latest values.
+  const logMasteryReading = useCallback(({ at, note } = {}) => {
     setState((s) =>
-      patchFromMastery(s, (mastery, p) =>
-        withLatestReadingSynced(
-          p,
-          { ...mastery, log: sortLog([...mastery.log, entry]) },
-          entry.id,
-        ),
-      ),
+      patchFromMastery(s, (mastery, p) => {
+        const entry = snapshotReading({
+          at: at || new Date().toISOString(),
+          note,
+          onHand: p.onHand,
+          other: p.other,
+          resourceChestTotals: totalResourcesFromChests(
+            p.chests,
+            p.level,
+            p.leveledChestOverrides,
+          ),
+        });
+        if (!entry) return { mastery };
+        return { mastery: { ...mastery, log: sortLog([...mastery.log, entry]) } };
+      }),
     );
-    return entry.id;
   }, []);
 
   // Edits a reading in place. An edit that leaves the entry unusable (e.g. a
   // cleared time) keeps the old entry. Syncs like add when the edited entry
-  // ends up newest.
+  // ends up newest, so on-hand stock and Other Inventory match the latest
+  // reading.
   const updateMasteryLogEntry = useCallback((entryId, patch) => {
     setState((s) =>
       patchFromMastery(s, (mastery, p) => {
@@ -1076,7 +1085,7 @@ export function useProfiles() {
     updatePlannerHospital,
     updatePlannerWeighting,
     resetActivePlanner,
-    addMasteryLogEntry,
+    logMasteryReading,
     updateMasteryLogEntry,
     deleteMasteryLogEntry,
     setMasteryCurrentStep,

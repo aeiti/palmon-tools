@@ -12,6 +12,7 @@ import {
   projectionBasis,
   projectSteps,
   setCurrentStep,
+  snapshotReading,
   uniformRate,
 } from '../campMastery.js';
 import { MASTERY_STEPS } from '../data/campMastery.js';
@@ -250,6 +251,23 @@ describe('measureRates with chests', () => {
     expect(average.steel).toBeCloseTo(1 * M, 3);
   });
 
+  it('cancels resource chests opened into stock', () => {
+    // Opened 40M of gold chests: stock +40M, chest worth −40M.
+    const log = [
+      { ...entry(at(0), 0), resourceChests: { gold: 40 * M, lumber: 0, steel: 0 } },
+      { ...entry(at(1), 0), gold: 40 * M, resourceChests: { gold: 0, lumber: 0, steel: 0 } },
+    ];
+    expect(measureRates(log, {}, 3, values).average.gold).toBeCloseTo(0, 3);
+  });
+
+  it('ignores resource chests when a reading predates them', () => {
+    const log = [
+      { ...entry(at(0), 0), resourceChests: null },
+      { ...entry(at(1), 0), resourceChests: { gold: 40 * M, lumber: 0, steel: 0 } },
+    ];
+    expect(measureRates(log, {}, 3, values).average.gold).toBe(0);
+  });
+
   it('ignores a chest type one of the readings did not record', () => {
     const log = [
       { ...entry(at(0), 0), chests: { 'master-awakening-bundle': null } },
@@ -388,5 +406,22 @@ describe('projectionBasis', () => {
     const basis = projectionBasis([], { gold: 7, lumber: 8, steel: 9 }, {}, 123);
     expect(basis.at).toBe(123);
     expect(basis.stock).toEqual({ gold: 7, lumber: 8, steel: 9 });
+  });
+});
+
+describe('snapshotReading', () => {
+  it('captures on-hand stock, mastery chests and resource chest worth', () => {
+    const e = snapshotReading({
+      at: '2026-10-05T12:00:00Z',
+      note: 'n',
+      onHand: { gold: 5, lumber: 6, steel: 7, xp: 99 },
+      other: { 'sr-choice-chest': 319, 'mount-feed': 4 },
+      resourceChestTotals: { gold: 1, lumber: 2, steel: 3, xp: 50 },
+    });
+    expect(e).toMatchObject({ gold: 5, lumber: 6, steel: 7, note: 'n' });
+    expect(e.chests['sr-choice-chest']).toBe(319);
+    // every mastery chest is recorded, 0 when absent — not null
+    expect(e.chests['ur-choice-chest']).toBe(0);
+    expect(e.resourceChests).toEqual({ gold: 1, lumber: 2, steel: 3 });
   });
 });
