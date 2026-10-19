@@ -1,15 +1,15 @@
-import { useState } from "react";
-import { CHEST_RESOURCES } from "../../lib/data/chests.js";
+import { useState } from 'react';
+import { CHEST_RESOURCES } from '../../lib/data/chests.js';
 import {
   MASTERY_CHESTS,
   MASTERY_RESOURCES,
-} from "../../lib/data/campMastery.js";
-import { OTHER_ITEMS } from "../../lib/data/other.js";
-import { formatCompact, formatCompactFull } from "../../lib/format.js";
-import CompactInput from "../ui/CompactInput.jsx";
-import ResetButton from "../ui/ResetButton.jsx";
-import StepperInput from "../ui/StepperInput.jsx";
-import { formatWhen, toLocalInputValue } from "./format.js";
+} from '../../lib/data/campMastery.js';
+import { OTHER_ITEMS } from '../../lib/data/other.js';
+import { formatCompact, formatCompactFull } from '../../lib/format.js';
+import CompactInput from '../ui/CompactInput.jsx';
+import ResetButton from '../ui/ResetButton.jsx';
+import StepperInput from '../ui/StepperInput.jsx';
+import { formatWhen, toLocalInputValue } from './format.js';
 
 const RESOURCE_META = Object.fromEntries(
   CHEST_RESOURCES.map((r) => [r.key, r]),
@@ -135,9 +135,9 @@ export default function StockLog({ log, onUpdate, onDelete }) {
             <li
               key={e.id}
               className={[
-                "flex flex-wrap items-center gap-x-4 gap-y-1 py-2 text-sm",
-                e.id === editingId ? "bg-indigo-500/10" : "",
-              ].join(" ")}
+                'flex flex-wrap items-center gap-x-4 gap-y-1 py-2 text-sm',
+                e.id === editingId ? 'bg-indigo-500/10' : '',
+              ].join(' ')}
             >
               <span className="w-full text-slate-300 sm:w-32">
                 {formatWhen(Date.parse(e.at))}
@@ -186,8 +186,8 @@ function ChestSummary({ chests, note }) {
   if (parts.length === 0 && !note) return null;
   return (
     <span className="w-full text-xs text-slate-500">
-      {parts.join(" · ")}
-      {parts.length > 0 && note ? " — " : ""}
+      {parts.join(' · ')}
+      {parts.length > 0 && note ? ' — ' : ''}
       {note}
     </span>
   );
