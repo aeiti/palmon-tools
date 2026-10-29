@@ -37,20 +37,17 @@ export default function About() {
       <section className="flex flex-col gap-2">
         <h2 className="h-section">Support</h2>
         <p>
-          Palmon Tools is free and ad-free. If it's saved you some time, a
-          bundle goes a long way toward fueling more updates.
+          Palmon Tools is free and ad-free. If it's saved you some time,{' '}
+          <a
+            href={BMC_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="link-inline"
+          >
+            buy me a bundle
+          </a>{' '}
+          — it goes a long way toward fueling more updates.
         </p>
-        <a
-          href={BMC_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="w-fit rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
-        >
-          <img
-            src="https://img.buymeacoffee.com/button-api/?text=Buy me a bundle&emoji=🎁&slug=palmontools&button_colour=5F7FFF&font_colour=ffffff&font_family=Lato&outline_colour=000000&coffee_colour=FFDD00"
-            alt="Buy me a bundle"
-          />
-        </a>
       </section>
 
       <section className="flex flex-col gap-2">
