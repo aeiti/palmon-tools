@@ -11,6 +11,8 @@ import {
   normalizeMasteryEntry,
   projectionBasis,
   projectSteps,
+  readingIntervals,
+  stockProjection,
   setCurrentStep,
   snapshotReading,
   uniformRate,
@@ -423,5 +425,39 @@ describe('snapshotReading', () => {
     // every mastery chest is recorded, 0 when absent — not null
     expect(e.chests['ur-choice-chest']).toBe(0);
     expect(e.resourceChests).toEqual({ gold: 1, lumber: 2, steel: 3 });
+  });
+});
+
+describe('readingIntervals', () => {
+  it('gives one rate per gap between readings', () => {
+    const at = (h) => new Date(Date.UTC(2026, 9, 4, h)).toISOString();
+    const out = readingIntervals(
+      [entry(at(0), 0), entry(at(2), 20 * M), entry(at(2), 30 * M), entry(at(4), 30 * M)],
+      {},
+    );
+    // the zero-length gap at hour 2 is skipped
+    expect(out).toHaveLength(2);
+    expect(out[0].rate.gold).toBeCloseTo(10 * M, 3);
+    expect(out[1].hours).toBe(2);
+  });
+});
+
+describe('stockProjection', () => {
+  it('meets every resource\'s cumulative cost when the step is affordable', () => {
+    const completed = setCurrentStep({}, '31-4');
+    const stock = { gold: 300 * M, lumber: 250 * M, steel: 240 * M };
+    const pool = { fixed: { gold: 10 * M, lumber: 10 * M, steel: 10 * M }, flexible: 500 * M };
+    const rate = { gold: 4 * M, lumber: 4 * M, steel: 4 * M, flexible: 0 };
+    const [row] = projectSteps({ completed, stock, pool, rates: { average: rate } });
+    const proj = stockProjection(row, { at: 0, stock }, pool, rate, row.hours.average);
+    for (const r of ['gold', 'lumber', 'steel']) {
+      expect(proj.lines[r].start).toBe(stock[r]);
+      expect(proj.lines[r].end).toBeCloseTo(row.cumulative[r], -3);
+    }
+    expect(proj.endAt).toBeCloseTo(row.hours.average * 3600 * 1000, 0);
+  });
+
+  it('is null when the step is never reached', () => {
+    expect(stockProjection({}, { at: 0, stock: {} }, {}, {}, Infinity)).toBeNull();
   });
 });

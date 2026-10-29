@@ -255,6 +255,52 @@ export function measureRates(log, completed, window = 3, values = null) {
   };
 }
 
+// Net income for each gap between consecutive readings, oldest first:
+// [{ from, to, hours, rate }] where from / to are epoch ms and rate is
+// shaped like measureRates()'s. Gaps of zero length are skipped.
+export function readingIntervals(log, completed, values = null) {
+  const sorted = sortLog(log || []);
+  const out = [];
+  for (let i = 1; i < sorted.length; i++) {
+    const res = rateBetween(sorted[i - 1], sorted[i], completed, values);
+    if (!res) continue;
+    out.push({
+      from: Date.parse(sorted[i - 1].at),
+      to: Date.parse(sorted[i].at),
+      hours: res.hours,
+      rate: res.rate,
+    });
+  }
+  return out;
+}
+
+// Where each resource heads for a projected step: from stock at the basis
+// time, plus the chests credited to it right away (fixed chests and its share
+// of the flexible pool), rising at its rate until the step is affordable.
+// Returns per resource { start, credited, end } values and the end time, or
+// null when the step is never reached.
+export function stockProjection(row, basis, pool, rate, hours) {
+  if (!row || !rate || hours === null || !Number.isFinite(hours)) return null;
+  const allocation = hoursToAfford(row.need, rate, pool?.flexible || 0)
+    .allocation;
+  const lines = {};
+  for (const r of MASTERY_RESOURCES) {
+    const start = basis.stock[r];
+    // Credit the choice chests this resource gets at the finish line up
+    // front, so the line meets the cost exactly when the step is affordable.
+    const credited = Math.min(
+      row.cumulative[r],
+      start + (pool?.fixed?.[r] || 0) + (allocation?.[r] || 0),
+    );
+    const end = Math.min(
+      row.cumulative[r],
+      credited + Math.max(0, rate[r] || 0) * hours,
+    );
+    lines[r] = { start, credited, end };
+  }
+  return { endAt: basis.at + hours * HOUR_MS, lines };
+}
+
 export function uniformRate(perHour) {
   const v = Math.max(0, Number(perHour) || 0);
   return { gold: v, lumber: v, steel: v, flexible: 0 };
